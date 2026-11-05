@@ -11,7 +11,7 @@
 const isDev = process.env.NODE_ENV === 'development';
 
 /**
- * The canonical origin, from NEXT_PUBLIC_SITE_URL — e.g. https://medicamaru.com.
+ * The canonical origin, from NEXT_PUBLIC_SITE_URL — e.g. https://okusuriraku.shop.
  * Null when unset or malformed, which switches the www redirect below off
  * rather than failing the build over a typo in an environment variable.
  */
@@ -109,7 +109,7 @@ const nextConfig = {
     /* WebP only. AVIF was listed first, which makes the optimiser answer the
        SAME URL with AVIF or WebP depending on the browser's Accept header.
        Hostinger's CDN caches /_next/image responses without honouring
-       `Vary: Accept` — measured on medicamaru.com: a WebP-only request was
+       `Vary: Accept` — measured on okusuriraku.shop: a WebP-only request was
        served a cached AVIF. A browser without AVIF support (iOS 15 and
        older) then gets an image it cannot decode. With one format, whatever
        the CDN caches works everywhere. It is also far cheaper to encode on
@@ -136,7 +136,7 @@ const nextConfig = {
       // replica serves real product media.
       { protocol: 'https', hostname: 'placehold.co' },
       // Live product/category media, served from Laravel's public storage disk.
-      { protocol: 'https', hostname: 'adminpanel.medicamaru.com', pathname: '/storage/**' },
+      { protocol: 'https', hostname: 'adminpanel.okusuriraku.shop', pathname: '/storage/**' },
       // The same backend running locally under XAMPP. Development only — the
       // optimiser refuses any host not listed here, so without this every
       // product image 400s when API_BASE_URL points at localhost.
@@ -211,8 +211,8 @@ const nextConfig = {
    * The WordPress コラム, served under /column on THIS domain.
    *
    * WordPress lives on its own host (COLUMN_ORIGIN, e.g.
-   * https://wp.medicamaru.com) and is proxied here, so visitors and Google only
-   * ever see medicamaru.com/column/…. A subfolder rather than a subdomain
+   * https://wp.okusuriraku.shop) and is proxied here, so visitors and Google only
+   * ever see okusuriraku.shop/column/…. A subfolder rather than a subdomain
    * because Google can treat a subdomain as a separate site, and for a YMYL
    * pharmacy the whole point of publishing articles is to build authority on
    * the domain that sells the products.
@@ -237,12 +237,12 @@ const nextConfig = {
    * directory (`/wp-admin`), and issues its own canonical 301 to add the slash
    * back — using the only hostname IT knows, which is the backend's. So
    *
-   *   medicamaru.com/column/wp-admin/  ->  308  /column/wp-admin
-   *                                    ->  301  https://wp.medicamaru.com/wp-admin/
+   *   okusuriraku.shop/column/wp-admin/  ->  308  /column/wp-admin
+   *                                    ->  301  https://wp.okusuriraku.shop/wp-admin/
    *
    * and from there every URL, including the login form's redirect_to, is on
-   * the wrong domain. You log in on medicamaru.com, the cookie is set for
-   * medicamaru.com, and WordPress then sends you to wp.medicamaru.com where
+   * the wrong domain. You log in on okusuriraku.shop, the cookie is set for
+   * okusuriraku.shop, and WordPress then sends you to wp.okusuriraku.shop where
    * that cookie does not exist — so the login form simply reappears, with
    * nothing to indicate why.
    *
@@ -265,7 +265,7 @@ const nextConfig = {
        trailing slash: /column/wp-admin/ left here as /wp-admin. Apache on the
        WordPress host then sees a real directory without its slash, issues its
        own canonical 301 to add it back — using the only hostname it knows,
-       the backend's — and the visitor is thrown onto wp.medicamaru.com
+       the backend's — and the visitor is thrown onto wp.okusuriraku.shop
        mid-login. A raw `(.*)` capture passes the remainder through exactly as
        it arrived, slash included, so Apache never needs to redirect.
 
