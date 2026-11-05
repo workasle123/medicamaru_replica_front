@@ -1,0 +1,65 @@
+/* The above-the-fold spec table — the single strongest pattern found in
+   Phase 2 research. It answers the real buying questions (what does it do,
+   what's in it, how does it ship, how long, who is it for, what are the
+   risks) before any scrolling. medicine.shop buries all of this in prose. */
+
+.wrap {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background-color: var(--color-surface);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+}
+
+.row {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+.label {
+  width: 34%;
+  padding: var(--sp-3) var(--sp-3);
+  text-align: left;
+  vertical-align: top;
+  font-weight: var(--fw-bold);
+  color: var(--color-text);
+  background-color: var(--c-primary-50);
+  white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+  .label {
+    width: 28%;
+    padding-inline: var(--sp-4);
+  }
+}
+
+.value {
+  padding: var(--sp-3);
+  vertical-align: top;
+  color: var(--color-text);
+  line-height: var(--lh-snug);
+}
+
+@media (min-width: 768px) {
+  .value {
+    padding-inline: var(--sp-4);
+  }
+}
+
+/* Deep links from a spec row into the matching detail section further down
+   the page — okusuritsuhan does this and it works well for long PDPs. */
+.jump {
+  display: inline-block;
+  margin-top: var(--sp-1);
+  font-size: var(--fs-xs);
+  color: var(--color-link);
+}

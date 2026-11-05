@@ -1,0 +1,15 @@
+/* Sits above the first fieldset, so it is read before any field it explains
+   rather than after. Muted: it is a footnote that happens to appear first, not
+   a heading. */
+.note {
+  margin-bottom: var(--sp-2);
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+/* Same colour and weight as the marker itself, so the key is recognisably the
+   same character the fields carry. */
+.mark {
+  color: var(--c-danger-700);
+  font-weight: var(--fw-bold);
+}

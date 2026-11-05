@@ -1,0 +1,268 @@
+/* --- trigger ------------------------------------------------------------- */
+
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  flex-shrink: 0;
+  min-height: 40px;
+  padding-inline: var(--sp-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-surface);
+  color: var(--color-heading);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  cursor: pointer;
+}
+
+.trigger:hover {
+  border-color: var(--c-primary-500);
+  color: var(--c-primary-800);
+}
+
+/* The label is dropped on phones — the icon carries it, and the row also has to
+   hold the logo and the menu button. It returns as soon as there is room. */
+.triggerLabel {
+  display: none;
+}
+
+@media (min-width: 480px) {
+  .triggerLabel {
+    display: inline;
+  }
+}
+
+@media (max-width: 479px) {
+  .trigger {
+    width: 40px;
+    padding-inline: 0;
+    justify-content: center;
+  }
+}
+
+/* --- scrim --------------------------------------------------------------- */
+
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  border: 0;
+  padding: 0;
+  background-color: rgb(15 23 27 / 45%);
+  cursor: pointer;
+}
+
+/* --- panel --------------------------------------------------------------- */
+
+/* Full-height sheet on the right at desktop; on a phone it takes the bottom of
+   the screen instead, where the thumb already is and where the on-screen
+   keyboard will not push it out of view. */
+.panel {
+  position: fixed;
+  z-index: 61;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-lg);
+  inset: auto 0 0 0;
+  height: min(80vh, 32rem);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+}
+
+@media (min-width: 768px) {
+  .panel {
+    inset: 0 0 0 auto;
+    width: min(24rem, 100vw);
+    height: 100dvh;
+    border-radius: 0;
+  }
+}
+
+.panelHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding: var(--sp-4);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.panelTitle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-base);
+  font-weight: var(--fw-bold);
+  color: var(--color-heading);
+}
+
+.close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: var(--fs-base);
+  cursor: pointer;
+}
+
+.close:hover {
+  background-color: var(--color-surface-sunken);
+  color: var(--color-heading);
+}
+
+/* Grows to fill, so the composer stays pinned to the bottom whatever the
+   transcript holds. */
+.transcript {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--sp-4);
+}
+
+.notice {
+  margin: 0;
+  padding: var(--sp-4);
+  background-color: var(--c-primary-50);
+  border-radius: var(--radius-lg);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-relaxed);
+  color: var(--color-text);
+}
+
+.noticeLink {
+  font-weight: var(--fw-bold);
+  text-decoration: underline;
+}
+
+.composer {
+  display: flex;
+  gap: var(--sp-2);
+  padding: var(--sp-4);
+  border-top: 1px solid var(--color-border);
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  min-height: 44px;
+  padding-inline: var(--sp-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  font-size: var(--fs-sm);
+}
+
+.input:disabled {
+  background-color: var(--c-neutral-100);
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+}
+
+.send {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background-color: var(--c-primary-500);
+  color: var(--c-neutral-900);
+  font-size: var(--fs-sm);
+  cursor: pointer;
+}
+
+.send:disabled {
+  background-color: var(--c-neutral-200);
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+}
+
+/* --- Dock ------------------------------------------------------------- 
+ 
+   Fixed above the bottom tab bar rather than inside the header. On a phone
+   the tab bar owns the last 60px plus the home-indicator inset, so the offset
+   is computed from the same token rather than guessed — change the bar's
+   height and this follows it.
+ 
+   Below --z-sticky on purpose: the tab bar is permanent navigation and this
+   is not, so if they ever overlap the navigation wins. */
+.dock {
+  position: fixed;
+  right: var(--sp-4);
+  bottom: calc(var(--mobile-tabbar-h) + env(safe-area-inset-bottom) + var(--sp-3));
+  z-index: calc(var(--z-sticky) - 1);
+  transition:
+    opacity var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+/* No tab bar from 768px, so it sits on the viewport edge instead. */
+@media (min-width: 768px) {
+  .dock {
+    bottom: var(--sp-5);
+    right: var(--sp-5);
+  }
+}
+
+/* The cart's checkout bar occupies the same corner. `:has()` lets this react
+   to a component it cannot see and has no prop from — the bar marks itself
+   with data-bottom-bar, and the dock steps up over it.
+
+   An attribute rather than a class because CSS modules hash class names, so
+   `.checkoutBar` here would never match the one the cart page renders. */
+@media (max-width: 1023px) {
+  body:has([data-bottom-bar]) .dock {
+    bottom: calc(
+      var(--mobile-tabbar-h) + env(safe-area-inset-bottom) + var(--bottom-bar-h, 72px) +
+        var(--sp-3)
+    );
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  body:has([data-bottom-bar]) .dock {
+    bottom: calc(var(--bottom-bar-h, 72px) + var(--sp-3));
+  }
+}
+
+/* Scrolled down: out of the way. `visibility` rather than display so the
+   transition can run, and so nothing reflows when it comes back. */
+.dockHidden {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(calc(100% + var(--sp-4)));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dock {
+    transition: opacity var(--dur-fast) var(--ease-out);
+  }
+
+  .dockHidden {
+    transform: none;
+  }
+}
+
+/* Docked, it is a floating control rather than a header button, so it needs
+   to read as one: a shadow to lift it off whatever it is over, and a solid
+   surface so text behind it never shows through. */
+.dock .trigger {
+  min-height: 44px;
+  box-shadow: var(--shadow-md, 0 4px 14px rgb(0 0 0 / 0.14));
+  border-color: var(--c-primary-300, var(--color-border));
+}
+
+/* Docked, the narrow-screen rule above collapses this to a 40px square, which
+   is below the 44px minimum and smaller than every other floating control.
+   As a FAB it gets a proper circle instead. */
+@media (max-width: 479px) {
+  .dock .trigger {
+    width: 48px;
+    height: 48px;
+  }
+}

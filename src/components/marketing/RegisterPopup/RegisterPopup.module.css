@@ -1,0 +1,307 @@
+/* ==========================================================================
+   新規会員登録キャンペーン invitation.
+
+   Takes its look from the campaign banner in the homepage rail: a soft green
+   wash behind the heading, the figure at display size in the banner's red,
+   and a filled red pill for the CTA. Rebuilt in CSS rather than reusing the
+   artwork — that file is 1116×252 and unreadable cropped into a 24rem card,
+   and it still has the old 「お薬ショップへようこそ！」 wording baked into it.
+
+   CENTRED AT EVERY WIDTH, and deliberately small on a phone. It was a bottom
+   sheet, which is the right pattern for a tall sheet full of controls — this
+   is five short lines and one button, and as a sheet it stood 449px tall on an
+   812px screen, covering 55% of the page to say one sentence. Centred and
+   tightened it is nearer a third, with the page still legible around it.
+   ========================================================================== */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--sp-4);
+  background-color: rgba(15, 23, 42, 0.55);
+  animation: fade var(--dur-base) var(--ease-out);
+}
+
+.card {
+  position: relative;
+  width: 100%;
+  max-width: 24rem;
+
+  /* Capped and scrollable: a 320×568 phone is not hypothetical, and unbounded
+     the card centres itself and hangs off the TOP of such a screen — taking
+     the close button with it.
+
+     dvh, not vh: on mobile Safari and Chrome, vh is the height with the URL
+     bar RETRACTED, so a 100vh cap is taller than the screen actually is
+     whenever the bar is showing — which is exactly when the popup appears. */
+  max-height: calc(100vh - var(--sp-8));
+  max-height: calc(100dvh - var(--sp-8));
+  overflow-x: hidden;
+  overflow-y: auto;
+  /* Scrolling to the end of the card must not start scrolling the page
+     underneath it. */
+  overscroll-behavior: contain;
+
+  background-color: var(--color-surface);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+  animation: rise var(--dur-slow) var(--ease-out);
+}
+
+/* --- Close ------------------------------------------------------------- */
+
+/* 44px, the minimum comfortable tap target, even though the icon inside is
+   18px. Sticky, not absolute: once the card can scroll, an absolutely
+   positioned close button scrolls off the top with the header and the visitor
+   is left hunting for a way out of a modal. The negative margin stops the
+   sticky box adding height of its own. */
+.close {
+  position: sticky;
+  top: var(--sp-2);
+  z-index: 1;
+  float: right;
+  margin-right: var(--sp-2);
+  margin-bottom: -44px;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background-color: rgba(255, 255, 255, 0.75);
+  color: var(--c-neutral-700, #3f3f46);
+  cursor: pointer;
+}
+
+.close:hover,
+.close:focus-visible {
+  background-color: #fff;
+  color: var(--color-heading);
+}
+
+/* --- Head -------------------------------------------------------------- */
+
+/* The banner's green watercolour, reduced to a flat wash. A photographic
+   gradient at this size reads as a JPEG artefact rather than a texture. */
+.head {
+  padding: var(--sp-5) var(--sp-4) var(--sp-3);
+  background: linear-gradient(180deg, #eaf7e1 0%, #f7fbf2 100%);
+}
+
+.eyebrow {
+  display: inline-block;
+  margin: 0;
+  padding: var(--sp-1) var(--sp-3);
+  border-radius: var(--radius-pill);
+  background-color: #1f7a3d;
+  color: #fff;
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.04em;
+}
+
+/* --- Body -------------------------------------------------------------- */
+
+.body {
+  padding: var(--sp-4) var(--sp-4) var(--sp-5);
+}
+
+.title {
+  margin: 0 0 var(--sp-3);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-snug);
+  color: var(--color-heading);
+}
+
+/* The figure on its own line, at display size. Its own block so the Japanese
+   either side keeps body sizing. */
+.points {
+  display: block;
+  margin: var(--sp-1) 0;
+  line-height: 1;
+  /* The banner's red. Paired only with white or the card's own surface — it
+     is a display colour, never set as body text. */
+  color: #e4002b;
+}
+
+.pointsNum {
+  font-size: 3.25rem;
+  font-weight: var(--fw-bold);
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* On the figure's line, not below it — see the note in the component. */
+.pointsUnit {
+  margin-inline-start: var(--sp-1);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-bold);
+}
+
+.lead {
+  margin: 0 0 var(--sp-4);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-normal);
+  color: var(--color-text-muted);
+}
+
+/* The banner's CTA pill, filled rather than outlined — it is the one action
+   this card exists to offer. */
+.cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  width: 100%;
+  min-height: 48px;
+  padding: var(--sp-2) var(--sp-4);
+  border-radius: var(--radius-pill);
+  background-color: #e4002b;
+  color: #fff;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  text-decoration: none;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.12);
+}
+
+.cta:hover,
+.cta:focus-visible {
+  background-color: #c20025;
+  color: #fff;
+  text-decoration: none;
+}
+
+.later {
+  display: block;
+  width: 100%;
+  margin-top: var(--sp-2);
+  padding: var(--sp-2);
+  border: 0;
+  background: none;
+  color: var(--color-text-muted);
+  font-size: var(--fs-xs);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.later:hover,
+.later:focus-visible {
+  color: var(--color-text);
+}
+
+.terms {
+  margin: var(--sp-3) 0 0;
+  font-size: var(--fs-2xs);
+  line-height: var(--lh-normal);
+  color: var(--color-text-muted);
+}
+
+/* --- Motion ------------------------------------------------------------ */
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay,
+  .card {
+    animation: none;
+  }
+}
+
+/* --- Phone ------------------------------------------------------------- */
+
+/* Smaller type and tighter spacing below 640px. The figure stays the biggest
+   thing on the card — it is the message — but 52px of it on a 375px screen
+   was setting the card's height on its own. */
+@media (max-width: 639px) {
+  .card {
+    max-width: 20rem;
+  }
+
+  .head {
+    padding: var(--sp-4) var(--sp-4) var(--sp-2);
+  }
+
+  .body {
+    padding: var(--sp-3) var(--sp-4) var(--sp-4);
+  }
+
+  .pointsNum {
+    font-size: 2.5rem;
+  }
+
+  /* Down a step from the heading's own size, which left 「500ポイントプレゼント」
+     measuring 256px inside a 256px content box on a 320px screen — fitting
+     exactly, with nothing in hand for a wider fallback font. */
+  .pointsUnit {
+    font-size: var(--fs-sm);
+  }
+
+  .lead {
+    margin-bottom: var(--sp-3);
+    font-size: var(--fs-xs);
+    line-height: var(--lh-snug);
+  }
+
+  .later {
+    margin-top: var(--sp-1);
+    padding: var(--sp-1);
+  }
+
+  .terms {
+    margin-top: var(--sp-2);
+  }
+}
+
+/* --- Short screens ------------------------------------------------------ */
+
+/* Height, not width: an iPhone SE is 667px tall and a 360×640 Android shorter
+   still, and on those the card passed half the screen again at the size that
+   suits a 812px phone. Everything here is spacing and the figure — no line of
+   copy is dropped, because what the card SAYS is the same on every phone. */
+@media (max-height: 720px) {
+  .head {
+    padding: var(--sp-3) var(--sp-4) var(--sp-2);
+  }
+
+  .body {
+    padding: var(--sp-2) var(--sp-4) var(--sp-3);
+  }
+
+  .pointsNum {
+    font-size: 2.125rem;
+  }
+
+  .points {
+    margin: 0;
+  }
+
+  .title {
+    margin-bottom: var(--sp-2);
+  }
+
+  .lead {
+    margin-bottom: var(--sp-3);
+  }
+
+  .cta {
+    min-height: 44px;
+  }
+}

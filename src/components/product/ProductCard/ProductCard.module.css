@@ -1,0 +1,160 @@
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.card:hover {
+  border-color: var(--c-primary-300);
+  box-shadow: var(--shadow-md);
+}
+
+/* --- Media ------------------------------------------------------------ */
+
+/* Full-bleed packshot: the image spans the whole card, no tinted panel behind
+   it. No padding here — the card's own `overflow: hidden` plus its radius clip
+   the top corners, so the image meets the border cleanly. `position: relative`
+   stays for the badges, which sit over the image. */
+.media {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+/* A square box at the card's full width, rather than a fixed 120px centred in
+   it. The square keeps every card the same height in a grid; `contain` rather
+   than `cover` because these are packshots — cropping one cuts the end off the
+   box, which is the part carrying the strength and the count.
+
+   This also stops under-using what was already being downloaded: `sizes` on the
+   <Image> has always asked for a 240px source, which was then displayed at 120
+   and thrown away. */
+.image {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: contain;
+}
+
+/* Stands in for a product with no uploaded packshot, keeping the card the
+   same height as the ones beside it in the grid. Same square box the image
+   occupies, so a row does not go ragged. */
+.imageMissing {
+  width: 100%;
+  aspect-ratio: 1;
+  background-color: var(--color-surface-muted, #f4f4f5);
+}
+
+.badges {
+  position: absolute;
+  top: var(--sp-2);
+  left: var(--sp-2);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--sp-1);
+  z-index: var(--z-base);
+}
+
+/* --- Body ------------------------------------------------------------- */
+
+/* Centred: what the market does, and what keeps a two-line name and a short
+   price from drifting to opposite edges of a narrow card. */
+.body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  gap: var(--sp-2);
+  padding: var(--sp-3);
+  text-align: center;
+}
+
+.brand {
+  font-size: var(--fs-xs);
+  color: var(--color-text-subtle);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+}
+
+.name {
+  font-size: var(--fs-base);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--ls-normal);
+}
+
+.nameLink {
+  color: var(--color-text);
+}
+
+.nameLink:hover {
+  color: var(--c-primary-800);
+  text-decoration: none;
+}
+
+/* Stretched link — the whole card is clickable, but only the product name
+   is in the accessibility tree as the link. Badges and the wishlist button
+   sit above it via z-index. */
+.nameLink::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+/* --- Price ------------------------------------------------------------ */
+
+/* Pushed to the foot of the card, so price, stars and the stock badge line up
+   across a row however long each name runs.
+
+   The margin sits on the GROUP rather than on the price, because the discount
+   badge above it is conditional: pinning the badge would leave a card without
+   one unpinned, and its price would sit higher than its neighbours'. */
+.priceGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-1);
+  margin: auto 0 0;
+}
+
+.priceBlock {
+  margin: 0;
+}
+
+/* One price, per unit: `¥1,910 /1錠あたり`. The pack total is no longer shown
+   here — the pack table on the product page carries every tier. */
+.unitPrice {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-bold);
+  color: var(--color-price);
+  letter-spacing: var(--ls-tight);
+}
+
+.perUnit {
+  margin-left: var(--sp-1);
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-1);
+}
+
+/* --- Compact variant (the homepage headline rail) --------------------- */
+
+/* No size override any more: the compact cards are ~150px wide and the image
+   now takes whatever width its card has, so it scales with them. */
+

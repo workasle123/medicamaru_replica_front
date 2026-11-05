@@ -1,0 +1,217 @@
+.section {
+  margin-bottom: var(--sp-10);
+  scroll-margin-top: calc(var(--header-clear) + var(--sp-6));
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  font-size: var(--fs-xl);
+  margin-bottom: var(--sp-4);
+  padding-bottom: var(--sp-2);
+  border-bottom: 2px solid var(--c-primary-100);
+}
+
+/* Topic icon in a tinted disc, same treatment as the category tiles. */
+.titleIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-pill);
+  background-color: var(--c-primary-50);
+  border: 1px solid var(--c-primary-100);
+  color: var(--c-primary-700);
+}
+
+.titleIcon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.item {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.question {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  min-height: var(--control-h-md);
+  padding: var(--sp-3) var(--sp-4);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  cursor: pointer;
+  list-style: none;
+}
+
+.question::-webkit-details-marker {
+  display: none;
+}
+
+.question::after {
+  content: '＋';
+  flex-shrink: 0;
+  color: var(--c-primary-800);
+  font-weight: var(--fw-bold);
+}
+
+.item[open] .question {
+  background-color: var(--c-primary-50);
+}
+
+.item[open] .question::after {
+  content: '−';
+}
+
+/* Takes the free space, which is what pushes the ＋/− indicator to the end. */
+.questionText {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Q and A marks. Q is the brand orange with dark text (the 500 tone is
+   dark-text-only); A is teal 700, the lightest teal that carries white text. */
+.mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-pill);
+  background-color: var(--c-primary-500);
+  color: var(--c-neutral-900);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  line-height: 1;
+}
+
+.markAnswer {
+  background-color: var(--c-accent-700);
+  color: var(--color-text-inverse);
+}
+
+/* The answer is highlighted: a teal tint with a bar down its left edge, so it
+   reads as the reply to the orange-tinted question above it. The bar is an
+   inset shadow rather than a border so it does not shift the A mark out of
+   line with the Q. */
+.answer {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4) var(--sp-4);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-normal);
+  color: var(--color-text);
+  background-color: var(--c-accent-50);
+  border-top: 1px solid var(--c-accent-100);
+  box-shadow: inset 3px 0 0 var(--c-accent-500);
+}
+
+/* Answers are prose, so they keep a readable measure even when the card
+   spans a wide container. The top padding centres the first line on the
+   28px mark beside it. */
+.answerText {
+  flex: 1;
+  min-width: 0;
+  max-width: 82ch;
+  padding-top: 3px;
+}
+
+/* Answers from the admin editor, or plain text split into paragraphs at its
+   blank lines (richTextHtml). Two classes deep so the FAQ page's prose styles
+   (ContentPage `.body h2`, `.body ul`…) do not restyle an answer. */
+.answer .answerText > * {
+  margin: 0;
+}
+
+.answer .answerText > * + * {
+  margin-top: var(--sp-2);
+}
+
+.answer .answerText :is(ul, ol) {
+  padding-left: 1.5em;
+}
+
+.answer .answerText li + li {
+  margin-top: var(--sp-1);
+}
+
+/* The editor offers no headings for answers; anything pasted in stays at
+   answer size rather than becoming a page-level heading. */
+.answer .answerText :is(h2, h3, h4) {
+  padding: 0;
+  border: 0;
+  font-size: inherit;
+  font-weight: var(--fw-bold);
+}
+
+.answer .answerText a {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+/* A link whose address was not safe keeps its text but loses the address. */
+.answer .answerText a:not([href]) {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* --- "Show more" ------------------------------------------------------- */
+/* A <details> rather than a button, so the hidden questions are real markup
+   that works — and is indexable — without JavaScript. */
+
+.more > .list {
+  margin-top: var(--sp-2);
+}
+
+.moreToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-top: var(--sp-4);
+  min-height: var(--control-h-md);
+  padding-inline: var(--sp-5);
+  border: 1px solid var(--c-primary-600);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-surface);
+  color: var(--c-primary-700);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  cursor: pointer;
+  list-style: none;
+}
+
+.moreToggle::-webkit-details-marker {
+  display: none;
+}
+
+.moreToggle::after {
+  content: '▾';
+}
+
+.more[open] .moreToggle::after {
+  content: '▴';
+}
+
+.moreToggle:hover {
+  background-color: var(--c-primary-500);
+  color: var(--c-neutral-900);
+}
+
+.more[open] .moreToggle {
+  margin-bottom: var(--sp-1);
+}

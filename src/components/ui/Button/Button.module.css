@@ -1,0 +1,91 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  font-weight: var(--fw-bold);
+  line-height: 1;
+  text-align: center;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+  text-decoration: none;
+}
+
+.button:hover {
+  text-decoration: none;
+}
+
+.button:disabled,
+.button[aria-disabled='true'] {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.md {
+  height: var(--control-h-md);
+  padding-inline: var(--sp-5);
+  font-size: var(--fs-base);
+}
+
+.lg {
+  height: var(--control-h-lg);
+  padding-inline: var(--sp-6);
+  font-size: var(--fs-md);
+}
+
+/* --- Variants --------------------------------------------------------- */
+
+/* Brand pink, reserved for the single most important action on a view —
+   almost always "add to cart" or "place order". Uses the 600 step so white
+   text clears contrast; the 400 brand pink does not. */
+.primary {
+  background-color: var(--color-cta);
+  color: var(--color-cta-text);
+}
+.primary:hover {
+  background-color: var(--color-cta-hover);
+  color: var(--color-cta-text);
+}
+
+/* Deep orange with white text rather than the bright brand fill, so it stays
+   visually subordinate to .primary — which is the brand orange with dark
+   text. Two filled buttons of the same colour would compete. 4.98:1. */
+.secondary {
+  background-color: var(--c-primary-700);
+  color: var(--color-text-inverse);
+}
+.secondary:hover {
+  background-color: var(--c-primary-800);
+  color: var(--color-text-inverse);
+}
+
+.outline {
+  background-color: var(--color-surface);
+  border-color: var(--c-primary-600);
+  /* Text needs 800, not 700: 700 on the white surface is 4.68:1 but drops
+     below 4.5 on the tinted hover state. */
+  color: var(--c-primary-800);
+}
+.outline:hover {
+  background-color: var(--c-primary-50);
+  color: var(--c-primary-800);
+}
+
+.ghost {
+  background-color: transparent;
+  color: var(--color-text);
+}
+.ghost:hover {
+  background-color: var(--color-surface-sunken);
+  color: var(--color-text);
+}
+
+/* --- Modifiers -------------------------------------------------------- */
+
+.block {
+  width: 100%;
+}

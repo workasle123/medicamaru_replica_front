@@ -1,0 +1,50 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  padding: 2px var(--sp-2);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  line-height: 1.5;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+}
+
+/* Savings. Red rather than the amber CTA, so a discount never competes
+   visually with "add to cart". Static, never animated: kusuriexpress blinks
+   its discount badge, which is an accessibility hazard.
+   600 step, because this carries white text at 12px. */
+.sale {
+  background-color: var(--c-sale-600);
+  color: var(--color-text-inverse);
+}
+
+.inStock {
+  background-color: var(--c-success-50);
+  color: var(--c-success-700);
+}
+
+.outOfStock {
+  background-color: var(--color-surface-sunken);
+  color: var(--color-text-muted);
+}
+
+.neutral {
+  background-color: var(--color-surface-sunken);
+  color: var(--color-text-muted);
+}
+
+.info {
+  background-color: var(--c-info-50);
+  color: var(--c-info-700);
+}
+
+.brand {
+  background-color: var(--c-primary-50);
+  color: var(--c-primary-800);
+}
+
+.warning {
+  background-color: var(--c-warning-50);
+  color: var(--c-warning-700);
+}

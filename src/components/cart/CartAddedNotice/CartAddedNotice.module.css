@@ -1,0 +1,138 @@
+/* Fixed, not in the flow. The customer may have scrolled anywhere on a long
+   product page by the time they tap a pack, and a confirmation they have to
+   go and find is not a confirmation.
+
+   Above the phone tab bar, keyed to the same token the bar is sized from so
+   the two cannot drift — and above the CheckoutBar's stacking order is not a
+   concern here, since that bar only exists on /cart. */
+.toast {
+  position: fixed;
+  left: var(--sp-3);
+  right: var(--sp-3);
+  bottom: calc(var(--mobile-tabbar-h) + env(safe-area-inset-bottom) + var(--sp-3));
+  z-index: var(--z-toast, 60);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+
+  padding: var(--sp-3) var(--sp-3) var(--sp-3) var(--sp-4);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-heading, #1a1a1a);
+  color: var(--color-text-inverse, #fff);
+  box-shadow: var(--shadow-lg, 0 8px 24px rgb(0 0 0 / 0.2));
+
+  animation: cartToastIn 180ms var(--ease-out, ease-out);
+}
+
+/* 「カートに追加しました」 is ten characters, and on a 375px screen the row
+   came to 323px of content in 323px of space — so it wrapped to two lines by a
+   pixel or two and made the toast half again as tall. Twelve pixels bought
+   back from the gaps and the close button fit it on one line, with every type
+   size left on its token. */
+@media (max-width: 419px) {
+  .toast {
+    gap: var(--sp-2);
+    padding-left: var(--sp-3);
+  }
+
+  .close {
+    width: 40px;
+  }
+}
+
+/* Desktop: a card in the bottom-right rather than a full-width band. There is
+   no tab bar to clear, and a bar across a 1600px viewport to say five words
+   reads as a site-wide announcement rather than a reply to one tap. */
+@media (min-width: 768px) {
+  .toast {
+    left: auto;
+    right: var(--sp-5);
+    bottom: var(--sp-5);
+    width: min(24rem, calc(100vw - 2 * var(--sp-5)));
+  }
+}
+
+@keyframes cartToastIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast {
+    animation: none;
+  }
+}
+
+.message {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin: 0;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+}
+
+.tick {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  flex: none;
+  border-radius: var(--radius-pill);
+  background-color: var(--c-success-500, #2e9e5b);
+  color: #fff;
+  font-size: var(--fs-2xs);
+  line-height: 1;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+  flex: none;
+}
+
+/* The point of the whole component, so it is the one filled thing in it. */
+.view {
+  display: inline-block;
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--radius-md);
+  background-color: var(--c-primary-500);
+  color: var(--color-text-inverse, #fff);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.view:hover,
+.view:focus-visible {
+  background-color: var(--c-primary-600, var(--c-primary-500));
+  color: var(--color-text-inverse, #fff);
+  text-decoration: none;
+}
+
+/* 44px of target around a 16px glyph — the toast sits where a thumb rests. */
+.close {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin: calc(var(--sp-2) * -1) 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font-size: var(--fs-lg);
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0.75;
+}
+
+.close:hover,
+.close:focus-visible {
+  opacity: 1;
+}

@@ -1,0 +1,74 @@
+/* Delivery destination, sitting to the right of the search field. */
+
+.root {
+  display: none;
+  align-items: center;
+  gap: var(--sp-2);
+  flex-shrink: 0;
+  /* Enough for a prefecture plus a ward, and no more — a long city name must
+     truncate rather than steal width from the search field beside it. */
+  max-width: 11rem;
+  min-height: 40px;
+  padding: var(--sp-1) var(--sp-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  color: var(--color-heading);
+  text-decoration: none;
+}
+
+/* Hidden below 1024px. On a phone the search field already takes a full row of
+   its own and the account links live in the drawer; adding this would push the
+   header to a third row to show something the customer confirms at checkout
+   anyway. */
+@media (min-width: 1024px) {
+  .root {
+    display: inline-flex;
+  }
+}
+
+.root:hover {
+  border-color: var(--c-primary-500);
+  text-decoration: none;
+}
+
+.pin {
+  flex-shrink: 0;
+  color: var(--c-primary-600);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.2;
+}
+
+.label {
+  font-size: var(--fs-2xs);
+  color: var(--color-text-muted);
+}
+
+/* One line, ellipsised. The full value is in the link's title attribute. */
+.value {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  color: var(--color-heading);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chevron {
+  flex-shrink: 0;
+  color: var(--color-text-muted);
+}
+
+/* Holds the row's width while the fetch is in flight, so the search field does
+   not resize under the cursor when the answer arrives. */
+.pending {
+  width: 10rem;
+  border-color: transparent;
+}

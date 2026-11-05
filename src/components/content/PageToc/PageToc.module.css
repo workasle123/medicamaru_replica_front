@@ -1,0 +1,141 @@
+/* Following the reader is the ASIDE's job (`stickyAside` in
+   ContentPage.module.css), not this list's — sticky here would only travel
+   the few pixels the aside itself has spare. */
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item + .item {
+  margin-top: 1px;
+}
+
+.link {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-2);
+  padding: var(--sp-2);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-normal);
+  color: var(--color-text);
+}
+
+.link:hover {
+  background-color: var(--c-primary-50);
+  color: var(--c-primary-700);
+  text-decoration: none;
+}
+
+/* The heading's own number where it has one (第1章, 1. …) is inside the text;
+   this one is the position in the list, so it is muted and tabular. */
+.number {
+  flex-shrink: 0;
+  min-width: 1.4em;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  color: var(--color-text-subtle);
+  font-variant-numeric: tabular-nums;
+}
+
+.text {
+  min-width: 0;
+}
+
+/* --- Phone shape -------------------------------------------------------
+   Only below 768px. Above that the sticky side column is the contents list,
+   and two of them on one page would be noise. */
+.collapsible {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .collapsible {
+    display: block;
+    margin-bottom: var(--sp-6);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background-color: var(--color-surface);
+    overflow: hidden;
+  }
+
+  .summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-3);
+    /* 44px of target, per the tap-size the rest of the site holds to. */
+    min-height: 44px;
+    padding: var(--sp-3) var(--sp-4);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-bold);
+    color: var(--color-heading);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  /* Safari draws its own triangle through ::-webkit-details-marker, which
+     `list-style: none` alone does not remove. */
+  .summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .summaryLabel {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-2);
+  }
+
+  .summaryLabel svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    color: var(--c-primary-600);
+  }
+
+  /* The chevron turns when open — the only state signal on a closed box. */
+  .count {
+    position: relative;
+    padding-right: var(--sp-5);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-medium);
+    color: var(--color-text-subtle);
+  }
+
+  .count::after {
+    content: '';
+    position: absolute;
+    right: 2px;
+    top: 50%;
+    width: 7px;
+    height: 7px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: translateY(-70%) rotate(45deg);
+    transition: transform 0.15s ease;
+  }
+
+  .collapsible[open] .count::after {
+    transform: translateY(-20%) rotate(-135deg);
+  }
+
+  .collapsibleBody {
+    padding: 0 var(--sp-2) var(--sp-2);
+    border-top: 1px solid var(--color-border);
+  }
+
+  /* This shape sits INSIDE the article, where ContentPage underlines links as
+     prose (`.body a`). A contents list is navigation, not prose, and fourteen
+     underlined lines read as a wall — so it is turned off here. Two classes
+     to outrank that descendant selector. */
+  .collapsible .link {
+    text-decoration: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .count::after {
+    transition: none;
+  }
+}

@@ -1,0 +1,158 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-3);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+@media (min-width: 640px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Six across. The homepage passes no limit, so this renders every flagged
+   category - eight at present, which puts two on a second row. */
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: var(--sp-3);
+  }
+}
+
+/* Icon over name, centred. Position relative so the name link's ::after can be
+   stretched across the whole tile. */
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-2);
+  height: 100%;
+  padding: var(--sp-4) var(--sp-3);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  color: var(--color-text);
+  text-align: center;
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.card:hover {
+  border-color: var(--c-primary-400);
+  box-shadow: var(--shadow-sm);
+  color: var(--c-primary-800);
+}
+
+/* The frame the icon or placeholder sits in. A fixed square with a soft tint, so
+   a tile with an uploaded icon and a tile still waiting for one are the same
+   size and read as one set. 56px on phones, 64px from 1024px -- the sizes an
+   uploaded icon is drawn at, which is why 256x256 is the recommended upload. */
+.iconFrame {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-lg);
+  background-color: var(--c-accent-50);
+  overflow: hidden;
+}
+
+@media (min-width: 1024px) {
+  .iconFrame {
+    width: 64px;
+    height: 64px;
+  }
+}
+
+/* contain, not cover: an icon with its own padding must not be cropped into. */
+.icon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.iconFallback {
+  font-size: 1.5rem;
+  font-weight: var(--fw-bold);
+  line-height: 1;
+  color: var(--c-primary-600);
+}
+
+@media (min-width: 1024px) {
+  .iconFallback {
+    font-size: 1.75rem;
+  }
+}
+
+/* Two lines at most, so a long name cannot make one tile taller than its row. */
+.name {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-snug);
+  color: inherit;
+}
+
+.name:hover {
+  text-decoration: none;
+}
+
+/* The whole tile is clickable through this one link. */
+.name::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+.name:focus-visible {
+  outline: none;
+}
+
+.name:focus-visible::after {
+  outline: 2px solid var(--c-primary-600);
+  outline-offset: 2px;
+}
+
+.count {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+/* Subcategory links sit above the stretched tile link so they stay clickable. */
+.children {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--sp-1) var(--sp-2);
+  margin: var(--sp-1) 0 0;
+  padding: var(--sp-2) 0 0;
+  border-top: 1px dashed var(--color-border);
+  list-style: none;
+}
+
+.childLink {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+.childLink:hover {
+  color: var(--c-primary-800);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition: none;
+  }
+}

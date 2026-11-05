@@ -1,0 +1,366 @@
+/* Pack-tier selector.
+   Built from radio inputs + labels, so selecting a tier needs NO JavaScript
+   and the choice submits with the form. Every tier shows its own price, unit
+   price, discount and points inline — exactly how medicine.shop and
+   okusuritsuhan present bulk pricing — so nothing has to update dynamically. */
+
+.panel {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-4);
+}
+
+.heading {
+  font-size: var(--fs-base);
+  font-weight: var(--fw-bold);
+  margin-bottom: var(--sp-1);
+}
+
+.subheading {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  margin-bottom: var(--sp-4);
+}
+
+/* DENSITY MATTERS HERE because this list is the only part of the layout that
+   grows with the data.
+
+   From 1280px the panel takes a column of its own beside the product
+   information, and a grid row is as tall as its tallest column — so once the
+   list is taller than the description, every extra pack is a pixel of blank
+   space beside it, and the body below cannot start until the list ends.
+   Measured before this was tightened, the worst product in the catalogue
+   (7 packs) left 338px of blank under the description and 804px under the
+   gallery.
+
+   KNOW THE SCALE BEFORE SPENDING MORE EFFORT HERE. Counting live rows only —
+   `product_variants.deleted_at IS NULL`, which matters because 52% of that
+   table is soft-deleted — the catalogue is 82% single-pack and 96% three or
+   fewer, where the rail is shorter than the description and there is no gap
+   at all. Just 22 products carry five or more, and exactly one carries seven.
+   This is a narrow problem, so it does not justify hiding packs behind a
+   「すべて見る」 toggle: there is no runaway case to cap, and those are the buy
+   buttons. See the note on .actions for where the height came from. */
+.tiers {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  margin: 0 0 var(--sp-4);
+  padding: 0;
+  list-style: none;
+}
+
+/* --- One card per pack ---------------------------------------------------
+
+   These were radio rows: a hidden input, a label styled through
+   `:checked + .tierLabel`, and a custom dot. All of it existed so one shared
+   form at the foot of the panel could tell which variant to post. Each row now
+   owns its own form and its own button, so there is nothing to select and
+   nothing to indicate — the selection state, the dot, and the pointer cursor
+   all went with the radios. */
+.tier {
+  padding: var(--sp-2);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+}
+
+.tier:hover {
+  border-color: var(--c-primary-300);
+}
+
+.tierHead {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: var(--sp-3);
+}
+
+.tierMain {
+  min-width: 0;
+}
+
+.packLabel {
+  display: block;
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-sm);
+}
+
+.tierMeta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin-top: 2px;
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+/* STAYS STACKED, and that is a measured decision rather than inertia.
+
+   Putting the struck-through list price beside the price looked like it would
+   save a line. It did — and cost more than it saved. This column is sized
+   `auto`, so a wider line claims more of the row: 「3,080円 2,600円」 on one
+   line took the column from ~90px to 175px, which squeezed the pack label
+   beside it to 122px, which wrapped its two badges onto a second line.
+   tierHead went from 54px to 78px. The saving was real and the bill was
+   larger. Keep the narrow column; the height came out of the chrome instead. */
+.tierPricing {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.wasPrice {
+  display: block;
+  font-size: var(--fs-xs);
+  color: var(--color-price-was);
+  text-decoration: line-through;
+}
+
+.price {
+  display: block;
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-bold);
+  color: var(--color-price);
+  letter-spacing: var(--ls-tight);
+}
+
+.unitPrice {
+  display: block;
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+/* − | field | + as one control. The buttons carry the outer border so the
+   three read as a single unit rather than three loose boxes. */
+.qtyGroup {
+  display: flex;
+  align-items: stretch;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+  overflow: hidden;
+}
+
+.qtyStep {
+  width: 40px;
+  min-height: var(--control-h-lg);
+  border: 0;
+  background-color: var(--color-surface-sunken);
+  color: var(--color-heading);
+  font-size: var(--fs-lg);
+  line-height: 1;
+  cursor: pointer;
+}
+
+.qtyStep:hover:not(:disabled) {
+  background-color: var(--c-primary-50);
+  color: var(--c-primary-700);
+}
+
+.qtyStep:disabled {
+  color: var(--color-text-subtle);
+  cursor: not-allowed;
+}
+
+.qtyStep:focus-visible {
+  outline: 2px solid var(--c-primary-600);
+  outline-offset: -2px;
+}
+
+
+.outOfStock {
+  padding: var(--sp-4);
+  text-align: center;
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  background-color: var(--color-surface-sunken);
+  border-radius: var(--radius-md);
+}
+
+/* --- over-limit confirmation --------------------------------------------
+
+   The same dialog the cart shows, because it is the same message about the
+   same rule — a customer who meets it on one page and then the other should
+   not have to work out whether they are being told two different things.
+   Duplicated rather than shared: the two live in different CSS Modules, and a
+   shared one would be a global stylesheet for six rules. */
+.limitDialog {
+  /* A modal <dialog> is centred by the UA's own `margin: auto`, which the
+     global reset in base.css zeroes — so it lands in the top-left corner
+     instead. Restated here. */
+  margin: auto;
+  width: min(420px, calc(100vw - var(--sp-8)));
+  padding: var(--sp-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: var(--shadow-lg);
+}
+
+.limitDialog::backdrop {
+  background-color: rgb(0 0 0 / 45%);
+}
+
+.limitTitle {
+  margin: 0 0 var(--sp-2);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.03em;
+  color: var(--color-heading);
+}
+
+.limitBody {
+  margin: 0 0 var(--sp-5);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-normal);
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+}
+
+.limitActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--sp-2);
+}
+
+/* Cancel is the quiet one. The customer is being told something, not warned
+   off — the shop has no objection to the larger order, it just splits. */
+.limitCancel,
+.limitProceed {
+  min-height: var(--control-h-sm);
+  padding-inline: var(--sp-4);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  cursor: pointer;
+}
+
+.limitCancel {
+  border: 1px solid var(--color-border-strong);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+}
+
+.limitProceed {
+  border: 1px solid var(--c-primary-700);
+  background-color: var(--c-primary-700);
+  color: var(--color-text-inverse);
+}
+
+.limitCancel:hover,
+.limitProceed:hover {
+  filter: brightness(0.97);
+}
+
+/* --- Actions: one horizontal bar ----------------------------------------
+
+   The panel is 360px at every width, including on a phone. Three packs each
+   carrying a 数量 label, a stepper and a full-width button came to 239px a row
+   and a 939px panel — a column of controls taller than the product it sells.
+
+   So the row is one line: favourite, then the primary action. The heart is a
+   fixed square and the button takes the rest, which keeps the two aligned
+   across packs however long a price runs. */
+/* The dashed rule and the padding either side of it cost ~25px per card and
+   separated two things that were never in danger of being confused — the
+   pack's price and the button that buys that pack. The card's own border
+   already groups them. The gap above is what remains, and it is enough.
+
+   The button itself is NOT made smaller: 44px is the minimum target size
+   (WCAG 2.5.8), and this list is the one place on the page where a mis-tap
+   costs an order. Height came out of the chrome around it instead. */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-top: var(--sp-2);
+}
+
+.addForm {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.wishForm {
+  flex: 0 0 auto;
+  display: flex;
+}
+
+/* Square, and the same height as the button beside it — an icon button that
+   does not match its neighbour reads as a mistake rather than as a pair. */
+.favButton {
+  display: grid;
+  place-items: center;
+  width: var(--control-h-md);
+  height: var(--control-h-md);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.favButton:hover {
+  border-color: var(--c-sale-500);
+  color: var(--c-sale-500);
+}
+
+.favButton:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* --- Quantity, once the pack is in the cart ------------------------------
+
+   Takes the button's place rather than sitting beside it, so the row never
+   grows a second line. Each control is its own form, so the group is a flex
+   row of forms rather than one. */
+.qtyGroup {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  height: var(--control-h-md);
+  padding-inline: var(--sp-2);
+  border: 1px solid var(--c-primary-300);
+  border-radius: var(--radius-md);
+  background-color: var(--c-primary-50);
+}
+
+.qtyStep {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-surface);
+  font-size: var(--fs-md);
+  line-height: 1;
+  cursor: pointer;
+}
+
+.qtyStep:hover:not(:disabled) {
+  border-color: var(--c-primary-600);
+  color: var(--c-primary-700);
+}
+
+.qtyStep:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.qtyValue {
+  flex: 1 1 auto;
+  text-align: center;
+  font-size: var(--fs-base);
+  font-weight: var(--fw-bold);
+  color: var(--color-heading);
+}

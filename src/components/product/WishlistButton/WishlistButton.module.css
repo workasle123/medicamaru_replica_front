@@ -1,0 +1,34 @@
+/* Sized to sit beside the add-to-cart button rather than compete with it:
+   outline, not filled, so the primary action stays the obvious one. */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  /* Matches Button's md height so the pair lines up exactly. */
+  min-height: var(--control-h-md);
+  padding-inline: var(--sp-4);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.button:hover:not(:disabled) {
+  background-color: var(--c-sale-50);
+  border-color: var(--c-sale-300);
+  color: var(--c-sale-700);
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}

@@ -1,0 +1,214 @@
+/* The whole component is phone and tablet only: from 1024px the category nav
+   row and the action links are visible in the header itself, so a drawer would
+   be a second route to the same places. */
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  /* 44px, matching お知らせ and LINE beside it. At 40 it sat 4px short of its
+     neighbours in a row of three, which reads as misalignment rather than as
+     a smaller button, and it is the one target on the row people reach for
+     most. */
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-surface);
+  color: var(--color-heading);
+  cursor: pointer;
+}
+
+.trigger:hover {
+  border-color: var(--c-primary-500);
+}
+
+@media (min-width: 1024px) {
+  .trigger {
+    display: none;
+  }
+}
+
+.bars {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  width: 18px;
+}
+
+.bars span {
+  display: block;
+  height: 2px;
+  border-radius: 2px;
+  background-color: currentColor;
+}
+
+/* --- drawer -------------------------------------------------------------- */
+
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  border: 0;
+  padding: 0;
+  background-color: rgb(15 23 27 / 45%);
+  cursor: pointer;
+}
+
+.drawer {
+  position: fixed;
+  inset: 0 0 0 auto;
+  z-index: 61;
+  display: flex;
+  flex-direction: column;
+  width: min(20rem, 88vw);
+  height: 100dvh;
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-lg);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding: var(--sp-4);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.headTitle {
+  font-size: var(--fs-base);
+  font-weight: var(--fw-bold);
+  color: var(--color-heading);
+}
+
+.close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+
+.close:hover {
+  background-color: var(--color-surface-sunken);
+  color: var(--color-heading);
+}
+
+/* Scrolls independently of the page, which is frozen while this is open. */
+.body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--sp-4);
+}
+
+/* --- sections ------------------------------------------------------------ */
+
+/* auto-fit rather than a fixed three: the row carries four links when signed out
+   (ログイン, 新規登録, お気に入り, カート) and three when signed in, and a fixed
+   count left the fourth alone on a second row. */
+.quick {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(72px, 1fr));
+  gap: var(--sp-2);
+  margin: 0 0 var(--sp-5);
+  padding: 0;
+  list-style: none;
+}
+
+.quickLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: var(--sp-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-heading);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  text-align: center;
+}
+
+.quickLink:hover {
+  border-color: var(--c-primary-500);
+  text-decoration: none;
+}
+
+/* The saved-product count beside お気に入り in this drawer.
+   NOT the header's .badge, which is absolutely positioned over an icon —
+   there is no icon here, so the number sits inline after the label. */
+.quickCount {
+  margin-inline-start: var(--sp-1);
+  min-width: 18px;
+  height: 18px;
+  padding-inline: 4px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: var(--radius-pill);
+  background-color: var(--c-sale-600);
+  color: var(--color-text-inverse);
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-bold);
+  line-height: 1;
+}
+
+.nav {
+  margin: 0 0 var(--sp-5);
+  padding: 0;
+  list-style: none;
+}
+
+.navLink {
+  display: block;
+  padding: var(--sp-3) 0;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-heading);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+}
+
+.navLink:hover {
+  color: var(--c-primary-800);
+  text-decoration: none;
+}
+
+.cats {
+  margin: 0;
+}
+
+.catsTitle {
+  margin: 0 0 var(--sp-3);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-wide);
+  color: var(--color-text-muted);
+}
+
+.catList {
+  display: grid;
+  gap: var(--sp-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.catLink {
+  display: block;
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  font-size: var(--fs-sm);
+}
+
+.catLink:hover {
+  background-color: var(--color-surface-sunken);
+  color: var(--c-primary-800);
+  text-decoration: none;
+}

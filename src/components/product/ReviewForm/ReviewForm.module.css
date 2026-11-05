@@ -1,0 +1,199 @@
+/* The form sits under the review list, inside the same カスタマーレビュー
+   section, so it is panelled rather than bordered on all four sides — the
+   section already has a boundary. */
+.wrap {
+  margin-top: var(--sp-5);
+  padding-top: var(--sp-5);
+  border-top: 1px solid var(--color-border);
+}
+
+.heading {
+  margin: 0 0 var(--sp-3);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-bold);
+  color: var(--color-heading);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+/* --- The two gates ------------------------------------------------------ */
+
+/* Shown instead of the form to a guest, or to a customer who has not ordered
+   this product. Quiet: it is an explanation, not a warning. */
+.gate {
+  margin-top: var(--sp-5);
+  padding: var(--sp-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface-muted, #f7f7f8);
+  text-align: center;
+}
+
+.gateText {
+  margin: 0;
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+.gateLink {
+  display: inline-block;
+  margin-top: var(--sp-2);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+}
+
+/* --- Fields ------------------------------------------------------------- */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: 0;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: var(--color-heading);
+}
+
+.required {
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  background-color: var(--c-danger-50);
+  color: var(--c-danger-700);
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-bold);
+}
+
+.input,
+.textarea {
+  width: 100%;
+  padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  font-size: var(--fs-sm);
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 7rem;
+  line-height: var(--lh-relaxed, 1.7);
+}
+
+.input:focus-visible,
+.textarea:focus-visible {
+  outline: 2px solid var(--c-primary-500);
+  outline-offset: 1px;
+}
+
+.file {
+  font-size: var(--fs-sm);
+}
+
+.counter {
+  margin: 0;
+  text-align: right;
+  font-size: var(--fs-2xs);
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.hint {
+  margin: 0;
+  font-size: var(--fs-2xs);
+  color: var(--color-text-muted);
+}
+
+.error {
+  margin: 0;
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-bold);
+  color: var(--c-danger-700);
+}
+
+/* The 薬機法 note. Small, but present before submission rather than as a
+   rejection afterwards — a reviewer who is told the rule up front can write
+   within it. */
+.terms {
+  margin: 0;
+  font-size: var(--fs-2xs);
+  line-height: var(--lh-relaxed, 1.7);
+  color: var(--color-text-muted);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* --- Stars -------------------------------------------------------------- */
+
+/* row-reverse, with the inputs rendered 5→1, so that the DOM order lets a
+   sibling selector fill every star to the LEFT of the hovered one. CSS has no
+   previous-sibling selector, which is why the order is inverted here rather
+   than in the markup's meaning. */
+.stars {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+  gap: var(--sp-1);
+}
+
+.star {
+  display: inline-flex;
+}
+
+/* Not display:none — a hidden input is skipped by keyboard navigation and
+   removed from the accessibility tree. Clipped instead, so it is focusable and
+   announced, with the focus ring drawn on the label beside it. */
+.starInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.starLabel {
+  cursor: pointer;
+  line-height: 1;
+}
+
+.starGlyph {
+  font-size: 1.9rem;
+  color: var(--color-border);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+/* The hovered star and everything after it in DOM order — which, with
+   row-reverse, is everything to its left on screen. */
+.star:hover .starGlyph,
+.star:hover ~ .star .starGlyph,
+.starInput:checked ~ .starLabel .starGlyph,
+.star:has(.starInput:checked) ~ .star .starGlyph {
+  color: var(--c-warning-500, #f5a623);
+}
+
+.starInput:focus-visible ~ .starLabel .starGlyph {
+  outline: 2px solid var(--c-primary-500);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}

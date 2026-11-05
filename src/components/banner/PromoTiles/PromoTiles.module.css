@@ -1,0 +1,77 @@
+/* Three feature tiles. medicine.shop runs the same idea (bulk order / search
+   by body part / offers) and it works: these are evergreen entry points into
+   the site, not time-limited campaigns. */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--sp-3);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+@media (min-width: 768px) {
+  .grid {
+    gap: var(--sp-4);
+  }
+}
+
+.tile {
+  position: relative;
+  display: block;
+  height: 100%;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background-color: var(--c-primary-500);
+  color: var(--c-neutral-900);
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out);
+}
+
+.tile:hover {
+  text-decoration: none;
+  color: var(--color-text-inverse);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.media {
+  aspect-ratio: 16 / 9;
+  background-color: var(--c-primary-700);
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 2px;
+  padding: var(--sp-4);
+  background: linear-gradient(
+    to top,
+    rgba(var(--scrim-primary-rgb), 0.92) 0%,
+    rgba(var(--scrim-primary-rgb), 0.5) 60%,
+    rgba(var(--scrim-primary-rgb), 0.12) 100%
+  );
+}
+
+.title {
+  font-size: var(--fs-md);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-tight);
+}
+
+.subtitle {
+  font-size: var(--fs-xs);
+  opacity: 0.9;
+}

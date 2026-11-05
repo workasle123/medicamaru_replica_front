@@ -1,0 +1,950 @@
+.layout {
+  display: grid;
+  gap: var(--sp-6);
+  padding-bottom: var(--sp-12);
+}
+
+@media (min-width: 1024px) {
+  .layout {
+    grid-template-columns: 240px minmax(0, 1fr);
+    gap: var(--sp-8);
+    align-items: start;
+  }
+}
+
+/* --- Sidebar ---------------------------------------------------------- */
+
+.sidebar {
+  min-width: 0;
+}
+
+.identity {
+  padding: var(--sp-4);
+  margin-bottom: var(--sp-4);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.greeting {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+.name {
+  font-size: var(--fs-base);
+  font-weight: var(--fw-bold);
+  margin-top: 2px;
+}
+
+.points {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-2);
+  margin-top: var(--sp-3);
+  padding-top: var(--sp-3);
+  border-top: 1px dashed var(--color-border);
+}
+
+.pointsLabel {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+.pointsValue {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-bold);
+  color: var(--c-primary-700);
+}
+
+.nav {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.navList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navItem + .navItem {
+  border-top: 1px solid var(--color-border);
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  min-height: var(--control-h-md);
+  padding-inline: var(--sp-4);
+  font-size: var(--fs-sm);
+  color: var(--color-text);
+}
+
+/* Where you are. Keyed off aria-current so the visual marker and the one a
+   screen reader reads can never drift apart. */
+.navLink[aria-current='page'] {
+  font-weight: var(--fw-bold);
+  color: var(--c-primary-700);
+  background-color: var(--c-primary-50);
+}
+
+/* --- The menu on a phone ------------------------------------------------
+
+   Below 1024px the grid is one column, so this sidebar stacks on top of the
+   page instead of beside it. As a vertical list of six it measured 270px, and
+   with the identity card above it that put 620px of furniture before the
+   first heading — more than a 390x844 screen shows at once, so every account
+   page opened on its own navigation with the content below the fold.
+
+   A horizontal rail instead: one row, scrolled sideways, about 50px. The
+   links stay visible rather than being hidden behind a disclosure, which is
+   what a six-item menu wants when five of the six are one tap from here. */
+@media (max-width: 1023px) {
+  .nav {
+    /* The frame belonged to a boxed list; a rail reads better unboxed. */
+    border: 0;
+    border-radius: 0;
+    background-color: transparent;
+    overflow: visible;
+  }
+
+  .navList {
+    display: flex;
+    gap: var(--sp-2);
+    overflow-x: auto;
+    /* Room for the chips' own outline, which a clipped overflow would cut. */
+    padding-block: 2px;
+    scrollbar-width: none;
+    /* Cancels the container gutters so the row can run to both edges and read
+       as scrollable, then pays them back as padding. */
+    margin-inline: calc(-1 * var(--sp-4));
+    padding-inline: var(--sp-4);
+  }
+
+  .navList::-webkit-scrollbar {
+    display: none;
+  }
+
+  .navItem {
+    flex: 0 0 auto;
+  }
+
+  /* The divider between stacked rows makes no sense side by side. */
+  .navItem + .navItem {
+    border-top: 0;
+  }
+
+  .navLink {
+    min-height: var(--control-h-sm);
+    padding-inline: var(--sp-4);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    background-color: var(--color-surface);
+    white-space: nowrap;
+  }
+
+  /* A filled pill, not a tinted row: on a rail the current item has to be
+     distinguishable from five others at a glance, and --c-primary-700 is the
+     lightest step the tokens mark as white-text safe. */
+  .navLink[aria-current='page'] {
+    border-color: var(--c-primary-700);
+    background-color: var(--c-primary-700);
+    color: var(--color-text-inverse);
+  }
+}
+
+.navLink:hover {
+  background-color: var(--c-primary-50);
+  color: var(--c-primary-800);
+  text-decoration: none;
+}
+
+.logout {
+  width: 100%;
+  text-align: left;
+  color: var(--c-danger-700);
+}
+
+/* --- Content ---------------------------------------------------------- */
+
+.content {
+  min-width: 0;
+}
+
+.title {
+  font-size: var(--fs-2xl);
+  letter-spacing: var(--ls-tight);
+  margin-bottom: var(--sp-5);
+}
+
+/* A sentence under the page title saying what the screen is for. Pulled up
+   against the title's own margin so the two read as one block. */
+.lead {
+  margin-top: calc(var(--sp-5) * -1 + var(--sp-2));
+  margin-bottom: var(--sp-5);
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+.cards {
+  display: grid;
+  gap: var(--sp-4);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.card {
+  padding: var(--sp-4);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.cardLabel {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+.cardValue {
+  display: block;
+  margin-top: var(--sp-1);
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-tight);
+}
+
+.section {
+  margin-top: var(--sp-8);
+}
+
+.sectionHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-3);
+}
+
+.sectionTitle {
+  font-size: var(--fs-lg);
+}
+
+.definition {
+  display: grid;
+  gap: 0;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.defRow {
+  display: grid;
+  grid-template-columns: 34% minmax(0, 1fr);
+  border-bottom: 1px solid var(--color-border);
+  font-size: var(--fs-sm);
+}
+
+.defRow:last-child {
+  border-bottom: none;
+}
+
+.defLabel {
+  padding: var(--sp-3) var(--sp-4);
+  font-weight: var(--fw-bold);
+  background-color: var(--c-primary-50);
+}
+
+.defValue {
+  padding: var(--sp-3) var(--sp-4);
+}
+
+/* --- Expired session ---------------------------------------------------- */
+/* Shown when a session cookie is present but the backend no longer accepts
+   its token. Deliberately a rendered state rather than a redirect — see the
+   note in layout.js. */
+
+.expired {
+  max-width: 32rem;
+  margin: var(--sp-10) auto;
+  padding: var(--sp-8);
+  text-align: center;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.expiredTitle {
+  margin-bottom: var(--sp-3);
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-bold);
+  color: var(--color-heading);
+}
+
+.expiredBody {
+  margin-bottom: var(--sp-6);
+  color: var(--color-text-muted);
+}
+
+.expiredCta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--control-h-md);
+  padding-inline: var(--sp-6);
+  border-radius: var(--radius-md);
+  background-color: var(--color-cta);
+  color: var(--color-cta-text);
+  font-weight: var(--fw-bold);
+}
+
+.expiredCta:hover {
+  text-decoration: none;
+  color: var(--color-cta-text);
+  filter: brightness(0.96);
+}
+
+/* --- Referral panel ------------------------------------------------------ */
+
+.referralShare {
+  display: grid;
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-6);
+}
+
+@media (min-width: 640px) {
+  .referralShare {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+.copyField {
+  min-width: 0;
+}
+
+.copyLabel {
+  display: block;
+  margin-bottom: var(--sp-1);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  color: var(--color-text-muted);
+}
+
+.copyRow {
+  display: flex;
+  gap: var(--sp-2);
+}
+
+/* min-width: 0 so a long link shrinks instead of pushing the button out of
+   the row — the link is ~60 characters and the column is 200px on a phone. */
+.copyInput {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: var(--control-h-md);
+  padding-inline: var(--sp-3);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface-sunken);
+  color: var(--color-text);
+  font-size: var(--fs-sm);
+  /* The code is Latin and read character by character to be retyped. */
+  font-family: var(--font-numeric), ui-monospace, monospace;
+}
+
+.copyButton {
+  flex: 0 0 auto;
+  min-height: var(--control-h-md);
+  padding-inline: var(--sp-4);
+  border: 1px solid var(--c-primary-700);
+  border-radius: var(--radius-md);
+  background-color: var(--c-primary-700);
+  color: var(--color-text-inverse);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+
+.copyButton:hover {
+  background-color: var(--c-primary-800);
+  border-color: var(--c-primary-800);
+}
+
+/* Confirmation has to register without being read: the label changes, but the
+   colour is what catches the eye at the moment of the tap. */
+.copyButton[data-state='copied'] {
+  background-color: var(--c-success-500);
+  border-color: var(--c-success-500);
+}
+
+.copyButton[data-state='failed'] {
+  background-color: var(--c-warning-50);
+  border-color: var(--c-warning-500);
+  color: var(--c-warning-700);
+}
+
+.copyHint {
+  margin: var(--sp-1) 0 0;
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+.referralSteps {
+  margin: 0;
+  padding-left: var(--sp-5);
+  display: grid;
+  gap: var(--sp-2);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-relaxed);
+}
+
+.referralNote {
+  margin: var(--sp-3) 0 0;
+  font-size: var(--fs-xs);
+  line-height: var(--lh-relaxed);
+  color: var(--color-text-muted);
+}
+
+.referralList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.referralPerson {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-4);
+  font-size: var(--fs-sm);
+}
+
+.referralPerson + .referralPerson {
+  border-top: 1px solid var(--color-border);
+}
+
+.referralDate {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+/* --- Order history ------------------------------------------------------- */
+/* An order is a record, not a label/value pair, and both of these pages used
+   to be built from .defRow with the shape patched back inline. */
+
+.orderList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--sp-3);
+}
+
+.orderCard {
+  padding: var(--sp-4);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.orderHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sp-3);
+}
+
+/* The stage chip, and the payment chip when there is still money outstanding.
+   Wraps rather than squeezing: at phone width 「ご注文受付」 beside
+   「お支払い待ち」 does not fit next to the order number, and a shrunken chip
+   reads as a different kind of thing. Right-aligned so the stack stays
+   against the card edge when it does wrap. */
+.orderBadges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--sp-1);
+  flex: none;
+}
+
+.orderNumber {
+  font-weight: var(--fw-bold);
+  font-family: var(--font-numeric), inherit;
+  letter-spacing: var(--ls-tight);
+}
+
+.orderDate {
+  margin: var(--sp-1) 0 0;
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+/* Two lines at most. A Japanese product name runs long and the whole point of
+   this line is a glance at which order this is. */
+.orderItems {
+  margin: var(--sp-3) 0 0;
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.orderFoot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  margin-top: var(--sp-3);
+  padding-top: var(--sp-3);
+  border-top: 1px solid var(--color-border);
+}
+
+.orderTotal {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+}
+
+.orderLink {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: var(--c-primary-700);
+  white-space: nowrap;
+}
+
+/* 配送状況を追跡 sits beside 詳細を見る. Wraps as a pair when the row runs out
+   of width, so the two never end up on separate lines from each other. */
+.orderActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--sp-3);
+}
+
+/* Secondary to 詳細を見る — it is the action for the minority of orders that
+   have shipped, and should not outweigh the one every row has. */
+.trackLink {
+  font-size: var(--fs-sm);
+  color: var(--c-accent-800);
+  text-decoration: underline;
+  white-space: nowrap;
+}
+
+.trackLink:hover {
+  color: var(--c-accent-900);
+}
+
+/* On the detail page the number itself is the link, so it keeps the weight it
+   had as a fact and gains an underline to say it is clickable. */
+.trackNumber {
+  color: var(--c-accent-800);
+  text-decoration: underline;
+  overflow-wrap: anywhere;
+}
+
+.trackNumber:hover {
+  color: var(--c-accent-900);
+}
+
+/* One per parcel on a split shipment. Block, so two numbers stack instead of
+   running together on one line where they read as a single long code. */
+.trackItem {
+  display: block;
+}
+
+.trackItem + .trackItem {
+  margin-top: var(--sp-2);
+}
+
+/* 「荷物1」 ahead of the number, shown only when there is more than one — see
+   the order detail page. Muted and small: it labels the number, it is not
+   the thing being read. */
+.trackLabel {
+  display: inline-block;
+  min-width: 3.5em;
+  color: var(--color-text-muted);
+  font-size: var(--fs-sm);
+}
+
+/* --- Order detail ------------------------------------------------------- */
+
+.orderDetailHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
+}
+
+/* The title carries the page's bottom margin, so this sits inside the head
+   row without one of its own. */
+.orderDetailHead .title {
+  margin-bottom: 0;
+}
+
+.invoiceLink {
+  min-height: var(--control-h-sm);
+  display: inline-flex;
+  align-items: center;
+  padding-inline: var(--sp-3);
+  border: 1px solid var(--c-primary-700);
+  border-radius: var(--radius-md);
+  color: var(--c-primary-700);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  white-space: nowrap;
+}
+
+.invoiceLink:hover {
+  background-color: var(--c-primary-50);
+}
+
+/* The order's own facts. auto-fit rather than a fixed column count because
+   the tracking number is only there for part of an order's life, and a
+   four-column grid with three filled reads as a missing field. */
+.orderFacts {
+  display: grid;
+  gap: var(--sp-3);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr));
+  margin: var(--sp-5) 0 0;
+  padding: var(--sp-4);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.orderFact dt {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+.orderFact dd {
+  margin: var(--sp-1) 0 0;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  /* The order and tracking numbers are long Latin strings in a narrow
+     column; breaking them beats overflowing the card. */
+  overflow-wrap: anywhere;
+}
+
+.orderLines {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.orderLine {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+}
+
+.orderLine + .orderLine {
+  border-top: 1px solid var(--color-border);
+}
+
+/* Also the placeholder: the span with no image gets the same box, so a line
+   without a thumbnail keeps its text aligned with the lines that have one. */
+.orderLineImage {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  background-color: var(--color-surface-sunken);
+  border-radius: var(--radius-md);
+}
+
+.orderLineInfo {
+  min-width: 0;
+}
+
+.orderLineName {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-snug);
+}
+
+.orderLineMeta {
+  margin: var(--sp-1) 0 0;
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+/* The 「レビューを書く」 link under an ordered item. Deliberately quiet —
+   it is an invitation beneath the line's own details, not a call to action
+   competing with them. */
+.orderLineReview {
+  display: inline-block;
+  margin-top: var(--sp-1);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+}
+
+.orderLineTotal {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  white-space: nowrap;
+}
+
+.shipTo {
+  display: grid;
+  gap: var(--sp-1);
+  padding: var(--sp-4);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  font-size: var(--fs-sm);
+  font-style: normal;
+  line-height: var(--lh-relaxed);
+}
+
+.shipToName {
+  font-weight: var(--fw-bold);
+}
+
+.orderTotals {
+  margin: 0;
+  padding: var(--sp-2) var(--sp-4);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.totalRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding: var(--sp-2) 0;
+  font-size: var(--fs-sm);
+}
+
+.totalRow dd {
+  margin: 0;
+}
+
+/* The figure the customer is actually transferring. */
+.totalRowGrand {
+  margin-top: var(--sp-1);
+  padding-top: var(--sp-3);
+  border-top: 1px solid var(--color-border);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-bold);
+}
+
+.totalRowGrand dd {
+  font-size: var(--fs-lg);
+  letter-spacing: var(--ls-tight);
+}
+
+@media (max-width: 480px) {
+  /* The thumbnail column costs a quarter of a 390px screen, and the price has
+     to fit on the same line as the name. Image above, text beside it is worse
+     than a smaller image. */
+  .orderLine {
+    grid-template-columns: 48px minmax(0, 1fr) auto;
+    gap: var(--sp-2);
+    padding-inline: var(--sp-3);
+  }
+
+  .orderLineImage {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+/* --- Points history ----------------------------------------------------- */
+
+.pointsSummary {
+  padding: var(--sp-5);
+  margin-bottom: var(--sp-6);
+  background-color: var(--c-accent-50);
+  border: 1px solid var(--c-accent-200);
+  border-radius: var(--radius-lg);
+  text-align: center;
+}
+
+.pointsSummaryLabel {
+  display: block;
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+.pointsSummaryValue {
+  display: block;
+  margin-top: var(--sp-1);
+  font-size: var(--fs-3xl);
+  font-weight: var(--fw-bold);
+  line-height: 1.1;
+  letter-spacing: var(--ls-tight);
+  color: var(--c-accent-900);
+}
+
+.pointsSummaryUnit {
+  margin-left: 2px;
+  font-size: var(--fs-lg);
+}
+
+.pointsSummaryNote {
+  margin: var(--sp-2) 0 0;
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+.pointList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.pointRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+}
+
+.pointRow + .pointRow {
+  border-top: 1px solid var(--color-border);
+}
+
+.pointInfo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--sp-1) var(--sp-3);
+  min-width: 0;
+}
+
+.pointReason {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+}
+
+.pointContext {
+  font-size: var(--fs-xs);
+  color: var(--c-accent-800);
+  overflow-wrap: anywhere;
+}
+
+.pointDate {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+/* Green for earned, plain ink for spent. Spending is not a loss to flag in
+   red — it is the point of having them. */
+.pointAmount {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  white-space: nowrap;
+}
+
+.pointAmount[data-direction='credit'] {
+  color: var(--c-success-700);
+}
+
+.pointAmount[data-direction='debit'] {
+  color: var(--color-text-muted);
+}
+
+.pointReasons {
+  margin: 0;
+  padding-left: var(--sp-5);
+  display: grid;
+  gap: var(--sp-2);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-relaxed);
+}
+
+.pointNote {
+  margin: var(--sp-3) 0 0;
+  font-size: var(--fs-xs);
+  line-height: var(--lh-relaxed);
+  color: var(--color-text-muted);
+}
+
+/* --- 会員情報 ----------------------------------------------------------- */
+
+.profileForm {
+  display: grid;
+  gap: var(--sp-4);
+  max-width: 34rem;
+}
+
+/* 姓 and 名 side by side: they are one name, and stacking them makes a short
+   field look like a long one. Collapses on a phone, where two inputs on a row
+   leave neither wide enough for a kanji name. */
+.nameRow {
+  display: grid;
+  gap: var(--sp-3);
+}
+
+@media (min-width: 480px) {
+  .nameRow {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.profileActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-3);
+  margin-top: var(--sp-2);
+}
+
+.profileCancel {
+  padding: var(--sp-2) var(--sp-3);
+  border: none;
+  background: none;
+  color: var(--color-text-muted);
+  font-size: var(--fs-sm);
+  cursor: pointer;
+}
+
+.profileCancel:hover {
+  color: var(--color-text);
+  text-decoration: underline;
+}
+
+.profileNote {
+  margin: 0;
+  font-size: var(--fs-xs);
+  line-height: var(--lh-relaxed);
+  color: var(--color-text-muted);
+}
+
+/* 未登録 reads as information, not as an error — plenty of these fields are
+   genuinely optional. */
+.defEmpty {
+  color: var(--color-text-muted);
+}
+
+.defHint {
+  display: block;
+  margin-top: 2px;
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}

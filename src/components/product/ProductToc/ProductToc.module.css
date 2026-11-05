@@ -1,0 +1,122 @@
+/* --- In-page table of contents ---------------------------------------- */
+/* These PDPs run long. Both medicine.shop and okusuritsuhan use a 目次, and
+   it is genuinely useful here rather than decorative. */
+
+/* Tinted rather than plain white. On a white page a white-on-white card reads
+   as part of the background; the 目次 is a navigation aid and should announce
+   itself as a distinct block. The tint is the brand's own lightest step, so it
+   warms without introducing a second hue. */
+.toc {
+  background-color: var(--c-primary-50);
+  border: 1px solid var(--c-primary-100);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-4);
+  margin-bottom: var(--sp-8);
+}
+
+/* 目次 is two characters, so it needs the accent bar and the rule to register
+   as a heading at all. letter-spacing is set explicitly because the global
+   heading rule applies --ls-tight (-0.02em): negative tracking is a Latin
+   display habit and on kanji it closes up the counters. */
+.title {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-base);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.08em;
+  color: var(--c-primary-900);
+  margin-bottom: var(--sp-2);
+  padding-bottom: var(--sp-2);
+  border-bottom: 1px solid var(--c-primary-200);
+}
+
+.title::before {
+  content: '';
+  flex-shrink: 0;
+  width: 3px;
+  height: 0.9em;
+  border-radius: var(--radius-pill);
+  background-color: var(--c-primary-600);
+}
+
+/* No gap: the rows are separated by hairlines instead, which is how a
+   Japanese EC 目次 is usually set — it makes a long list scannable without
+   adding another coloured element per row. */
+.list {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: toc;
+}
+
+.item {
+  counter-increment: toc;
+}
+
+.item + .item {
+  border-top: 1px solid var(--c-primary-100);
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  min-height: 40px;
+  padding-block: var(--sp-1);
+  padding-inline: var(--sp-1);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-sm);
+  /* Labels wrap in a 300px rail, so they need line spacing of their own —
+     --lh-tight would set two lines of kanji almost touching. */
+  line-height: var(--lh-snug);
+  letter-spacing: 0.04em;
+  color: var(--color-text);
+}
+
+/* Filled, not tinted. The numbers were primary-50 on a white card — now that
+   the card itself is primary-50 they would have disappeared into it, and a
+   numbered 目次 whose numbers are invisible is just a list. primary-700 is the
+   step the palette marks as safe under white text (4.97:1). */
+.link::before {
+  content: counter(toc);
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-pill);
+  background-color: var(--c-primary-700);
+  color: var(--color-text-inverse);
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-bold);
+  /* A digit is not Japanese text and does not want the tracking above —
+     0.04em pushes a single numeral off-centre in a 20px circle. */
+  letter-spacing: 0;
+}
+
+.link:hover,
+.link:focus-visible {
+  background-color: var(--c-primary-100);
+  color: var(--c-primary-900);
+  text-decoration: none;
+}
+
+/* --- the selected entry --------------------------------------------------
+
+   The row you clicked keeps a background, so the 目次 shows where you went.
+
+   A different HUE from hover, not a darker step of it: hover is the warm
+   primary-100, this is accent-200. Two tints of the same hue, one slightly
+   deeper, read as "hovered" and "hovered a bit more" rather than as two
+   different states.
+
+   Declared AFTER the hover rule on purpose. Both are (0,2,0), so the later one
+   wins, and hovering the selected entry should not repaint it as merely
+   hovered. */
+.link[aria-current] {
+  background-color: var(--c-accent-200);
+  color: var(--c-accent-900);
+}

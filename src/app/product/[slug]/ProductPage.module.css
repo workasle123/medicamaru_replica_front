@@ -1,0 +1,474 @@
+/* --- One page grid ------------------------------------------------------
+
+   Everything from the gallery down to the ranking is ONE grid. It was two:
+   `.top` carried the gallery, title and pack panel, `.bodyLayout` the 目次,
+   description and ranking — and that split is what produced the blank space
+   this replaced.
+
+   A grid row is as tall as its tallest column, and the pack panel is the only
+   part of the page that grows with the data. On the catalogue's one 7-pack
+   product the panel was 1155px against 736px of title and specs beside it, so
+   the upper grid was held open to the taller figure: 240px of blank under the
+   specs, 610px under the gallery, and a description that could not start
+   until the packs ended. Compacting the cards and making the gallery sticky
+   took the first figure from 338px to 239px and could go no further, because
+   the row was the problem rather than what was in it.
+
+   In one grid the panel SPANS the title row, the specs row and the body row,
+   so the description that was being pushed below it pays for its height
+   instead. The gap is gone at any pack count rather than reduced at one.
+
+   Child order is unchanged — gallery, title, packs, specs, 目次, body,
+   ranking — which is what keeps reading order and the phone layout identical.
+
+   The gallery and the 目次 share column 1 at every width, so the page has one
+   left edge down its whole length. */
+.page {
+  --product-aside: 300px;
+
+  display: grid;
+  gap: var(--sp-6);
+  padding-bottom: var(--sp-10);
+}
+
+/* The gallery and its tag list are one column, so the tags sit under the
+   image rather than becoming a third grid item. */
+.galleryColumn {
+  min-width: 0;
+}
+
+/* NOT STICKY, and that is deliberate — it used to be.
+
+   It was added when the gallery shared one grid row with the whole pack
+   panel and ended up to 804px above the bottom of that row. Spanning only the
+   title and specs rows leaves about 212px under it instead, which is less
+   than a screen, so the photo is still there while the specs are read without
+   any help.
+
+   Making it sticky here is actively WRONG, not merely unnecessary. A sticky
+   grid item is held inside the grid CONTAINER rather than inside its own grid
+   area, so in a grid that runs the length of the page it never releases: the
+   photo pinned at the top of the viewport and the 目次 scrolling up beneath it
+   in the same column rode straight over it, 300x428px of overlap from y=500
+   to the foot of the page. Anything in this column that is made sticky needs
+   the treatment .rankingColumn gets below — a parent that stretches to the
+   area, and the sticky on a child of it. */
+
+/* Tags are DESCRIPTIVE, not navigation — see the note in page.js. So they
+   must not look clickable: a pill with a border and a hover colour is the
+   shape of a filter chip, and people click those. These read as metadata
+   instead — a small heading, a flat tint, a square-ish corner, no hover, no
+   pointer. The # carries the "keyword" meaning that the pill shape used to. */
+.tagSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  margin-top: var(--sp-5);
+}
+
+.tagLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  margin: 0;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  color: var(--color-text-subtle);
+}
+
+.tagLabelIcon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-1) var(--sp-2);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 1px;
+  padding: 5px var(--sp-2);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-surface-sunken);
+  color: var(--color-text-muted);
+  font-size: var(--fs-xs);
+  line-height: 1.4;
+}
+
+.tagHash {
+  font-weight: var(--fw-bold);
+  color: var(--color-text-subtle);
+}
+
+/* Two columns: the rail, then everything else. The pack panel does NOT get a
+   column of its own until 1280px — at this width a third rail would leave the
+   description under 350px — so it stays directly under the title, which is as
+   high as a single content column allows. The rail runs gallery, then 目次. */
+@media (min-width: 1024px) {
+  .page {
+    grid-template-columns: minmax(0, var(--product-aside)) minmax(0, 1fr);
+    grid-template-areas:
+      'gallery head'
+      'gallery purchase'
+      'gallery details'
+      'toc     body';
+    column-gap: var(--sp-8);
+    align-items: start;
+  }
+
+  .galleryColumn {
+    grid-area: gallery;
+  }
+
+  .head {
+    grid-area: head;
+  }
+
+  .purchase {
+    grid-area: purchase;
+  }
+
+  .details {
+    grid-area: details;
+  }
+
+  .tocColumn {
+    grid-area: toc;
+  }
+
+  .bodyMain {
+    grid-area: body;
+  }
+}
+
+/* Three columns from 1280px: the gallery/目次 rail, the product information
+   and body, and a rail of its own for the pack panel — so 数量別価格 starts
+   level with the title rather than below the price, where at 1280x900 it used
+   to run from y=362 to y=954, i.e. past the fold.
+
+   THE RAIL SPANS ALL THREE ROWS, down into the description. That is what
+   merging the two grids bought: the pack panel's height is paid for by the
+   text beside it instead of by a row held open next to it.
+
+   One column, one grid item, two things stacked inside it — the packs, then
+   the ranking. They cannot be two grid items: a grid cannot flow two items
+   down a column that a third item spans, so the ranking's only cell was a
+   fourth row BELOW the description, which put it 4,575px down the page on a
+   7-pack product and 5,591px down on a 4-pack one. Beside the text is where
+   a recommendation earns its place.
+
+   The rail is 360px against the 300px rail opposite, so the two bracket the
+   text rather than mirroring each other — this is the one carrying product
+   cards and a column of buy buttons. */
+@media (min-width: 1280px) {
+  .page {
+    grid-template-columns: minmax(0, var(--product-aside)) minmax(0, 1fr) 360px;
+    grid-template-areas:
+      'gallery head    rail'
+      'gallery details rail'
+      'toc     body    rail';
+  }
+
+  .railRight {
+    grid-area: rail;
+    /* Stretched, unlike everything else in this grid: the ranking inside it
+       is sticky, and a sticky element travels inside its PARENT's box. Left
+       at `start` the rail would be only as tall as the packs plus the
+       ranking, and the ranking would have nowhere to travel. */
+    align-self: stretch;
+    min-width: 0;
+  }
+}
+
+/* Below 1280 there is no third column, so the rail stops being a box at all
+   and hands its children back to the grid — the pack panel lands exactly
+   where it used to sit in the single column, and the ranking is `display:
+   none` at these widths anyway. That is why no ordering is needed here. */
+@media (max-width: 1279px) {
+  .railRight {
+    display: contents;
+  }
+}
+
+.head,
+.details {
+  min-width: 0;
+}
+
+.details {
+  display: grid;
+  gap: var(--sp-5);
+}
+
+.brand {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  letter-spacing: var(--ls-wide);
+}
+
+.title {
+  margin-top: var(--sp-1);
+  font-size: var(--fs-2xl);
+  letter-spacing: var(--ls-tight);
+}
+
+@media (min-width: 768px) {
+  .title {
+    font-size: var(--fs-3xl);
+  }
+}
+
+/* Headline unit price. For bulk-tier products this is the real value
+   proposition — okusuritsuhan puts it in the page <title>. */
+.headlinePrice {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin-top: var(--sp-3);
+}
+
+.unitPrice {
+  font-size: var(--fs-3xl);
+  font-weight: var(--fw-bold);
+  color: var(--color-price);
+  letter-spacing: var(--ls-tight);
+  line-height: 1.1;
+}
+
+/* `/1錠あたり` beside the figure: the same one-price form as the cards, set
+   small so the number still leads. */
+.perUnit {
+  margin-left: var(--sp-2);
+  font-size: var(--fs-base);
+  font-weight: normal;
+  color: var(--color-text-muted);
+  letter-spacing: var(--ls-normal);
+}
+
+.fromPrice {
+  font-size: var(--fs-base);
+  color: var(--color-text-muted);
+}
+
+/* A grid item's automatic minimum is its min-content width, and the pack
+   panel's tier rows do not wrap — which made this column 368px wide inside a
+   343px page on a phone and scrolled the whole product page sideways. */
+.purchase,
+.specs {
+  min-width: 0;
+}
+
+/* The pre-discount per-unit price. */
+.wasPrice {
+  font-size: var(--fs-lg);
+  color: var(--color-text-subtle);
+  text-decoration: line-through;
+}
+
+.ratingRow {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+  margin-top: var(--sp-3);
+}
+
+.reviewLink {
+  font-size: var(--fs-sm);
+}
+
+/* --- E-E-A-T byline ---------------------------------------------------- */
+/* Last-updated date and medical supervision credit. For YMYL pharmaceutical
+   content these are ranking factors, not decoration — and the primary
+   platform has neither. */
+
+.byline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-1) var(--sp-4);
+  margin-top: var(--sp-4);
+  padding: var(--sp-3);
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+  background-color: var(--color-surface-sunken);
+  border-radius: var(--radius-md);
+}
+
+.specs {
+  /* Both of these are 目次 jump targets — see ProductToc. Without the margin
+     the heading lands flush against the top of the viewport. */
+  scroll-margin-top: calc(var(--header-clear) + var(--sp-6));
+  margin-top: var(--sp-5);
+}
+
+/* The pack panel does NOT stick, and that is deliberate.
+
+   It was made sticky when it was a grid item of its own, and that cost more
+   than it bought: measured at 1440x900 a 7-pack panel is 1152px against about
+   760px of usable viewport, so it pinned to the top of the screen and parked
+   its last two カートに入れる buttons below the fold for the whole length of
+   the description — and the best unit price is on the LARGEST pack, so the
+   pack the shop most wants bought was the unreachable one. Pinning it by the
+   foot instead does nothing: `bottom` sticky only holds an element that is
+   still BELOW the scrollport.
+
+   The ranking under it sticks instead. It is short, it is the last thing in
+   the rail, and it has the whole body row to travel through — so the column
+   stays occupied beside the description without anything being hidden. */
+
+/* --- Body: 目次 column + content ---------------------------------------- */
+/* The table of contents sits beside the text rather than above it, so it stays
+   visible while a long product body is read. These pages run to several
+   thousand pixels — a TOC that scrolls away with the first screen is a link
+   list, not a navigation aid.
+
+   Where these three sit is decided by the page grid above; what is left here
+   is how they behave once placed.
+
+   Below 1024px the aside stacks above the content, which is also its DOM
+   order — no visual/DOM mismatch for keyboard or screen-reader users. */
+.tocColumn {
+  min-width: 0;
+}
+
+@media (min-width: 1024px) {
+  .tocColumn {
+    position: sticky;
+    /* The header no longer sticks, so this only needs breathing room. */
+    top: calc(var(--header-clear) + var(--sp-6));
+    /* Never taller than the viewport: a body with twelve headings would
+       otherwise run past the bottom with no way to reach the lower entries. */
+    max-height: calc(100dvh - var(--header-clear) - var(--sp-10));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+}
+
+.bodyMain {
+  min-width: 0;
+}
+
+.disclaimer {
+  padding: var(--sp-4);
+  margin-bottom: var(--sp-10);
+  font-size: var(--fs-xs);
+  line-height: var(--lh-normal);
+  color: var(--color-text-muted);
+  background-color: var(--color-surface-sunken);
+  border-left: 3px solid var(--c-warning-500);
+  border-radius: var(--radius-sm);
+}
+
+.references {
+  scroll-margin-top: calc(var(--header-clear) + var(--sp-6));
+  margin-bottom: var(--sp-10);
+  font-size: var(--fs-sm);
+}
+
+.referencesTitle {
+  font-size: var(--fs-base);
+  font-weight: var(--fw-bold);
+  margin-bottom: var(--sp-2);
+}
+
+.referencesList {
+  padding-left: 1.4em;
+  color: var(--color-text-muted);
+}
+
+.related {
+  padding-bottom: var(--sp-12);
+}
+
+/* --- Ranking column ----------------------------------------------------- */
+
+/* Hidden below 1280px rather than stacked.
+   At 1024 a second rail would be 600px of a ~976px content width, leaving the
+   description under 350px — narrower than the thing it sits beside is worth.
+   And it does not stack: it is a recommendation, and putting it under a long
+   description puts it where nobody reaches. */
+.rankingColumn {
+  display: none;
+}
+
+@media (min-width: 1280px) {
+  .rankingColumn {
+    display: block;
+    min-width: 0;
+    /* Clears the pack panel above it in the rail — without this the two
+       cards touch, and they are two separate things. */
+    margin-top: var(--sp-6);
+    position: sticky;
+    /* Same offset as the 目次 opposite it, so the two columns settle level
+       rather than one riding slightly higher than the other. */
+    top: calc(var(--header-clear) + var(--sp-6));
+    /* The list is ten products tall and the viewport may not be. Capping it
+       keeps the lower entries reachable instead of running off the bottom
+       where nothing can scroll to them. */
+    max-height: calc(100dvh - var(--header-clear) - var(--sp-10));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+}
+
+/* --- Phone: tags move below the star rating --------------------------- */
+
+/* The tags belong to the gallery column and the stars to the block below it,
+   so they are in different boxes and `order` alone cannot reach across.
+   `.galleryColumn` is flattened with `display: contents`, which promotes the
+   photo and the tag list to grid items of `.page` — and then one ordering
+   puts everything in the sequence a phone wants. It carries only
+   `min-width: 0`, so nothing is lost by flattening it.
+
+   Why move them at all: the tag block sat between the photo and the product
+   name, costing about 80px before a visitor learned what they were looking
+   at. Below the stars it is still the first thing after the headline facts,
+   and the name, price and rating all clear the fold.
+
+   EVERY OTHER ITEM NEEDS AN ORDER, not just the ones being moved. The default
+   is 0, and the photo is stuck with it (its class comes from ProductGallery's
+   own module and is not reachable from here), so anything left at 0 would be
+   hoisted alongside the photo — the 目次 and the description included, which
+   would put the body text above the product name. The order below is the DOM
+   order with the tags lifted out of the gallery. */
+@media (max-width: 639px) {
+  .galleryColumn {
+    display: contents;
+  }
+
+  .head {
+    order: 1;
+  }
+
+  .tagSection {
+    order: 2;
+    /* The grid gap spaces it now; the original top margin was for sitting
+       directly under the photo. */
+    margin-top: 0;
+  }
+
+  .purchase {
+    order: 3;
+  }
+
+  .details {
+    order: 4;
+  }
+
+  .tocColumn {
+    order: 5;
+  }
+
+  .bodyMain {
+    order: 6;
+  }
+}

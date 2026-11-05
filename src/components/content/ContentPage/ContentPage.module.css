@@ -1,0 +1,263 @@
+/* The page is ONE measure-wide column, centred in the container.
+
+   The measure used to sit on `.body` alone, which left the column pinned to
+   the left edge of a 1760px container — on a 1920px screen that is 622px of
+   text with 1,200px of nothing beside it. Carrying it here centres the whole
+   page and keeps the breadcrumbs and title on the same left edge as the text
+   under them — centring the article alone left the breadcrumbs stranded at the
+   container edge.
+
+   768px rather than the old 70ch: at 16px that is roughly 45 full-width
+   Japanese characters per line, which is the measure the note below always
+   claimed. 70ch reached only 38, because `ch` measures the digit zero. */
+.column {
+  max-width: var(--container-narrow);
+  margin-inline: auto;
+}
+
+.page {
+  padding-bottom: var(--sp-16);
+}
+
+/* --- With side columns -------------------------------------------------
+
+   1400px caps the whole row, so the middle column stays near the 768px
+   measure above (1400 - 240 - 280 - 2 x 32 = 816) instead of stretching to
+   1,100px of FAQ on a 1920px screen.
+
+   Phone: one column in source order — article first, side boxes after. No
+   named areas here: a column hidden on phones (`.notOnPhone`) would otherwise
+   leave its empty row, and a second gap, behind.
+   Tablet: the article full width, the two side columns side by side under it.
+   Desktop: left | article | right. */
+.wide {
+  max-width: 1400px;
+  margin-inline: auto;
+}
+
+.threeCol {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sp-6);
+  padding-bottom: var(--sp-16);
+}
+
+@media (min-width: 768px) {
+  .threeCol {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas:
+      'main main'
+      'start end';
+    align-items: start;
+  }
+
+  .main {
+    grid-area: main;
+  }
+
+  .start {
+    grid-area: start;
+  }
+
+  .end {
+    grid-area: end;
+  }
+}
+
+@media (min-width: 1024px) {
+  .threeCol {
+    grid-template-columns: 200px minmax(0, 1fr) 240px;
+    grid-template-areas: 'start main end';
+  }
+}
+
+@media (min-width: 1280px) {
+  .threeCol {
+    grid-template-columns: 240px minmax(0, 1fr) 280px;
+    column-gap: var(--sp-8);
+  }
+}
+
+/* One side column only (the policy pages' contents list): match the empty
+   gutter to it so the article is centred rather than nudged right. */
+@media (min-width: 1024px) {
+  .oneSide {
+    grid-template-columns: 200px minmax(0, 1fr) 200px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .oneSide {
+    grid-template-columns: 240px minmax(0, 1fr) 240px;
+  }
+}
+
+.main {
+  min-width: 0;
+}
+
+/* The grid supplies the space below. */
+.main > .page {
+  padding-bottom: 0;
+}
+
+.start,
+.end {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+  min-width: 0;
+}
+
+/* A side column the page has left out on phones (`phone: false`). */
+@media (max-width: 767px) {
+  .notOnPhone {
+    display: none;
+  }
+}
+
+/* A side column that follows the reader (`sticky: true`) — the policy pages'
+   contents list. Only from 1024px, where the columns actually sit BESIDE the
+   article; below that they are stacked under it and there is nothing to
+   follow. `align-items: start` above is what makes this work: it leaves the
+   item shorter than its grid area, which is the room sticky travels in.
+   max-height keeps a 14-entry list from running past the viewport. */
+@media (min-width: 1024px) {
+  .stickyAside {
+    position: sticky;
+    top: calc(var(--header-clear) + var(--sp-4));
+    max-height: calc(100vh - var(--header-clear) - var(--sp-8));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+}
+
+.header {
+  margin-bottom: var(--sp-8);
+}
+
+/* Opt-in (`centerHeader`), used by the contact page. The lead carries a 60ch
+   cap, which only reads as centred once the block itself is centred too —
+   text-align alone would leave it hugging the left. */
+.headerCentered {
+  text-align: center;
+}
+
+.headerCentered .lead {
+  margin-inline: auto;
+}
+
+.title {
+  font-size: var(--fs-3xl);
+  letter-spacing: var(--ls-tight);
+}
+
+/* Opt-in, for a title too long to sit on one line of a phone.
+
+   「キャンペーン・クーポン一覧」 is thirteen full-width characters, which at
+   --fs-3xl measures 406px against the 358px a 390px screen has to offer — so
+   it broke after 「・」 and ran to two lines. Most titles here are four to
+   seven characters and fit with room to spare, which is why this is opt-in
+   rather than applied to .title: shrinking 「お知らせ」 to make
+   「キャンペーン・クーポン一覧」 fit would be fixing the wrong heading.
+
+   The slope is the title's own measure: the string is 12.69em wide, and the
+   container leaves vw minus its 32px of gutters, so vw/12.69 is the largest
+   size that still fits. 7.6vw keeps ~3% in hand for rounding, and the cap
+   returns it to --fs-3xl at about 455px, before any tablet sees it. Budget is
+   roughly thirteen full-width characters; a longer title would need its own
+   number rather than this one. */
+.titleFit {
+  font-size: clamp(1.25rem, 7.6vw - 2.5px, var(--fs-3xl));
+  text-wrap: nowrap;
+}
+
+.meta {
+  margin-top: var(--sp-3);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: var(--c-primary-700);
+}
+
+.lead {
+  margin-top: var(--sp-4);
+  font-size: var(--fs-md);
+  line-height: var(--lh-normal);
+  color: var(--color-text-muted);
+  max-width: 60ch;
+}
+
+.updated {
+  margin-top: var(--sp-3);
+  font-size: var(--fs-xs);
+  color: var(--color-text-subtle);
+}
+
+/* Measure lives on `.page` above, so the header shares it. Japanese body text
+   becomes hard to track past roughly 45 full-width characters per line. */
+.body {
+  font-size: var(--fs-base);
+  line-height: var(--lh-normal);
+}
+
+.body > * + * {
+  margin-top: var(--sp-5);
+}
+
+.body h2 {
+  margin-top: var(--sp-10);
+  font-size: var(--fs-xl);
+  padding-bottom: var(--sp-2);
+  border-bottom: 2px solid var(--c-primary-100);
+  scroll-margin-top: calc(var(--header-clear) + var(--sp-6));
+}
+
+.body h3 {
+  margin-top: var(--sp-8);
+  font-size: var(--fs-lg);
+}
+
+.body ul,
+.body ol {
+  padding-left: 1.5em;
+}
+
+.body li + li {
+  margin-top: var(--sp-2);
+}
+
+.body a {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.body table {
+  width: 100%;
+  font-size: var(--fs-sm);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+}
+
+.body th,
+.body td {
+  padding: var(--sp-3);
+  border: 1px solid var(--color-border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.body th {
+  background-color: var(--c-primary-50);
+  font-weight: var(--fw-bold);
+  white-space: nowrap;
+}
+
+/* Callout for regulatory and safety notices */
+.notice {
+  padding: var(--sp-4);
+  background-color: var(--c-warning-50);
+  border-left: 3px solid var(--c-warning-500);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-normal);
+}

@@ -1,0 +1,48 @@
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-5);
+}
+
+.titleGroup {
+  min-width: 0;
+}
+
+.title {
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-tight);
+}
+
+@media (min-width: 768px) {
+  .title {
+    font-size: var(--fs-2xl);
+  }
+}
+
+/* A short accent rule under the heading. Enough to give sections rhythm
+   without the heavy coloured header bars the reference sites use. */
+.title::after {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 3px;
+  margin-top: var(--sp-2);
+  border-radius: var(--radius-pill);
+  background-color: var(--c-primary-500);
+}
+
+.subtitle {
+  margin-top: var(--sp-2);
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+.link {
+  flex-shrink: 0;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  white-space: nowrap;
+}

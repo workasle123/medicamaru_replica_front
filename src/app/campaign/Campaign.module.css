@@ -1,0 +1,56 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+}
+
+/* Wider than the gap between sections inside a card, so the eight cards read
+   as a series of separate things rather than as one long document. */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+}
+
+.empty {
+  padding: var(--sp-8) var(--sp-5);
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface-sunken);
+  text-align: center;
+  line-height: var(--lh-relaxed);
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+}
+
+/* --- the shared small print --------------------------------------------- */
+.note {
+  padding: var(--sp-5);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface-sunken);
+}
+
+/* Both scoped through .note, past ContentPage's `.body h2` and `.body ul`. */
+.note .noteHeading {
+  margin: 0 0 var(--sp-3);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.05em;
+  color: var(--color-heading);
+}
+
+.note .noteList {
+  margin: 0;
+  padding-inline-start: 1.25em;
+  font-size: var(--fs-sm);
+  line-height: var(--lh-relaxed);
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+}
+
+/* Spacing by margin rather than by flex gap, because ContentPage already sets
+   `li + li { margin-top: --sp-2 }` on this list and a gap would have stacked on
+   top of it. One mechanism, stated here. */
+.note .noteList li + li {
+  margin-top: var(--sp-2);
+}

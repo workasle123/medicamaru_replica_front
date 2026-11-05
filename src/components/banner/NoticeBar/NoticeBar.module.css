@@ -1,0 +1,84 @@
+/* Announcement card.
+   Inset and rounded rather than a full-bleed strip, and teal rather than
+   amber, so it reads as part of the brand rather than a browser warning.
+   For a store where delivery takes 10–28 days, shipping pauses and customs
+   delays are genuinely urgent information — hence the position above the
+   hero and the teal accent that pulls the eye. */
+
+.wrap {
+  padding-block: var(--sp-4) 0;
+}
+
+.bar {
+  background-color: var(--c-accent-50);
+  border: 1px solid var(--c-accent-200);
+  border-radius: var(--radius-lg);
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  padding: var(--sp-4);
+}
+
+@media (min-width: 768px) {
+  .item {
+    align-items: center;
+  }
+}
+
+.item + .item {
+  border-top: 1px dashed var(--c-accent-200);
+}
+
+/* Solid teal disc — the one strong colour accent in an otherwise light card */
+.icon {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-pill);
+  /* Dark on teal, not white. The brand teal is a light hue — white text on
+     it measures 2.09:1. Dark text clears 7.91:1. */
+  background-color: var(--c-accent-400);
+  color: var(--c-neutral-900);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  line-height: 1;
+}
+
+.content {
+  min-width: 0;
+  flex: 1;
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+  color: var(--color-text);
+}
+
+/* 700 step: the brand teal at 400 does not clear 4.5:1 on this tint */
+.title {
+  font-weight: var(--fw-bold);
+  color: var(--c-accent-700);
+}
+
+.link {
+  flex-shrink: 0;
+  color: var(--c-primary-800);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  white-space: nowrap;
+}
+
+.link:hover {
+  color: var(--c-primary-800);
+}

@@ -1,0 +1,110 @@
+.promos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+/* --- the supplied banner ------------------------------------------------
+
+   No SideBox around it. Every other box in a side column gets a heading, but
+   this artwork already carries its own — 「薬の名前がわからない場合は…」 is the
+   heading — and a second one above it would say the same thing twice in a
+   240px column that has no room to spare. */
+.banner {
+  display: block;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  line-height: 0;
+  box-shadow: var(--shadow-xs);
+  transition: box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.banner:hover {
+  box-shadow: var(--shadow-md);
+}
+
+/* Height from the artwork's own 1031×1526, so the column reserves the right
+   space before the file arrives and nothing below it jumps. */
+.bannerImage {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* --- the register card --------------------------------------------------
+
+   Markup rather than the supplied landscape artwork, which would be 160px
+   tall here with unreadable type inside it. */
+.card {
+  padding: var(--sp-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface);
+  text-align: center;
+}
+
+/* Scoped through .card: an unscoped .cardTitle is (0,1,0) and loses to
+   ContentPage's `.body h2` (0,1,1) — though this one sits in the side column
+   rather than the body, the same trap is one refactor away, and the explicit
+   reset costs nothing. */
+.card .cardTitle {
+  margin: 0 0 var(--sp-2);
+  padding-bottom: 0;
+  border-bottom: 0;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.05em;
+  color: var(--color-heading);
+}
+
+.cardBody {
+  margin: 0 0 var(--sp-4);
+  font-size: var(--fs-xs);
+  line-height: var(--lh-relaxed);
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  text-align: start;
+}
+
+.cardCta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--control-h-md);
+  padding-inline: var(--sp-3);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-cta);
+  color: var(--color-cta-text);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.04em;
+  /* The column is 200px at 1024, and 「新規会員登録」 at --fs-sm is 84px, so this
+     has room — but a longer label later would wrap into the pill rather than
+     overflow it. */
+  text-align: center;
+}
+
+.cardCta:hover {
+  background-color: var(--color-cta-hover);
+  text-decoration: none;
+}
+
+.cardFoot {
+  margin: var(--sp-3) 0 0;
+  font-size: var(--fs-2xs);
+  line-height: var(--lh-normal);
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+}
+
+/* Japanese breaks between any two characters, so without this the line wrapped
+   inside 「ログイン」 itself — measured as two client rects for one link, which
+   is a two-character word split in half with an underline running under each
+   piece. inline-block is what gives nowrap something to hold. */
+.cardLink {
+  display: inline-block;
+  white-space: nowrap;
+  color: var(--color-link);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}

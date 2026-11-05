@@ -1,0 +1,387 @@
+/* ==========================================================================
+   Medicamaru — Design Tokens
+   Single source of truth. Components must never hardcode raw values.
+   Phase 3 deliverable.
+   ========================================================================== */
+
+:root {
+  /* ======================================================================
+     COLOR
+     ----------------------------------------------------------------------
+     Vibrant, multi-accent palette in the Japanese e-commerce idiom. The
+     reference sites all run highly saturated colour and use four to six
+     hues simultaneously (cocoro: orange + teal + yellow + red;
+     kusuriexpress: crimson + gold; osakadou: blue + coral + orange).
+
+     CONTRAST RULE, verified by measurement — do not change these without
+     re-checking. NOTE this is the INVERSE of the rule the old purple/pink
+     palette used, because all three supplied brand colours are light:
+
+       #FB9328 orange  2.26:1 on white
+       #FDC434 yellow  1.60:1 on white
+       #6CC2BB teal    2.09:1 on white
+
+     None of them can carry white text at any size. So:
+
+       · 400/500 are the SUPPLIED BRAND COLOURS. They are vivid and they are
+         the ones customers should see — but they take DARK text only, which
+         they carry comfortably (7.3:1 to 10.3:1). A filled orange button
+         with near-black text is the correct primary CTA here.
+       · 700 is the lightest step safe for WHITE text (orange 4.97:1, teal
+         4.84:1). Yellow needs 800 — it never clears at 700 (3.65:1).
+       · 700/800 are also the text-on-white steps for links and coloured
+         copy.
+
+     Do not put white text on a 400/500. That is the mistake this palette
+     invites, and it fails by a factor of two.
+     ====================================================================== */
+
+  /* --- Primary: orange ---------------------------------------------------
+     Brand orange #FB9328 supplied by the business, sitting at 500 — its
+     natural lightness. Used as a fill behind dark text (7.31:1), and at 700
+     wherever white text or a link colour is needed. */
+  --c-primary-50:  #fdf7f1;
+  --c-primary-100: #f5e9de;
+  --c-primary-200: #fcd4ac;
+  --c-primary-300: #fab976;
+  --c-primary-400: #f89f44;
+  --c-primary-500: #fb9328;  /* BRAND — dark text only, 7.31:1 */
+  --c-primary-600: #d87208;
+  --c-primary-700: #ac5a07;  /* white text safe — 4.97:1 */
+  --c-primary-800: #854809;
+  --c-primary-900: #5f3407;
+
+  /* --- Accent: teal ------------------------------------------------------
+     Brand teal #6CC2BB supplied by the business, at 400. The cool
+     counterweight to the orange — trust, calm, and the colour that keeps a
+     warm palette from reading as a discount flyer. */
+  --c-accent-50:  #f4faf9;
+  --c-accent-100: #e4eeed;
+  --c-accent-200: #c2e5e2;
+  --c-accent-300: #9bd4cf;
+  --c-accent-400: #6cc2bb;  /* BRAND — dark text only, 7.91:1 */
+  --c-accent-500: #58b7af;
+  --c-accent-600: #449d95;
+  --c-accent-700: #367d77;  /* white text safe — 4.84:1 */
+  --c-accent-800: #2d625e;
+  --c-accent-900: #204643;
+
+  /* --- Highlight: yellow -------------------------------------------------
+     Brand yellow #FDC434 supplied by the business, at 400. The brightest
+     thing in the palette (10.31:1 behind dark text) and therefore the
+     attention colour: badges, points, campaign flags, star ratings.
+
+     It is NEVER a text colour and never carries white — even 700 only
+     reaches 3.65:1. If white text is unavoidable on yellow, use 800. */
+  --c-highlight-50:  #fdfaf1;
+  --c-highlight-100: #f5eede;
+  --c-highlight-200: #fce5ab;
+  --c-highlight-300: #fbd574;
+  --c-highlight-400: #fdc434;  /* BRAND — dark text only, 10.31:1 */
+  --c-highlight-500: #f8b816;
+  --c-highlight-600: #da9e07;
+  --c-highlight-700: #ad7e05;
+  --c-highlight-800: #866308;  /* lightest white-text-safe step — 5.53:1 */
+  --c-highlight-900: #604606;
+
+  /* --- Sale: red ---------------------------------------------------------
+     A true red, pushed away from the primary orange in hue so a price cut
+     never reads as a call to action. With an orange brand this separation
+     matters more than it did against purple. */
+  --c-sale-50:  #fff1f1;
+  --c-sale-100: #ffdcdc;
+  --c-sale-200: #ffb8b8;
+  --c-sale-300: #f98a8a;
+  --c-sale-400: #f05a5a;
+  --c-sale-500: #e03131;
+  --c-sale-600: #c81e1e;  /* white text safe — 5.874:1 */
+  --c-sale-700: #a51818;
+  --c-sale-800: #7f1212;
+  --c-sale-900: #5a0d0d;
+
+  /* --- Neutrals ----------------------------------------------------------
+     The light end is OFF-WHITE, not cream. It used to be sand-tinted
+     (#fffaf4 page, #f7f0e7 sunken) so the greys would sit with the orange,
+     but at full-page scale that much yellow read as a cream wash over the
+     whole site rather than as a neutral ground.
+
+     These steps keep a trace of warmth — the last digit or two, not a hue
+     you can name — so the orange brand still feels at home while nothing
+     looks tinted. The 400 step and everything below it stay warm charcoal:
+     those are ink, and ink on off-white is the contrast the design rests on.
+
+     Changing the ground moves every contrast ratio in the file. Measured
+     after the swap: the binding case (500 on sunken) went 5.20 → 5.21, and
+     white cards still separate from the page at 1.04:1, exactly as before.
+     Re-measure if you touch these again. */
+  --c-neutral-0:   #ffffff;
+  --c-neutral-50:  #fafaf9;  /* page background — off-white */
+  --c-neutral-100: #f2f1ef;  /* sunken surface */
+  --c-neutral-200: #e5e3e0;
+  --c-neutral-300: #d3d0cc;
+  --c-neutral-400: #a19d97;
+  /* Secondary text has to clear 4.5:1 on the SUNKEN surface, not just on
+     white — that is the binding constraint on these two steps. */
+  --c-neutral-500: #6d6357;  /* subtle — 5.21:1 on sunken */
+  --c-neutral-600: #574e44;  /* muted  — 7.22:1 on sunken */
+  /* The dark end runs warm charcoal rather than navy. Against the sand
+     background it reads as ink on paper — the dark half of the
+     "light surfaces / dark type" contrast the design depends on. */
+  --c-neutral-700: #423a33;
+  --c-neutral-800: #2d2722;
+  --c-neutral-900: #1c1815;  /* headline — 16.9:1 on the page */
+
+  /* --- Semantic. 50 = tint background, 700 = text on that tint. ---------- */
+  --c-success-50:  #eafaf1;
+  --c-success-500: #22c17a;  /* vivid — non-text */
+  --c-success-700: #14764a;
+
+  --c-warning-50:  #fff6e6;
+  --c-warning-500: #f5a300;  /* vivid — non-text */
+  --c-warning-700: #8a5600;
+
+  --c-danger-50:   #fff1f1;
+  --c-danger-500:  #e03131;  /* vivid — non-text */
+  --c-danger-700:  #a51818;
+
+  /* Info follows the brand teal so notices read as part of the palette
+     rather than as a stray blue. */
+  --c-info-50:     #f4faf9;
+  --c-info-500:    #58b7af;
+  --c-info-700:    #367d77;
+
+  /* ----------------------------------------------------------------------
+     SEMANTIC ALIASES — components should prefer these over raw scales
+     ---------------------------------------------------------------------- */
+  /* The backdrop is the <body>. The application now runs full-bleed, so this
+     is only visible behind overscroll and on any surface that deliberately
+     steps outside the content width. It has to match the page background
+     exactly or the seam shows, so it now POINTS at that token instead of
+     repeating the literal — the old `--c-cream` copy was a second place to
+     forget. */
+  --color-backdrop:      var(--c-neutral-50);
+  --color-bg:            var(--c-neutral-50);
+  --color-surface:       var(--c-neutral-0);
+  --color-surface-sunken:var(--c-neutral-100);
+  --color-border:        var(--c-neutral-200);
+  --color-border-strong: var(--c-neutral-300);
+
+  /* Three text weights, all of which clear 4.5:1 on white, on the page tint
+     AND on the sunken surface. The hierarchy is preserved by keeping one
+     scale step between them rather than by letting the lightest fade out —
+     brand names and taglines are content, not decoration. */
+  --color-text:          var(--c-neutral-800);
+  --color-text-muted:    var(--c-neutral-600);
+  --color-text-subtle:   var(--c-neutral-500);
+  --color-text-inverse:  var(--c-neutral-0);
+  /* Headlines go a step darker than body copy — the strong dark anchor
+     against the light sand surfaces. */
+  --color-heading:       var(--c-neutral-900);
+
+  /* Links use TEAL, not the orange. Orange 700 is a brown-amber that reads
+     as disabled text rather than a link, and against orange-tinted surfaces
+     it barely separates. Teal is the palette's cool hue and is unmistakably
+     interactive.
+
+     800 rather than 700, and the reason is the binding constraint: teal-700
+     clears on white (4.82:1) but FAILS on the sunken surface (4.26:1) and on
+     every tinted panel, including the footer. Links appear on all of those.
+     800 measures 6.95:1 on white and 5.17:1 at its worst. */
+  --color-link:          var(--c-accent-800);
+  --color-link-hover:    var(--c-accent-900);
+
+  --color-price:         var(--c-neutral-900);
+  --color-price-sale:    var(--c-sale-600);
+  /* A struck-through price is real information a shopper compares against,
+     not decoration — so it has to meet text contrast. neutral-400 measured
+     2.57:1 and was too faint. */
+  --color-price-was:     var(--c-neutral-500);
+
+  /* The primary CTA is the brand orange at its supplied value, carrying DARK
+     text. That is the opposite of the old palette, where the CTA went a step
+     deeper to earn white text — here going deeper would throw away the very
+     colour the brand is built on, and #FB9328 behind near-black already
+     clears 7.31:1. Bright fill, dark label. */
+  --color-cta:           var(--c-primary-500);
+  --color-cta-hover:     var(--c-primary-600);
+  --color-cta-text:      var(--c-neutral-900);
+
+  /* Orange → yellow, the brand gradient: the two warm hues, which sit
+     adjacent and blend without going muddy. Decorative only, and note BOTH
+     ends are light — anything on top must be dark, and must clear contrast
+     against the YELLOW end, which is the lighter of the two. */
+  --gradient-brand: linear-gradient(135deg, var(--c-primary-500) 0%, var(--c-highlight-400) 100%);
+
+  /* Teal, so the ring reads against the orange controls it most often
+     surrounds rather than blending into them. */
+  --color-focus-ring:    var(--c-accent-600);
+
+  /* Scrim bases, as RGB triplets so components can compose their own alpha
+     stops in a gradient. Kept here so a palette change stays a one-file edit
+     rather than a hunt through component stylesheets for raw rgba(). */
+  --scrim-primary-rgb: 95, 52, 7;    /* primary-900   */
+  --scrim-accent-rgb:  32, 70, 67;   /* accent-900    */
+  --scrim-neutral-rgb: 28, 24, 21;   /* neutral-900   */
+
+  /* ----------------------------------------------------------------------
+     TYPOGRAPHY
+     Base 16px — deliberately larger than kusuriexpress (12px) and
+     okusuritsuhan (15px). Audience skews older; 12px is an a11y failure.
+     ---------------------------------------------------------------------- */
+  --font-sans: var(--font-noto-sans-jp), -apple-system, BlinkMacSystemFont,
+               "Hiragino Kaku Gothic ProN", "Yu Gothic Medium", Meiryo,
+               "Helvetica Neue", Arial, sans-serif;
+  --font-numeric: var(--font-sans);
+
+  /* Type scale — 1.200 minor third, rounded to whole px */
+  --fs-2xs:  0.6875rem;  /* 11px — legal fine print only */
+  --fs-xs:   0.75rem;    /* 12px — badges, meta */
+  --fs-sm:   0.875rem;   /* 14px — secondary text */
+  --fs-base: 1rem;       /* 16px — body */
+  --fs-md:   1.125rem;   /* 18px — lead */
+  --fs-lg:   1.25rem;    /* 20px — h4 */
+  --fs-xl:   1.5rem;     /* 24px — h3 */
+  --fs-2xl:  1.75rem;    /* 28px — h2 */
+  --fs-3xl:  2rem;       /* 32px — h1 mobile */
+  --fs-4xl:  2.5rem;     /* 40px — h1 desktop */
+
+  --fw-regular:  400;
+  /* 400, not 500: only two weights of Noto Sans JP are loaded now — see the
+     note in app/layout.js. Kept as its own token rather than find-and-replaced
+     into the 24 rules that use it, so restoring the weight is one line. */
+  --fw-medium:   400;
+  --fw-bold:     700;
+
+  --lh-tight:   1.25;
+  --lh-snug:    1.4;
+  --lh-normal:  1.7;   /* Japanese body copy needs more leading than Latin */
+  --lh-relaxed: 1.9;
+
+  /* Japanese text benefits from slight negative tracking at large sizes */
+  --ls-tight:  -0.02em;
+  --ls-normal: 0;
+  --ls-wide:   0.04em;
+
+  /* ----------------------------------------------------------------------
+     SPACING — 4px base
+     ---------------------------------------------------------------------- */
+  --sp-0:   0;
+  --sp-1:   0.25rem;   /* 4  */
+  --sp-2:   0.5rem;    /* 8  */
+  --sp-3:   0.75rem;   /* 12 */
+  --sp-4:   1rem;      /* 16 */
+  --sp-5:   1.25rem;   /* 20 */
+  --sp-6:   1.5rem;    /* 24 */
+  --sp-8:   2rem;      /* 32 */
+  --sp-10:  2.5rem;    /* 40 */
+  --sp-12:  3rem;      /* 48 */
+  --sp-16:  4rem;      /* 64 */
+  --sp-20:  5rem;      /* 80 */
+  --sp-24:  6rem;      /* 96 */
+
+  /* Vertical rhythm between page sections */
+  /* The gap BETWEEN sections, applied once (see .section in utilities.css).
+     Was 40/64 applied to both sides, which read as 80/128 and left the
+     homepage feeling mostly empty between rails. */
+  --section-gap:        var(--sp-8);
+  --section-gap-lg:     var(--sp-12);
+
+  /* ----------------------------------------------------------------------
+     LAYOUT
+     ---------------------------------------------------------------------- */
+  /* The application is full-bleed — there is no frame width. Backgrounds,
+     the header bar and section tints run edge to edge; only the CONTENT is
+     constrained, by --container-max below.
+
+     --container-max is now the sole width control.
+
+     1760px, not 1280px. At 1280 a 16-inch MacBook (1728 logical px) left 217px
+     dead on each side while the header background ran edge to edge, which
+     reads as a broken layout rather than a deliberate measure. At 1760 every
+     common laptop — 1440, 1512, 1680, 1728 — is filled to ~97%, the gutter
+     coming from --container-pad alone.
+
+     It is still a cap rather than 100%: on a 2560px display, content stops at
+     1760. Long-form text is protected independently by its own measure —
+     ProductContent .body (78ch), FaqList .answer (82ch), CategoryContent
+     (74ch) — so this value is free to serve grids and banners. */
+  --container-max:    1760px;
+  --container-narrow: 768px;   /* long-form article measure */
+  --container-pad:    var(--sp-4);
+  --container-pad-lg: var(--sp-6);
+
+  /* ----------------------------------------------------------------------
+     RADIUS
+     ---------------------------------------------------------------------- */
+  --radius-xs:   2px;
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-lg:   12px;
+  --radius-xl:   16px;
+  --radius-pill: 999px;
+
+  /* ----------------------------------------------------------------------
+     ELEVATION — restrained. Cards lift off the tinted page background,
+     so heavy shadows are unnecessary.
+     ---------------------------------------------------------------------- */
+  --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.05);
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.10);
+  --shadow-lg: 0 12px 28px rgba(15, 23, 42, 0.14);
+
+  /* ----------------------------------------------------------------------
+     MOTION — respect prefers-reduced-motion (see base.css)
+     ---------------------------------------------------------------------- */
+  --ease-out:   cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out:cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast:   120ms;
+  --dur-base:   200ms;
+  --dur-slow:   320ms;
+
+  /* ----------------------------------------------------------------------
+     Z-INDEX — named, so no magic numbers appear in components
+     ---------------------------------------------------------------------- */
+  --z-base:      1;
+  --z-sticky:    100;
+  --z-header:    200;
+  --z-dropdown:  300;
+  --z-overlay:   400;
+  --z-drawer:    500;
+  --z-modal:     600;
+  --z-toast:     700;
+
+  /* ----------------------------------------------------------------------
+     COMPONENT-LEVEL
+     ---------------------------------------------------------------------- */
+  --control-h-sm: 36px;
+  --control-h-md: 44px;   /* meets the 44px touch-target minimum */
+  --control-h-lg: 52px;
+
+  /* The logo row only. The lockup is 2:1, so its width is governed by this
+     height — a bigger logo needs a taller bar. */
+  --header-bar-h-desktop: 96px;
+  --header-bar-h-mobile:  56px;
+
+  /* How much a sticky sidebar or an anchor target must clear at the top of
+     the viewport. ZERO, because the header is no longer sticky — it scrolls
+     away, so there is nothing left up there to hide behind.
+
+     Kept as a token instead of stripping the offsets out of ~15 files: if the
+     header is ever made sticky again, this single line restores them. The
+     stack would then measure 143px on desktop (bar 96 + nav 47) and 112px on
+     mobile (bar 56 + search row 56). */
+  --header-clear: 0px;
+
+  --mobile-tabbar-h:  60px;
+}
+
+/* Breakpoints are documented here for reference; CSS custom properties
+   cannot be used inside media queries, so these values are repeated
+   literally in component stylesheets. Keep them in sync.
+
+     --bp-sm:  480px
+     --bp-md:  768px    tablet
+     --bp-lg:  1024px   small desktop
+     --bp-xl:  1280px   desktop
+     --bp-2xl: 1440px   design frame
+*/

@@ -1,0 +1,105 @@
+/* FAQ page: the topic jump menu above the question groups. */
+
+/* Shown only when the admin has no active FAQ group with an active FAQ. */
+.empty {
+  padding: var(--sp-6);
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.jump {
+  margin-bottom: var(--sp-8);
+}
+
+/* Two classes deep on purpose. ContentPage styles every list inside its body
+   as prose — `.body ul` indents it and `.body li + li` spaces the items — and
+   either would knock this grid out of line.
+
+   As many 160px tiles as the middle column holds: two on a phone, and from two
+   to four between the side columns depending on the screen. */
+.jump .jumpList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: var(--sp-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.jump .jumpList > li {
+  margin: 0;
+}
+
+/* Same reason: ContentPage underlines every link in its body. */
+.jump .jumpLink {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  height: 100%;
+  min-height: 52px;
+  padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+  color: var(--color-heading);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-snug);
+  text-decoration: none;
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out);
+}
+
+.jump .jumpLink:hover {
+  border-color: var(--c-primary-500);
+  background-color: var(--c-primary-50);
+  color: var(--color-heading);
+  text-decoration: none;
+}
+
+.jump .jumpLink:focus-visible {
+  outline: 2px solid var(--c-primary-600);
+  outline-offset: 2px;
+}
+
+/* Same disc as the section headings, a size smaller. */
+.jumpIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-pill);
+  background-color: var(--c-primary-50);
+  color: var(--c-primary-700);
+}
+
+.jumpIcon svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Label over count, so the label has the tile's full width to itself. */
+.jumpText {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+/* auto-phrase breaks Japanese between phrases rather than mid-word where the
+   browser supports it; elsewhere it falls back to normal breaking. */
+.jumpLabel {
+  word-break: auto-phrase;
+}
+
+.jumpCount {
+  font-size: var(--fs-xs);
+  font-weight: normal;
+  color: var(--color-text-muted);
+}

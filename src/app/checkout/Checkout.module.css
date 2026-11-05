@@ -1,0 +1,387 @@
+.layout {
+  display: grid;
+  gap: var(--sp-6);
+  padding-bottom: var(--sp-12);
+}
+
+@media (min-width: 1024px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: var(--sp-8);
+    align-items: start;
+  }
+}
+
+.title {
+  font-size: var(--fs-2xl);
+  letter-spacing: var(--ls-tight);
+  margin-bottom: var(--sp-5);
+}
+
+.section {
+  padding: var(--sp-5);
+  margin-bottom: var(--sp-5);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.sectionTitle {
+  font-size: var(--fs-lg);
+  margin-bottom: var(--sp-4);
+  padding-bottom: var(--sp-2);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.fields {
+  display: grid;
+  gap: var(--sp-4);
+}
+
+@media (min-width: 640px) {
+  .twoUp {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* --- Summary ----------------------------------------------------------- */
+
+.summary {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-5);
+}
+
+@media (min-width: 1024px) {
+  .summary {
+    position: sticky;
+    top: calc(var(--header-clear) + var(--sp-4));
+  }
+}
+
+.summaryTitle {
+  font-size: var(--fs-base);
+  font-weight: var(--fw-bold);
+  margin-bottom: var(--sp-3);
+}
+
+.miniLines {
+  list-style: none;
+  margin: 0 0 var(--sp-3);
+  padding: 0 0 var(--sp-3);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.miniLine {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding-block: var(--sp-2);
+  font-size: var(--fs-sm);
+}
+
+.miniName {
+  min-width: 0;
+}
+
+.miniPack {
+  display: block;
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+.row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding-block: var(--sp-2);
+  font-size: var(--fs-sm);
+}
+
+.rowDiscount {
+  color: var(--c-sale-600);
+}
+
+/* The payment method, stated with the figures now that there is no chooser.
+   Same shape as .row so it reads as another line of the order, not as a
+   leftover control. */
+.paymentLine {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding-block: var(--sp-2);
+  font-size: var(--fs-sm);
+}
+
+.paymentLineValue {
+  font-weight: var(--fw-bold);
+  color: var(--color-heading);
+}
+
+.paymentNoteSummary {
+  margin: var(--sp-2) 0 0;
+  font-size: var(--fs-xs);
+  line-height: var(--lh-relaxed);
+  color: var(--color-text-muted);
+}
+
+.totalRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-top: var(--sp-3);
+  padding-top: var(--sp-3);
+  border-top: 2px solid var(--color-border);
+}
+
+.totalLabel {
+  font-size: var(--fs-base);
+  font-weight: var(--fw-bold);
+}
+
+.totalValue {
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-tight);
+}
+
+.terms {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  margin-top: var(--sp-5);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+}
+
+.checkbox {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  accent-color: var(--c-primary-600);
+}
+
+.submitWrap {
+  margin-top: var(--sp-5);
+}
+
+.legalNote {
+  margin-top: var(--sp-4);
+  font-size: var(--fs-2xs);
+  color: var(--color-text-muted);
+  line-height: var(--lh-normal);
+}
+
+.alertSlot {
+  margin-bottom: var(--sp-4);
+}
+
+.alertBelow {
+  margin-top: var(--sp-3);
+}
+
+.pointsNote {
+  margin-top: var(--sp-2);
+  font-size: var(--fs-xs);
+  color: var(--c-primary-700);
+  text-align: right;
+}
+
+/* --- Confirmation ------------------------------------------------------ */
+
+.complete {
+  max-width: 640px;
+  margin-inline: auto;
+  padding-block: var(--sp-10) var(--sp-16);
+  text-align: center;
+}
+
+.completeIcon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  margin-inline: auto;
+  margin-bottom: var(--sp-5);
+  border-radius: var(--radius-pill);
+  background-color: var(--c-success-50);
+  color: var(--c-success-700);
+  /* Lands once, with the ribbons. Overshoots slightly and settles, which is
+     what makes it read as an arrival rather than a fade. */
+  animation: completeIconIn 460ms var(--ease-out) both;
+}
+
+/* A single ring that expands out of the tick and dissipates — the quiet half
+   of the celebration, for anyone who scrolls past the ribbons. */
+.completeIcon::after {
+  content: '';
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-pill);
+  border: 2px solid var(--c-success-700);
+  animation: completeIconRing 900ms var(--ease-out) 260ms both;
+}
+
+@keyframes completeIconIn {
+  from {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes completeIconRing {
+  from {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  to {
+    transform: scale(1.75);
+    opacity: 0;
+  }
+}
+
+/* Asked not to animate: the icon is simply there, which is all it ever
+   needed to be. */
+@media (prefers-reduced-motion: reduce) {
+  .completeIcon {
+    animation: none;
+  }
+
+  .completeIcon::after {
+    display: none;
+  }
+}
+
+.orderNumber {
+  display: inline-block;
+  margin-top: var(--sp-4);
+  padding: var(--sp-2) var(--sp-4);
+  background-color: var(--color-surface-sunken);
+  border-radius: var(--radius-md);
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-wide);
+}
+
+.completeBody {
+  margin-top: var(--sp-4);
+  color: var(--color-text-muted);
+  line-height: var(--lh-normal);
+}
+
+.completeSummary {
+  margin-top: var(--sp-8);
+  text-align: left;
+}
+
+.completeActions {
+  display: flex;
+  gap: var(--sp-3);
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: var(--sp-8);
+}
+
+/* --- saved address picker ------------------------------------------------ */
+
+/* A fieldset, because these radios are one question with several answers and a
+   screen reader should hear the legend before the options. */
+.picker {
+  display: grid;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-5);
+  padding: 0;
+  border: 0;
+}
+
+.pickerLegend {
+  padding: 0;
+  margin-bottom: var(--sp-2);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: var(--color-heading);
+}
+
+/* The whole row is the label, so the tap target is the card rather than the
+   12px radio inside it. */
+.pickerOption {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+  cursor: pointer;
+}
+
+.pickerOption:hover {
+  border-color: var(--c-primary-500);
+}
+
+/* :has() on the label, so the selected card is styled from the input's own
+   checked state without mirroring that state into a class. */
+.pickerOption:has(input:checked) {
+  border-color: var(--c-primary-600);
+  background-color: var(--c-accent-50);
+  box-shadow: inset 0 0 0 1px var(--c-primary-600);
+}
+
+.pickerOption:has(input:focus-visible) {
+  outline: 2px solid var(--c-primary-600);
+  outline-offset: 2px;
+}
+
+.pickerRadio {
+  margin-top: 2px;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  accent-color: var(--c-primary-600);
+  cursor: pointer;
+}
+
+.pickerBody {
+  min-width: 0;
+}
+
+.pickerLabel {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: var(--color-heading);
+}
+
+.pickerBadge {
+  padding: 1px var(--sp-2);
+  border-radius: var(--radius-sm);
+  background-color: var(--c-primary-600);
+  color: #fff;
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-bold);
+}
+
+.pickerText {
+  display: block;
+  margin-top: 2px;
+  font-size: var(--fs-xs);
+  line-height: var(--lh-snug);
+  color: var(--color-text-muted);
+}
+

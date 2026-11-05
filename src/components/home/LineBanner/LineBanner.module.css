@@ -1,0 +1,87 @@
+/* The lead column aligns its children to the start, so without stretching this
+   the banner would shrink to nothing — it has no intrinsic width of its own
+   once the image is set to fill it. In a column flex container align-self is
+   the horizontal axis, which is why it stays while flex-grow goes. */
+
+/* The slot's shape is declared here, in both of the two layouts it appears in.
+   It used to be inherited, and that was the whole problem: the box had auto
+   height, so it took the <img>'s intrinsic ratio, and that ratio came from the
+   width/height the banner normaliser hands to next/image — a hardcoded
+   1200×600. Every desktop LINE banner has therefore been rendering at exactly
+   2:1 no matter what was uploaded, and the real artwork (1600×645) lost 19% off
+   its sides to object-fit. A ratio that is really an artefact of a placeholder
+   constant two files away is not something artwork can be designed against.
+
+   flex: 0 0 auto, because flex-grow and aspect-ratio both want to set the
+   height and grow wins. The cost is real: where the product rail beside it is
+   taller than the headline + button + banner — around 1024px, by roughly 40px
+   — the column no longer absorbs the difference and ends a little short of the
+   rail. A predictable box is worth more than a flush bottom edge.
+
+   No min-height any more. It was a floor under a height nobody was setting on
+   purpose; with the ratio pinned the height is known at every width, and the
+   floor could only fight it. */
+.banner {
+  align-self: stretch;
+  flex: 0 0 auto;
+  /* Stacked: the shape of the 「Mobile Image」 upload, 900 × 440.
+     The box has to match the ARTWORK, not the other way round — the uploaded
+     file was 2.04:1 against a 1.90:1 box, and object-fit: cover ate the
+     difference off the sides. Every ratio here is now the spec the artwork is
+     cut to, so there is nothing to trim.
+     288 × 141 on a 320px phone, 358 × 175 on a 390. */
+  aspect-ratio: 900 / 440;
+  /* Past about 540px the ratio alone would run away with the height by the
+     time the stacked layout ends at 1023. Real phones never reach that; a
+     narrowed desktop window does. The cap trims top and bottom there. */
+  max-height: 260px;
+  display: block;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  line-height: 0;
+}
+
+/* Two columns from here, and the banner is in the 40% one: 372px wide at 1024,
+   672px at 1920. 2.5:1 gives it 149px and 269px.
+
+   2.5, not the 2:1 this used to say. The 「Banner Image」 actually uploaded is
+   1976 × 796 — 2.48:1 — and a 2:1 box was taking 19% off its sides. Matching
+   the box to the file is what stops that; the artwork spec below is the same
+   ratio, so the next upload fits too. */
+@media (min-width: 1024px) {
+  .banner {
+    aspect-ratio: 1500 / 600;
+    max-height: none;
+  }
+}
+
+.banner:hover {
+  text-decoration: none;
+}
+
+/* <picture> is only a wrapper for the <source> matching; letting it box the
+   image would put an inline element between the ratio and the img that has to
+   fill it. */
+.banner picture {
+  display: contents;
+}
+
+/* cover, and it stays cover at every width.
+
+   An earlier attempt at the cropping switched to `contain` below 467px. It
+   could not have worked, for three separate reasons worth writing down:
+
+     · `height: auto` does not cancel `aspect-ratio`. auto IS the default, and
+       the ratio sets the height regardless, so the box stayed 1.9:1.
+     · `min-height: auto` reset a min-height that no longer exists here.
+     · `contain` did apply — which is why it looked different without looking
+       fixed. The box was still the wrong shape, so instead of a crop you got
+       empty bands above and below, and at 468px it snapped back to a crop.
+
+   A mismatch between box and artwork can only be fixed at one of the two. The
+   ratios above are now the artwork's, so cover has nothing left to trim. */
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

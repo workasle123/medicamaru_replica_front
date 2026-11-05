@@ -1,0 +1,235 @@
+/* Showcase: full-width carousel, with the static side banners
+   (/home/left, /home/right) as a row of tiles beneath it. */
+
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+/* The tile row is a ScrollRail now — three across with arrows for the next
+   three — so its column sizing lives there rather than here. */
+
+/* --- Carousel ---------------------------------------------------------- */
+
+.carousel {
+  position: relative;
+}
+
+/* Scroll-snap track. Swipe on touch, drag/scroll on desktop, and the dots
+   below are anchor links the browser scrolls to natively — no JavaScript,
+   so it works before hydration. */
+.track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  /* Auto-advance is disabled under reduced-motion, but a dot click still
+     scrolls the track — it must jump rather than glide. */
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--radius-xl);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  scrollbar-width: none;
+}
+
+.track::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    scroll-behavior: auto;
+  }
+}
+
+.slide {
+  flex: 0 0 100%;
+  scroll-snap-align: center;
+  /* Breathing room above the slide when jumped to from the dots */
+  scroll-margin-top: calc(var(--header-clear) + var(--sp-4));
+}
+
+.slideLink {
+  position: relative;
+  display: block;
+  height: 100%;
+  background-color: var(--c-primary-700);
+  color: var(--color-text-inverse);
+}
+
+a.slideLink:hover {
+  text-decoration: none;
+  color: var(--color-text-inverse);
+}
+
+/* Nothing flanks the carousel any more, so its height comes from an explicit
+   ratio rather than from the neighbouring column.
+
+   The ratio matches the uploaded artwork exactly — every live carousel asset
+   is 1330×300 — so `object-fit: cover` has nothing to crop and the artwork's
+   own typography survives at every width. */
+.media {
+  aspect-ratio: 1330 / 300;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Copy sits over a scrim as real text, so it stays selectable, translatable
+   and legible whatever artwork an editor uploads. */
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: var(--sp-1);
+  padding: var(--sp-5);
+  background: linear-gradient(
+    to top,
+    rgba(var(--scrim-primary-rgb), 0.92) 0%,
+    rgba(var(--scrim-primary-rgb), 0.55) 50%,
+    rgba(var(--scrim-primary-rgb), 0.12) 100%
+  );
+}
+
+.badge {
+  align-self: flex-start;
+  padding: 3px var(--sp-2);
+  border-radius: var(--radius-sm);
+  background-color: var(--c-accent-400);
+  color: var(--c-neutral-900);
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-wide);
+}
+
+.title {
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-tight);
+  text-wrap: balance;
+}
+
+@media (min-width: 1024px) {
+  .title {
+    font-size: var(--fs-2xl);
+  }
+}
+
+.subtitle {
+  font-size: var(--fs-sm);
+  opacity: 0.94;
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  margin-top: var(--sp-2);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+}
+
+/* --- Dots and playback control ----------------------------------------- */
+
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  margin-top: var(--sp-3);
+}
+
+.dots {
+  display: flex;
+  justify-content: center;
+  gap: var(--sp-2);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.dot {
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-pill);
+  background-color: var(--c-primary-200);
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    width var(--dur-fast) var(--ease-out);
+}
+
+/* 24px hit area around a 10px dot — the visual size is not the tap size */
+.dotHit {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+}
+
+.dotHit:hover .dot,
+.dotHit:focus-visible .dot {
+  background-color: var(--c-primary-600);
+}
+
+/* The carousel moves on its own, so the current slide needs a marker. Width
+   as well as colour, so it does not rely on colour alone. */
+.dotHit[aria-current] .dot {
+  width: 24px;
+  background-color: var(--c-primary-600);
+}
+
+/* WCAG 2.2.2: content that moves automatically needs a visible stop. */
+.playToggle {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background-color: transparent;
+  color: var(--c-primary-800);
+  cursor: pointer;
+}
+
+.playToggle:hover {
+  background-color: var(--c-primary-100);
+}
+
+/* --- Square side banners ----------------------------------------------- */
+
+.square {
+  position: relative;
+  display: block;
+  height: 100%;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background-color: var(--c-primary-700);
+  color: var(--color-text-inverse);
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out);
+}
+
+/* Only the linked variant lifts — a tile with no destination must not look
+   interactive. See the Frame component. */
+a.square:hover {
+  text-decoration: none;
+  color: var(--color-text-inverse);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Every live left/right asset is 1.99:1 (918×462 or 700×352). */
+.squareMedia {
+  aspect-ratio: 2 / 1;
+}

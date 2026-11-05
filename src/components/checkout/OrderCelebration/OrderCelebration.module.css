@@ -1,0 +1,73 @@
+/* Fixed and inert. It sits over the page for a few seconds, so the one thing
+   it must never do is intercept a tap meant for the account number beneath. */
+.sky {
+  position: fixed;
+  inset: 0;
+  /* Under the header and any modal, above the page. The ribbons are decoration
+     and must not cover a dialog. */
+  z-index: 60;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* The vertical half of the motion: down the screen, with a little sideways
+   drift so they do not fall in straight lines. */
+.fall {
+  position: absolute;
+  top: 0;
+  animation-name: fall;
+  animation-timing-function: cubic-bezier(0.23, 0.6, 0.4, 1);
+  animation-fill-mode: both;
+  will-change: transform, opacity;
+}
+
+/* The spin, on its own element so it turns around the ribbon's own centre
+   rather than around wherever the fall has carried it. */
+.piece {
+  display: block;
+  border-radius: 1px;
+  animation-name: spin;
+  animation-timing-function: linear;
+  animation-fill-mode: both;
+  will-change: transform;
+}
+
+.round {
+  border-radius: 50%;
+}
+
+@keyframes fall {
+  0% {
+    transform: translate3d(0, -12vh, 0);
+    opacity: 0;
+  }
+  /* Fades in just below the top edge, so nothing pops into existence in view. */
+  10% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(var(--drift), 106vh, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(var(--spin));
+  }
+}
+
+/* Belt and braces. The component already renders nothing when reduced motion
+   is set, but a media query costs nothing and covers the case where the
+   preference changes after mount. */
+@media (prefers-reduced-motion: reduce) {
+  .sky {
+    display: none;
+  }
+}

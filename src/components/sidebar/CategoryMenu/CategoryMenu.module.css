@@ -1,0 +1,188 @@
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.list > li + li {
+  border-top: 1px solid var(--color-border);
+}
+
+/* --- Subcategory flyout ----------------------------------------------- */
+
+.item {
+  position: relative;
+}
+
+/* Hidden with `visibility`, not `display`, so the reveal can be transitioned —
+   and deliberately NOT with opacity alone, which would leave invisible links
+   in the tab order.
+
+   :focus-within does the keyboard half. Tabbing to the category link opens the
+   panel (the link is always visible, so focus can reach it), which makes the
+   sublinks focusable in turn and keeps :focus-within true while they are. */
+.flyout {
+  position: absolute;
+  top: calc(var(--sp-2) * -1);
+  left: 100%;
+  z-index: var(--z-dropdown);
+  width: max-content;
+  min-width: 220px;
+  max-width: 300px;
+  padding: var(--sp-2);
+  margin-left: var(--sp-1);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg, 0 12px 28px rgb(0 0 0 / 12%));
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    opacity var(--dur-fast) var(--ease-out),
+    visibility var(--dur-fast) var(--ease-out);
+}
+
+.item:hover > .flyout,
+.item:focus-within > .flyout {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* The gap between the row and the panel is dead space the pointer crosses, and
+   crossing it would close the menu. This bridges it without being visible. */
+.flyout::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 100%;
+  width: var(--sp-2);
+  height: 100%;
+}
+
+.flyoutTitle {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding: var(--sp-2) var(--sp-3);
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: var(--sp-1);
+  color: var(--color-heading);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.04em;
+  text-decoration: none;
+}
+
+.flyoutTitle:hover,
+.flyoutTitle:focus-visible {
+  color: var(--c-primary-800);
+  text-decoration: none;
+}
+
+.flyoutAll {
+  flex-shrink: 0;
+  color: var(--c-primary-700);
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-medium);
+}
+
+.sublist {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sublink {
+  display: block;
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+  letter-spacing: 0.04em;
+  text-decoration: none;
+}
+
+.sublink:hover,
+.sublink:focus-visible {
+  background-color: var(--c-primary-50);
+  color: var(--c-primary-900);
+  text-decoration: none;
+}
+
+/* The row stays highlighted while its own panel is open, so it is obvious
+   which category the subcategories belong to. */
+.item:hover > .link,
+.item:focus-within > .link {
+  background-color: var(--c-primary-50);
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  min-height: 48px;
+  padding: var(--sp-2) var(--sp-4);
+  color: var(--color-heading);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-snug);
+  text-decoration: none;
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+
+.link:hover {
+  background-color: var(--c-primary-50);
+  color: var(--color-heading);
+  text-decoration: none;
+}
+
+.link:focus-visible {
+  outline: 2px solid var(--c-primary-600);
+  outline-offset: -2px;
+}
+
+.icon {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+/* Same footprint as an icon, so names line up whether or not one is uploaded. */
+.iconFallback {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-pill);
+  background-color: var(--c-primary-100);
+  color: var(--c-primary-700);
+  font-size: var(--fs-xs);
+}
+
+.name {
+  flex: 1;
+  min-width: 0;
+  word-break: auto-phrase;
+}
+
+.chevron {
+  flex-shrink: 0;
+  color: var(--color-text-subtle);
+  font-size: var(--fs-lg);
+  line-height: 1;
+}
+
+.all {
+  display: block;
+  padding: var(--sp-3) var(--sp-4);
+  border-top: 1px solid var(--color-border);
+  background-color: var(--color-surface-sunken);
+  font-size: var(--fs-sm);
+  text-align: center;
+}

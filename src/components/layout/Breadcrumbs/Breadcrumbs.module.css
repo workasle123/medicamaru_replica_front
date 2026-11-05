@@ -1,0 +1,41 @@
+.nav {
+  padding-block: var(--sp-4);
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-1) var(--sp-2);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+.item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+/* aria-hidden, so exempt from text contrast — but still darkened from
+   text-subtle, because an invisible separator makes the trail harder to
+   parse at a glance. */
+.separator {
+  color: var(--c-neutral-400);
+}
+
+.link {
+  color: var(--color-text-muted);
+}
+
+.link:hover {
+  color: var(--c-primary-800);
+}
+
+.current {
+  color: var(--color-text);
+  font-weight: var(--fw-medium);
+}

@@ -1,0 +1,41 @@
+.rating {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+/* The empty track. Darkened from neutral-300 so the filled/empty boundary is
+   clearly readable — that contrast between the two is what actually conveys
+   the score, more than either colour alone. */
+.stars {
+  position: relative;
+  display: inline-block;
+  line-height: 1;
+  color: var(--c-neutral-400);
+}
+
+/* The filled overlay is clipped to the score width, which gives true
+   fractional stars instead of rounding to the nearest half.
+   Star glyphs are graphical, carry aria-hidden, and are backed by a
+   visually-hidden text equivalent plus the numeric value — a bright amber
+   cannot meet 4.5:1 on white and darkening it far enough to try would make
+   the rating look muddy and unlike every other store. */
+.fill {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  color: var(--c-accent-500);
+}
+
+.count {
+  font-size: var(--fs-xs);
+}
+
+.value {
+  font-weight: var(--fw-bold);
+  color: var(--color-text);
+}

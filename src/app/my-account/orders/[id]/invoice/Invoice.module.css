@@ -1,0 +1,287 @@
+/* ==========================================================================
+   Order statement — screen and print.
+
+   Hiding the rest of the page when this one prints is NOT here: the sheet
+   carries `data-print-sheet` and the isolation lives in styles/base.css,
+   because its subject is <body> and a CSS Module may not style an element
+   with no local class on it. This file owns what the sheet itself looks like,
+   on screen and on paper.
+   ========================================================================== */
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-5);
+}
+
+.back {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+}
+
+.printButton {
+  min-height: var(--control-h-md);
+  padding-inline: var(--sp-5);
+  border: 1px solid var(--c-primary-700);
+  border-radius: var(--radius-md);
+  background-color: var(--c-primary-700);
+  color: var(--color-text-inverse);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+
+.printButton:hover {
+  background-color: var(--c-primary-800);
+  border-color: var(--c-primary-800);
+}
+
+.sheet {
+  padding: var(--sp-6);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  /* A4 is 210mm wide; at the 12mm page margin below, the printed text column
+     is 186mm. Capping the screen width near that keeps what the customer sees
+     close to what comes out of the printer. */
+  max-width: 48rem;
+}
+
+.head {
+  display: grid;
+  gap: var(--sp-5);
+  padding-bottom: var(--sp-5);
+  border-bottom: 2px solid var(--color-border-strong);
+}
+
+@media (min-width: 640px) {
+  .head {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+  }
+}
+
+.docTitle {
+  font-size: var(--fs-2xl);
+  letter-spacing: var(--ls-wide);
+  margin-bottom: var(--sp-4);
+}
+
+.meta {
+  display: grid;
+  gap: var(--sp-1);
+  margin: 0;
+  font-size: var(--fs-sm);
+}
+
+/* A fixed label column so the values line up, which is most of what makes a
+   document look like a document. */
+.metaRow {
+  display: grid;
+  grid-template-columns: 8rem minmax(0, 1fr);
+  gap: var(--sp-2);
+}
+
+.metaRow dt {
+  color: var(--color-text-muted);
+}
+
+.metaRow dd {
+  margin: 0;
+  font-weight: var(--fw-bold);
+  overflow-wrap: anywhere;
+}
+
+.issuer {
+  font-size: var(--fs-xs);
+  line-height: var(--lh-relaxed);
+  color: var(--color-text-muted);
+}
+
+@media (min-width: 640px) {
+  .issuer {
+    text-align: right;
+  }
+}
+
+.issuer p {
+  margin: 0;
+}
+
+.issuerSite {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: var(--color-text);
+}
+
+.issuerName {
+  font-weight: var(--fw-bold);
+  color: var(--color-text);
+}
+
+.block {
+  margin-top: var(--sp-6);
+}
+
+.blockTitle {
+  margin-bottom: var(--sp-3);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-wide);
+  color: var(--color-text-muted);
+}
+
+.shipTo {
+  display: grid;
+  gap: var(--sp-1);
+  font-size: var(--fs-sm);
+  font-style: normal;
+  line-height: var(--lh-relaxed);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+}
+
+.table th,
+.table td {
+  padding: var(--sp-3) var(--sp-2);
+  border-bottom: 1px solid var(--color-border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.table thead th {
+  border-bottom: 1px solid var(--color-border-strong);
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+/* The three figure columns. Right-aligned and non-wrapping so the yen signs
+   stack; the product name is the only column allowed to take the slack. */
+.num {
+  text-align: right;
+  white-space: nowrap;
+  width: 1%;
+}
+
+.pack {
+  display: block;
+  margin-top: var(--sp-1);
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+.table tfoot th {
+  text-align: right;
+  font-weight: var(--fw-regular);
+  color: var(--color-text-muted);
+}
+
+.table tfoot tr:last-child th,
+.table tfoot tr:last-child td {
+  border-bottom: none;
+}
+
+.grand th,
+.grand td {
+  padding-top: var(--sp-4);
+  border-top: 2px solid var(--color-border-strong);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-bold);
+  color: var(--color-text);
+}
+
+.bank {
+  display: grid;
+  gap: var(--sp-1);
+  margin: 0;
+  font-size: var(--fs-sm);
+}
+
+.bankRow {
+  display: grid;
+  grid-template-columns: 8rem minmax(0, 1fr);
+  gap: var(--sp-2);
+}
+
+.bankRow dt {
+  color: var(--color-text-muted);
+}
+
+.bankRow dd {
+  margin: 0;
+  font-weight: var(--fw-bold);
+}
+
+.bankNote {
+  margin: var(--sp-3) 0 0;
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+.note {
+  margin-top: var(--sp-6);
+  padding-top: var(--sp-4);
+  border-top: 1px solid var(--color-border);
+  font-size: var(--fs-xs);
+  line-height: var(--lh-relaxed);
+  color: var(--color-text-muted);
+}
+
+.note p {
+  margin: 0 0 var(--sp-1);
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+
+  /* Position and visibility come from base.css; this is the paper styling. */
+  .sheet {
+    max-width: none;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    /* The page margin is set by @page; a second one here would double it. */
+    margin: 0;
+    color: #000;
+  }
+
+  /* The screen's muted greys are chosen against a white surface on a backlit
+     display. On paper at 600dpi they come out as a wash, so every one of them
+     is dropped to black and the hierarchy is carried by weight and rules
+     instead — which also survives a monochrome printer. */
+  .sheet * {
+    color: #000 !important;
+  }
+
+  .actions {
+    display: none;
+  }
+
+  /* A line item must not be split across a page break, and a table whose
+     header row is left behind on page one is unreadable on page two. */
+  .table thead {
+    display: table-header-group;
+  }
+
+  .table tr {
+    break-inside: avoid;
+  }
+
+  .block,
+  .note {
+    break-inside: avoid;
+  }
+}

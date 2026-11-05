@@ -1,0 +1,135 @@
+.layout {
+  display: grid;
+  gap: var(--sp-6);
+  padding-bottom: var(--sp-12);
+}
+
+/* Sidebar appears only when there is room for it. Below 1024px the filter
+   panel moves above the results as a collapsible block, rather than being
+   crushed into a narrow column. */
+@media (min-width: 1024px) {
+  .layout {
+    grid-template-columns: 260px minmax(0, 1fr);
+    gap: var(--sp-8);
+    align-items: start;
+  }
+}
+
+.sidebar {
+  min-width: 0;
+}
+
+@media (min-width: 1024px) {
+  .sidebar {
+    position: sticky;
+    top: calc(var(--header-clear) + var(--sp-4));
+    /* With every category group expanded the panel runs well past the
+       viewport, and a sticky element taller than the viewport cannot stick —
+       it just scrolls away. Capping it and letting it scroll internally is
+       what makes the filters actually stay put. */
+    max-height: calc(100dvh - var(--header-clear) - var(--sp-8));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    /* Room for the scrollbar so it never sits on top of the count badges */
+    padding-right: var(--sp-1);
+  }
+}
+
+.results {
+  min-width: 0;
+}
+
+.header {
+  margin-bottom: var(--sp-5);
+}
+
+.title {
+  font-size: var(--fs-2xl);
+  letter-spacing: var(--ls-tight);
+}
+
+.description {
+  margin-top: var(--sp-3);
+  color: var(--color-text-muted);
+  font-size: var(--fs-sm);
+  max-width: 70ch;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+  padding-block: var(--sp-4);
+  margin-bottom: var(--sp-4);
+  border-block: 1px solid var(--color-border);
+}
+
+.count {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+.countValue {
+  font-weight: var(--fw-bold);
+  color: var(--color-text);
+}
+
+/* --- Mobile filter disclosure ----------------------------------------- */
+
+.mobileFilters {
+  margin-bottom: var(--sp-4);
+}
+
+@media (min-width: 1024px) {
+  .mobileFilters {
+    display: none;
+  }
+}
+
+.disclosure {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface);
+  overflow: hidden;
+}
+
+.disclosureSummary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: var(--control-h-md);
+  padding-inline: var(--sp-4);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  cursor: pointer;
+  list-style: none;
+}
+
+.disclosureSummary::-webkit-details-marker {
+  display: none;
+}
+
+.disclosureSummary::after {
+  content: '＋';
+  color: var(--color-text-muted);
+}
+
+.disclosure[open] .disclosureSummary::after {
+  content: '−';
+}
+
+.disclosureBody {
+  padding: 0 var(--sp-3) var(--sp-3);
+}
+
+.desktopOnly {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .desktopOnly {
+    display: block;
+  }
+}

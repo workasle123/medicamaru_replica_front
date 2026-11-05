@@ -1,0 +1,206 @@
+/* A single row that pages sideways. See ScrollRail.jsx for the rationale. */
+
+.wrap {
+  position: relative;
+}
+
+.track {
+  display: grid;
+  grid-auto-flow: column;
+  /* Exactly N items across, gaps included, so the arrow always lands on an
+     item boundary rather than mid-card. */
+  grid-auto-columns: calc(
+    (100% - (var(--per-view-mobile) - 1) * var(--sp-3)) / var(--per-view-mobile)
+  );
+  gap: var(--sp-3);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  list-style: none;
+  margin: 0;
+  /* Room for the card shadow, which a clipped overflow would otherwise cut. */
+  padding: var(--sp-1) 0 var(--sp-2);
+  scrollbar-width: none;
+}
+
+.track::-webkit-scrollbar {
+  display: none;
+}
+
+/* Items sized to their own content — for tag rows, where forcing equal
+   columns would stretch a two-character chip to match a ten-character one. */
+/* Two classes deliberately: the breakpoint rules below set
+   grid-auto-columns on `.track`, and this has to outrank them. */
+.fluid.track {
+  grid-auto-columns: max-content;
+  gap: var(--sp-2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    scroll-behavior: auto;
+  }
+}
+
+.track > * {
+  scroll-snap-align: start;
+  min-width: 0;
+}
+
+@media (min-width: 640px) {
+  .track {
+    grid-auto-columns: calc(
+      (100% - (var(--per-view-tablet) - 1) * var(--sp-4)) / var(--per-view-tablet)
+    );
+    gap: var(--sp-4);
+  }
+}
+
+@media (min-width: 1024px) {
+  .track {
+    grid-auto-columns: calc(
+      (100% - (var(--per-view) - 1) * var(--sp-4)) / var(--per-view)
+    );
+  }
+}
+
+/* Wide screens show MORE items rather than bigger ones. With the container
+   running to 1760px, five product cards across a 16-inch MacBook came out
+   320px wide and 544px tall — taller than half the viewport.
+
+   Two steps rather than one, so card width stays roughly constant as the
+   viewport grows instead of dipping. A single jump to the wide count at
+   1400px made cards NARROWER at 1440 (183px) than at 1280 (231px), which is
+   the wrong direction. */
+@media (min-width: 1400px) {
+  .track {
+    grid-auto-columns: calc(
+      (100% - (var(--per-view-wide) - 1) * var(--sp-4)) / var(--per-view-wide)
+    );
+  }
+}
+
+/* --per-view-xwide equals --per-view-wide for rails that did not opt into
+   extra density, so this rule is a no-op for them. */
+@media (min-width: 1650px) {
+  .track {
+    grid-auto-columns: calc(
+      (100% - (var(--per-view-xwide) - 1) * var(--sp-4)) / var(--per-view-xwide)
+    );
+  }
+}
+
+/* --- Arrows ------------------------------------------------------------ */
+
+/* Outside the track on desktop where the container has gutters, overlapping
+   the edge on narrower screens where it does not. */
+.arrow {
+  position: absolute;
+  top: calc(50% - 22px);
+  z-index: 1;
+  display: none;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--c-accent-200);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-surface);
+  color: var(--c-primary-700);
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+/* Touch devices have swipe; the arrows are for pointer users. Below 640px
+   they would cover a card on a 390px screen for no benefit. */
+@media (min-width: 640px) {
+  .arrow {
+    display: grid;
+  }
+}
+
+.arrow:hover:not(:disabled) {
+  background-color: var(--c-primary-500);
+  border-color: var(--c-primary-600);
+  color: var(--c-neutral-900);
+}
+
+.arrow:disabled {
+  opacity: 0.35;
+  cursor: default;
+  box-shadow: none;
+}
+
+/* Overlapping the track's edge rather than sitting outside it.
+   These used to be pulled out into the container's gutter, which worked while
+   the app was a 1200px centred frame. The container now runs to the viewport
+   edge on wide screens, so a negative offset put the buttons off-screen and
+   gave the document an 8px horizontal scroll. Insetting keeps them reachable
+   at every width; the arrows are semi-transparent-free solid discs, so they
+   read clearly over a card edge. */
+.prev {
+  left: var(--sp-1);
+}
+
+.next {
+  right: var(--sp-1);
+}
+
+/* --- Page dots (opt-in, phones only) ---------------------------------- */
+
+/* Hidden from 640px up, where the arrows do the job and everything the rail
+   holds is usually already on screen. Display:none rather than visibility,
+   so the dots take no vertical space on desktop at all. */
+.dots {
+  display: none;
+}
+
+@media (max-width: 639px) {
+  .dots {
+    display: flex;
+    justify-content: center;
+    gap: var(--sp-1);
+    list-style: none;
+    margin: var(--sp-3) 0 0;
+    padding: 0;
+  }
+
+  /* 24px tap target around a 8px dot — the visual size is not the tap size.
+     Matches the campaign carousel's dots so the two read as one idiom. */
+  .dotHit {
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+
+  .dot {
+    display: block;
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-pill);
+    background-color: var(--c-primary-200);
+    transition:
+      background-color var(--dur-fast) var(--ease-out),
+      width var(--dur-fast) var(--ease-out);
+  }
+
+  /* Width as well as colour, so the current page is not signalled by colour
+     alone — the rail moves on its own, so this marker has to carry. */
+  .dotHit[aria-current] .dot {
+    width: 20px;
+    background-color: var(--c-primary-600);
+  }
+
+  .dotHit:focus-visible .dot {
+    background-color: var(--c-primary-600);
+  }
+}

@@ -1,0 +1,94 @@
+/**
+ * Medicamaru — skeleton primitives.
+ *
+ * One grey block, one sweep. Everything route-shaped is composed from these
+ * two rules plus the real page's own CSS module, so a skeleton inherits the
+ * page's geometry instead of restating it and drifting out of step with it.
+ */
+
+.block {
+  /* --c-neutral-200, not the sunken surface token.
+     --color-surface-sunken is #f2f1ef against a #fafaf9 page — a 2% step that
+     reads as a rendering artefact rather than as a placeholder. 200 is
+     legible on the page background AND on a white card, which is where most
+     of these sit. */
+  --skeleton-bg: var(--c-neutral-200);
+
+  position: relative;
+  display: block;
+  overflow: hidden;
+  background-color: var(--skeleton-bg);
+  border-radius: var(--radius-sm);
+  /* A skeleton has no content, so without this an empty block collapses to
+     zero height wherever a caller leaves the height to the layout. */
+  min-height: 0.5rem;
+  /* Text sitting beside one must not inherit its line box. */
+  line-height: 1;
+}
+
+/* Doubled class, for specificity — and this rule is load-bearing.
+
+   Route-shaped skeletons are built by putting a block inside the REAL page's
+   own class, which is what keeps their geometry honest. Several of those
+   classes carry a background of their own: ProductCard's `.imageMissing` is
+   near-white, the cart's `.thumb` is primary-50, a category tile's
+   `.iconFrame` is accent-50. Each is one class, same as `.block`, so the one
+   that wins is whichever stylesheet the bundler happens to emit last — and it
+   was theirs. Every packshot square in the catalogue fallback rendered white
+   on white, leaving cards that were two lines of grey text under nothing.
+
+   (0,2,0) beats any single-class rule, so the grey wins wherever a block is
+   dropped, whatever the borrowed class brings with it. Borders and radii are
+   deliberately NOT overridden: a bordered thumbnail outline is part of the
+   shape being reserved. */
+.block.block {
+  background-color: var(--skeleton-bg);
+}
+
+/* The sweep lives on a pseudo-element rather than on the block's own
+   background-position, so the block keeps a flat colour of its own.
+
+   That is what makes prefers-reduced-motion safe: base.css ends every
+   animation after 0.01ms with one iteration, which returns this layer to
+   translateX(-100%) — off the block entirely — leaving the flat grey. A
+   background-position animation would have frozen mid-gradient instead. */
+.block::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  /* Stops at 20/50/80 rather than 0/50/100, and 0.55 rather than a flat
+     white. The band is a fraction of the element it crosses, so on a 200px
+     packshot square an unbounded gradient at 0.7 lit up most of the box at
+     once and the square read as empty white card for a third of every cycle.
+     Narrowing the bright part keeps it a highlight travelling over a grey
+     block, which is the only thing it is meant to look like. */
+  background-image: linear-gradient(
+    90deg,
+    transparent 20%,
+    rgb(255 255 255 / 0.55) 50%,
+    transparent 80%
+  );
+  animation: skeleton-sweep 1.5s var(--ease-in-out) infinite;
+}
+
+@keyframes skeleton-sweep {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* --- Text ------------------------------------------------------------- */
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+/* Short, like the end of a paragraph. Without it a block of equal-length
+   lines reads as a table rather than as prose. */
+.textLast {
+  width: 62%;
+}
+

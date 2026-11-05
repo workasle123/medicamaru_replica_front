@@ -1,0 +1,41 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  margin: 0;
+}
+
+/* Term and detail on one line: three short pairs read faster as a table than
+   as a paragraph, and this is the thing people came to check. */
+.row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-3);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-normal);
+}
+
+.row + .row {
+  padding-top: var(--sp-2);
+  border-top: 1px solid var(--color-border);
+}
+
+.term {
+  flex-shrink: 0;
+  width: 3em;
+  font-weight: var(--fw-bold);
+  color: var(--color-text-subtle);
+}
+
+.detail {
+  margin: 0;
+  color: var(--color-heading);
+  font-weight: var(--fw-medium);
+}
+
+.note {
+  margin: var(--sp-3) 0 0;
+  font-size: var(--fs-xs);
+  line-height: var(--lh-normal);
+  color: var(--color-text-muted);
+}

@@ -1,0 +1,160 @@
+.section {
+  margin-bottom: var(--sp-10);
+  scroll-margin-top: calc(var(--header-clear) + var(--sp-6));
+}
+
+.title {
+  font-size: var(--fs-xl);
+  margin-bottom: var(--sp-4);
+  padding-bottom: var(--sp-2);
+  border-bottom: 2px solid var(--c-primary-100);
+}
+
+.panel {
+  display: grid;
+  gap: var(--sp-6);
+  padding: var(--sp-5);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+@media (min-width: 640px) {
+  .panel {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: var(--sp-8);
+  }
+}
+
+.score {
+  text-align: center;
+}
+
+.average {
+  display: block;
+  font-size: var(--fs-4xl);
+  font-weight: var(--fw-bold);
+  line-height: 1;
+  letter-spacing: var(--ls-tight);
+}
+
+.outOf {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+.count {
+  display: block;
+  margin-top: var(--sp-2);
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+/* --- Histogram -------------------------------------------------------- */
+
+.histogram {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 3.5em minmax(0, 1fr) 3em;
+  align-items: center;
+  gap: var(--sp-3);
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+.track {
+  height: 8px;
+  background-color: var(--color-surface-sunken);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+
+/* display: block is LOAD-BEARING, not tidiness.
+
+   This is a <span>, and .track is its only ancestor inside the row — a span
+   inside a block stays inline, and an inline box ignores both width and
+   height. So the percentage width computed in ReviewSummary.jsx was applied
+   to a box that could not take it: every bar rendered zero-wide and the
+   histogram showed five empty grey tracks with the correct percentage
+   written beside each one.
+
+   .track got away with it because it is a direct child of .row, which is a
+   grid — grid items are blockified, so its own 8px height took effect. The
+   bar has no such rescue. */
+.bar {
+  display: block;
+  height: 100%;
+  background-color: var(--c-warning-500);
+  border-radius: var(--radius-pill);
+}
+
+.pct {
+  text-align: right;
+}
+
+.empty {
+  padding: var(--sp-6);
+  text-align: center;
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  background-color: var(--color-surface);
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-lg);
+}
+
+/* --- The reviews themselves --------------------------------------------- */
+
+.reviews {
+  list-style: none;
+  margin: var(--sp-5) 0 0;
+  padding: 0;
+  display: grid;
+  gap: var(--sp-4);
+}
+
+.review {
+  padding-top: var(--sp-4);
+  border-top: 1px solid var(--color-border);
+}
+
+.reviewHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2) var(--sp-3);
+}
+
+.reviewAuthor {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+}
+
+.reviewDate {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+/* pre-wrap: the comment is a plain-text column, and a customer's own line
+   breaks are part of what they wrote. Never dangerouslySetInnerHTML — this is
+   visitor-supplied text. */
+.reviewBody {
+  margin: var(--sp-2) 0 0;
+  font-size: var(--fs-sm);
+  line-height: var(--lh-relaxed);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.reviewImage {
+  margin-top: var(--sp-3);
+  width: 160px;
+  height: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}

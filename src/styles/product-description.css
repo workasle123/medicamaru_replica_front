@@ -1,0 +1,311 @@
+/* ════════════════════════════════════════════════════════════════════
+   Medicamaru — product description components
+   Add ONCE to the storefront's global stylesheet (e.g. app/globals.css).
+
+   Why a stylesheet: POST /products/{id}/description strips style
+   attributes, <style> and <script>, but keeps class names. The n8n
+   publish workflow tags each part of a description with an mm-* class;
+   this file gives those classes their look.
+
+   Built on the site's own design tokens (--c-primary-*, --c-accent-*,
+   --sp-*, --radius-*, --shadow-*), so it follows any future theme change.
+   Every rule is opt-in through mm-* classes: legacy descriptions are
+   untouched. `body` prefixes beat the description container's own
+   element rules regardless of stylesheet load order.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ── One reading column ───────────────────────────────────────────────
+   The storefront caps p / h2 / ul at --prose-measure (692px) but lets
+   tables run full width, so text looked like it wrapped too early next
+   to the tables. Text and tables now share one column of ~56 Japanese
+   characters per line (comfortable at 16px / line-height 1.9).
+   Change --mm-measure to widen or narrow the whole description. */
+body { --mm-measure: 56rem; }
+body h2.mm-h,
+body h3.mm-h,
+body .mm-h ~ p,
+body ul.mm-list,
+body ol.mm-list,
+body table.mm-table {
+  max-width: var(--mm-measure);
+}
+
+/* ── Section headings ─────────────────────────────────────────────── */
+body .mm-h {
+  color: var(--color-heading, #1c1815);
+  font-feature-settings: "palt";
+  letter-spacing: 0.02em;
+}
+body .mm-h strong { font-weight: var(--fw-bold, 700); }
+
+body h2.mm-h {
+  position: relative;
+  margin-top: var(--sp-12, 3rem);
+  padding: 0 0 var(--sp-3, 0.75rem) var(--sp-5, 1.25rem);
+  font-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
+  line-height: var(--lh-snug, 1.4);
+  border-bottom: 1px solid var(--c-neutral-200, #e5e3e0);
+}
+body h2.mm-h::before {                       /* brand gradient bar */
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.15em;
+  bottom: calc(var(--sp-3, 0.75rem) + 0.15em);
+  width: 5px;
+  border-radius: var(--radius-pill, 999px);
+  background: var(--gradient-brand, linear-gradient(135deg, #fb9328 0%, #fdc434 100%));
+}
+body h2.mm-h:first-child { margin-top: 0; }
+
+body h3.mm-h {
+  margin-top: var(--sp-8, 2rem);
+  padding-left: 1.1em;
+  position: relative;
+  font-size: var(--fs-md, 1.125rem);
+  line-height: var(--lh-snug, 1.4);
+  color: var(--c-accent-800, #2d625e);
+}
+body h3.mm-h::before {                       /* teal dot */
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.45em;
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: 50%;
+  background: var(--c-accent-500, #58b7af);
+  box-shadow: 0 0 0 4px var(--c-accent-100, #e4eeed);
+}
+body h2.mm-h + h3.mm-h { margin-top: var(--sp-5, 1.25rem); }
+
+/* Comfortable Japanese reading rhythm for body copy */
+body .mm-h ~ p:not([class]) { line-height: var(--lh-relaxed, 1.9); }
+
+/* ── Lead / introduction ──────────────────────────────────────────── */
+body p.mm-lead {
+  padding: var(--sp-5, 1.25rem) var(--sp-6, 1.5rem);
+  font-size: var(--fs-md, 1.125rem);
+  line-height: var(--lh-relaxed, 1.9);
+  color: var(--c-neutral-700, #423a33);
+  background: linear-gradient(135deg, var(--c-primary-50, #fdf7f1) 0%, var(--c-highlight-50, #fdfaf1) 100%);
+  border: 1px solid var(--c-primary-100, #f5e9de);
+  border-radius: var(--radius-lg, 12px);
+}
+body p.mm-lead strong { color: var(--c-primary-800, #854809); }
+
+/* ── Lists ────────────────────────────────────────────────────────── */
+body ul.mm-list,
+body ol.mm-list {
+  list-style: none;
+  padding-left: 0;
+}
+body .mm-list > li {
+  position: relative;
+  padding-left: 2rem;
+  line-height: var(--lh-normal, 1.7);
+}
+body .mm-list > li + li { margin-top: var(--sp-3, 0.75rem); }
+body .mm-list > li::before {                 /* default: orange dot */
+  content: "";
+  position: absolute;
+  left: 0.45rem;
+  top: 0.62em;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--c-primary-500, #fb9328);
+}
+
+/* icon bullets: check / warn / danger */
+body .mm-list--check > li::before,
+body .mm-list--warn > li::before,
+body .mm-list--danger > li::before {
+  left: 0;
+  top: 0.2em;
+  width: 1.35rem;
+  height: 1.35rem;
+  display: grid;
+  place-items: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1;
+}
+body .mm-list--check > li::before  { content: "✓"; color: var(--c-accent-700, #367d77); background: var(--c-accent-100, #e4eeed); }
+body .mm-list--warn > li::before   { content: "!"; color: #fff; background: var(--c-warning-500, #f5a300); }
+body .mm-list--danger > li::before { content: "×"; color: #fff; background: var(--c-danger-500, #e03131); font-size: 0.95rem; }
+
+/* warn / danger lists sit on a tinted panel */
+body ul.mm-list--warn,
+body ul.mm-list--danger {
+  padding: var(--sp-5, 1.25rem) var(--sp-5, 1.25rem) var(--sp-5, 1.25rem) var(--sp-5, 1.25rem);
+  border-radius: var(--radius-lg, 12px);
+}
+body ul.mm-list--warn   { background: var(--c-warning-50, #fff6e6); border: 1px solid var(--c-highlight-200, #fce5ab); }
+body ul.mm-list--danger { background: var(--c-danger-50, #fff1f1); border: 1px solid #f7c9c9; }
+body ul.mm-list--danger > li { color: var(--c-sale-800, #7f1212); }
+
+/* numbered steps */
+body ol.mm-list--steps { counter-reset: mm-step; }
+body ol.mm-list--steps > li { counter-increment: mm-step; padding-left: 2.4rem; }
+body ol.mm-list--steps > li::before {
+  content: counter(mm-step);
+  left: 0; top: 0.1em;
+  width: 1.6rem; height: 1.6rem;
+  display: grid; place-items: center;
+  font-size: 0.8rem; font-weight: 700; color: #fff;
+  background: var(--c-primary-500, #fb9328);
+}
+
+/* ── Tables ───────────────────────────────────────────────────────── */
+body table.mm-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  font-size: var(--fs-sm, 0.875rem);
+  background: var(--color-surface, #fff);
+  border: 1px solid var(--c-neutral-200, #e5e3e0);
+  border-radius: var(--radius-lg, 12px);
+  box-shadow: var(--shadow-xs, 0 1px 2px rgba(15, 23, 42, 0.05));
+}
+body table.mm-table th,
+body table.mm-table td {
+  padding: var(--sp-3, 0.75rem) var(--sp-4, 1rem);
+  border: 0;
+  border-bottom: 1px solid var(--c-neutral-200, #e5e3e0);
+  text-align: left;
+  vertical-align: top;
+  line-height: var(--lh-normal, 1.7);
+}
+body table.mm-table tr:last-child > th,
+body table.mm-table tr:last-child > td { border-bottom: 0; }
+body table.mm-table th {
+  width: 30%;
+  font-weight: var(--fw-bold, 700);
+  color: var(--c-neutral-800, #2d2722);
+  background: var(--c-primary-50, #fdf7f1);
+  border-right: 1px solid var(--c-neutral-200, #e5e3e0);
+}
+body table.mm-table tr:nth-child(even) > td { background: var(--c-neutral-50, #fafaf9); }
+
+/* header row (項目 | 詳細) */
+body table.mm-table--head tr:first-child > th {
+  width: auto;
+  color: #fff;
+  font-size: var(--fs-xs, 0.75rem);
+  letter-spacing: var(--ls-wide, 0.04em);
+  background: var(--c-accent-800, #2d625e);
+  border-right-color: rgba(255, 255, 255, 0.18);
+}
+
+/* tones */
+body table.mm-table--warn th   { color: var(--c-warning-700, #8a5600); background: var(--c-warning-50, #fff6e6); }
+body table.mm-table--danger    { border-color: #f7c9c9; }
+body table.mm-table--danger th { color: var(--c-danger-700, #a51818); background: var(--c-danger-50, #fff1f1); }
+
+/* multi-line cells */
+body ul.mm-cell-list { margin: 0; padding-left: 1.1em; }
+body ul.mm-cell-list > li + li { margin-top: var(--sp-1, 0.25rem); }
+body ul.mm-cell-list > li::marker { color: var(--c-primary-500, #fb9328); }
+body table.mm-table--warn ul.mm-cell-list > li::marker   { color: var(--c-warning-500, #f5a300); }
+body table.mm-table--danger ul.mm-cell-list > li::marker { color: var(--c-danger-500, #e03131); }
+
+/* ── Alert (emergency / stop-and-see-a-doctor) ────────────────────── */
+body p.mm-alert {
+  position: relative;
+  padding: var(--sp-4, 1rem) var(--sp-5, 1.25rem) var(--sp-4, 1rem) 3.25rem;
+  font-weight: var(--fw-medium, 500);
+  color: var(--c-danger-700, #a51818);
+  background: var(--c-danger-50, #fff1f1);
+  border: 1px solid #f7c9c9;
+  border-left: 4px solid var(--c-danger-500, #e03131);
+  border-radius: var(--radius-md, 8px);
+}
+body p.mm-alert::before {
+  content: "!";
+  position: absolute;
+  left: var(--sp-4, 1rem);
+  top: calc(var(--sp-4, 1rem) + 0.2em);
+  width: 1.4rem; height: 1.4rem;
+  display: grid; place-items: center;
+  font-size: 0.85rem; font-weight: 700; color: #fff;
+  border-radius: 50%;
+  background: var(--c-danger-500, #e03131);
+}
+
+/* ── FAQ cards ────────────────────────────────────────────────────── */
+body p.mm-faq {
+  padding: var(--sp-5, 1.25rem) var(--sp-6, 1.5rem);
+  color: var(--c-neutral-700, #423a33);
+  background: var(--color-surface, #fff);
+  border: 1px solid var(--c-neutral-200, #e5e3e0);
+  border-left: 4px solid var(--c-primary-500, #fb9328);
+  border-radius: var(--radius-lg, 12px);
+  box-shadow: var(--shadow-xs, 0 1px 2px rgba(15, 23, 42, 0.05));
+  transition: box-shadow var(--dur-base, 200ms) var(--ease-out, ease), transform var(--dur-base, 200ms) var(--ease-out, ease);
+}
+body p.mm-faq:hover { box-shadow: var(--shadow-md, 0 4px 12px rgba(15, 23, 42, 0.1)); transform: translateY(-1px); }
+body p.mm-faq > strong:first-child {
+  display: block;
+  margin-bottom: var(--sp-2, 0.5rem);
+  font-size: var(--fs-base, 1rem);
+  line-height: var(--lh-snug, 1.4);
+  color: var(--c-neutral-900, #1c1815);
+}
+body p.mm-faq > strong:first-child + br { display: none; }
+body p.mm-faq + p.mm-faq { margin-top: var(--sp-3, 0.75rem); }
+
+/* ── Figures ──────────────────────────────────────────────────────── */
+body p.mm-figure { margin-block: var(--sp-6, 1.5rem); }
+body p.mm-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-lg, 12px);
+  box-shadow: var(--shadow-md, 0 4px 12px rgba(15, 23, 42, 0.1));
+}
+
+/* ── References ───────────────────────────────────────────────────── */
+body p.mm-ref {
+  padding-left: var(--sp-4, 1rem);
+  font-size: var(--fs-xs, 0.75rem);
+  line-height: 1.6;
+  color: var(--color-text-subtle, #6d6357);
+  border-left: 2px solid var(--c-neutral-200, #e5e3e0);
+  overflow-wrap: anywhere;
+}
+body p.mm-ref + p.mm-ref { margin-top: var(--sp-2, 0.5rem); }
+body p.mm-ref a { font-weight: var(--fw-regular, 400); color: var(--color-link, #2d625e); }
+
+/* ── Disclaimer ───────────────────────────────────────────────────── */
+body p.mm-disclaimer {
+  padding: var(--sp-4, 1rem) var(--sp-5, 1.25rem);
+  font-size: var(--fs-sm, 0.875rem);
+  line-height: var(--lh-normal, 1.7);
+  color: var(--color-text-muted, #574e44);
+  background: var(--c-neutral-100, #f2f1ef);
+  border-radius: var(--radius-md, 8px);
+}
+
+/* ── Small screens ────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  body p.mm-lead { padding: var(--sp-4, 1rem); font-size: var(--fs-base, 1rem); }
+  /* tables stack: label bar on top, value below — no squeezed columns */
+  body table.mm-table,
+  body table.mm-table tbody,
+  body table.mm-table tr { display: block; }
+  body table.mm-table th,
+  body table.mm-table td {
+    display: block;
+    width: auto;
+    padding: var(--sp-2, 0.5rem) var(--sp-4, 1rem);
+    border-right: 0;
+    white-space: normal;
+  }
+  body table.mm-table th { border-bottom: 0; }
+  body table.mm-table--head tr:first-child { display: none; }
+  body ul.mm-list--warn,
+  body ul.mm-list--danger { padding: var(--sp-4, 1rem); }
+  body p.mm-faq { padding: var(--sp-4, 1rem); }
+}

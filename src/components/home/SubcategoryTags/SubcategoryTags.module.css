@@ -1,0 +1,35 @@
+/* Chip row under a category heading. See SubcategoryTags.jsx. */
+
+.wrap {
+  margin-top: calc(var(--sp-3) * -1);
+  margin-bottom: var(--sp-4);
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  /* 36px rather than the 44px used for primary controls: these are a
+     secondary entry point sitting directly above 44px product cards, and a
+     full-height chip row would compete with the rail itself. Still within
+     comfortable reach on touch. */
+  height: 36px;
+  padding-inline: var(--sp-4);
+  border: 1px solid var(--c-accent-200);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-surface);
+  color: var(--c-primary-700);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  white-space: nowrap;
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.tag:hover {
+  background-color: var(--c-primary-500);
+  border-color: var(--c-primary-600);
+  color: var(--c-neutral-900);
+  text-decoration: none;
+}

@@ -1,0 +1,13 @@
+/* ==========================================================================
+   Medicamaru — global stylesheet entry point.
+   Order matters: tokens must be defined before anything consumes them.
+   Component styles live in co-located CSS Modules, never here.
+   ========================================================================== */
+
+@import '../styles/tokens.css';
+@import '../styles/base.css';
+@import '../styles/utilities.css';
+
+/* The one exception to the rule above. Admin-authored descriptions carry
+   mm-* classes that a hashed module class could never match — see the file. */
+@import '../styles/product-description.css';

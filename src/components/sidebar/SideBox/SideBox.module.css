@@ -1,0 +1,50 @@
+/* A titled box in a side column (see SideBox.jsx). */
+
+.box {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+  overflow: hidden;
+}
+
+/* `overflow: hidden` above is only there to clip the tinted heading bar to the
+   box's rounded corners — nothing else needs it. A box with a flyout has to
+   let that child out, so it stops clipping and the heading carries its own top
+   radii instead. */
+.boxOpen {
+  overflow: visible;
+}
+
+.boxOpen .heading {
+  border-start-start-radius: calc(var(--radius-md) - 1px);
+  border-start-end-radius: calc(var(--radius-md) - 1px);
+}
+
+/* Tinted bar with the brand colour underneath, so each box reads as its own
+   section at a glance in a column of several. */
+.heading {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin: 0;
+  padding: var(--sp-3) var(--sp-4);
+  border-bottom: 2px solid var(--c-primary-500);
+  background-color: var(--c-primary-50);
+  font-size: var(--fs-base);
+  line-height: var(--lh-snug);
+}
+
+.icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--c-primary-700);
+}
+
+.icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.body {
+  padding: var(--sp-4);
+}

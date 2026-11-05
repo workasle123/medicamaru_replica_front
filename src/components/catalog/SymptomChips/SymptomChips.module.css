@@ -1,0 +1,126 @@
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  height: 44px;
+  padding-inline: var(--sp-4);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--c-primary-800);
+  background-color: var(--color-surface);
+  border: 1px solid var(--c-primary-200);
+  border-radius: var(--radius-pill);
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.chip:hover {
+  background-color: var(--c-primary-500);
+  border-color: var(--c-primary-600);
+  color: var(--c-neutral-900);
+  text-decoration: none;
+}
+
+.active {
+  background-color: var(--c-primary-500);
+  border-color: var(--c-primary-600);
+  color: var(--c-neutral-900);
+}
+
+/* The chip is now two parts — label and count — so it needs its own gap. */
+.chip {
+  gap: var(--sp-2);
+}
+
+/* Tabular so counts of different widths still line up down a wrapped list. */
+.count {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-regular, 400);
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.chip:hover .count,
+.active .count {
+  color: inherit;
+}
+
+/* すべて — clears the open tab. Neutral rather than the primary tint, so it
+   reads as "no filter" beside chips that read as choices. */
+.clearChip {
+  color: var(--color-text);
+  border-color: var(--color-border-strong, var(--color-border));
+  background-color: var(--color-surface-sunken);
+}
+
+.clearChip:hover {
+  border-color: var(--c-primary-400);
+  background-color: var(--color-surface);
+  color: var(--c-primary-800);
+}
+
+/* --- Tab strip --------------------------------------------------------
+
+   Wrapped, 17 chips took 616px on a 375px screen — twelve rows, the whole
+   viewport, with the first product pushed to 1123px. You scrolled a full
+   screen past the filter to reach anything you could buy.
+
+   One line that scrolls sideways instead, at EVERY width. This used to stop at
+   768px, on the reasoning that a desktop can afford three rows of chips and
+   that showing them all beats hiding twelve behind a swipe. Three rows above
+   the products is the thing being removed, so the rail now runs everywhere and
+   matches the subcategory row.
+
+   The mask fades the last chip at the right edge, so a cut-off chip reads as
+   "there is more" rather than as a rendering fault. */
+.scroller {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  /* Room for the chip's focus ring, which a tight overflow box would clip. */
+  padding-block: 3px;
+  scroll-snap-type: x proximity;
+  mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent);
+}
+
+.scroller > li {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+}
+
+/* A phone swipes the row; a mouse cannot — a vertical wheel does not move a
+   horizontal box. So on a pointer device the scrollbar IS the affordance, and
+   hiding it the way the phone does would leave a row that is visibly cut off
+   with no way to move it. Thin rather than absent. */
+@media (min-width: 768px) {
+  .scroller {
+    scrollbar-width: thin;
+    scrollbar-color: var(--c-primary-200) transparent;
+    padding-bottom: var(--sp-2);
+  }
+}
+
+@media (max-width: 767px) {
+  .scroller {
+    scrollbar-width: none;
+    /* Bleed to the screen edge so the row visibly runs off it. Only here: on a
+       desktop this pulled the chips 16px left of every other element on the
+       page, and a row that does not share the page's left edge reads as
+       misplaced rather than as full-bleed. */
+    margin-inline: calc(var(--container-pad, var(--sp-4)) * -1);
+    padding-inline: var(--container-pad, var(--sp-4));
+  }
+
+  .scroller::-webkit-scrollbar {
+    display: none;
+  }
+}

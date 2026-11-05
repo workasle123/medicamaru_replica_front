@@ -1,0 +1,117 @@
+/* The backdrop. Fixed and full-viewport; the body scroll lock is applied in
+   JS because this alone does not stop the page behind from moving. */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal, 1000);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-4);
+  background: rgba(0, 0, 0, 0.55);
+  /* Fades in; never slides. A modal that animates its position draws the eye
+     to the movement rather than to the offer, and on a slow phone the slide
+     is what drops frames. */
+  animation: popupFade 180ms ease-out;
+}
+
+.card {
+  position: relative;
+  /* Sized by the artwork, capped by the viewport. The admin uploads whatever
+     shape suits the campaign, so nothing here assumes an aspect ratio.
+
+     Deliberately NOT `width: 100%`. That was tried, to stop a small upload
+     rendering a small modal, and reverted: filling the allowance means
+     scaling the artwork up, and an upload below the cap then shows soft
+     rather than small. Sizing to the file keeps it sharp, and the way to a
+     larger popup is a larger upload. */
+  max-width: min(32rem, 100%);
+  max-height: calc(100dvh - var(--sp-8));
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+  /* Clips the image to the rounded corners — without it the artwork's square
+     corners sit proud of the card at every radius. */
+  overflow: hidden;
+  animation: popupRise 200ms ease-out;
+}
+
+.link {
+  display: block;
+  /* The image is the whole target; no underline or focus outline offset
+     should imply there is text here. */
+  line-height: 0;
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: auto;
+  /* Never taller than the card, so a portrait image on a short laptop window
+     fits instead of overflowing behind the close button. */
+  max-height: calc(100dvh - var(--sp-8));
+  object-fit: contain;
+}
+
+/* The close button sits ON the artwork, so it cannot rely on the image behind
+   it for contrast — hence its own solid chip rather than a bare glyph. */
+.close {
+  position: absolute;
+  top: var(--sp-2);
+  right: var(--sp-2);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* 36px: comfortably over the 24px minimum for a touch target, and the
+     thing a visitor who does not want this needs to hit first time. */
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--color-text);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.close:hover {
+  background: var(--color-surface);
+}
+
+.close:focus-visible {
+  outline: 2px solid var(--c-primary-600);
+  outline-offset: 2px;
+}
+
+@keyframes popupFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes popupRise {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Someone who has asked for less motion gets none. The popup still appears —
+   this is a preference about movement, not about content. */
+@media (prefers-reduced-motion: reduce) {
+  .overlay,
+  .card {
+    animation: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .overlay {
+    padding: var(--sp-3);
+  }
+
+  .card {
+    /* Phones get the full width available: a campaign image inset on both
+       sides of a 375px screen has almost nothing left to read. */
+    max-width: 100%;
+  }
+}

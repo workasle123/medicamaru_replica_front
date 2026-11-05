@@ -1,0 +1,107 @@
+.nav {
+  margin-bottom: var(--sp-5);
+}
+
+.heading {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: var(--color-text-muted);
+  margin-bottom: var(--sp-2);
+}
+
+/* One line that scrolls, at every width.
+
+   Bleeds to the container edge so the row visibly runs off the screen rather
+   than stopping short — a chip cut by the viewport reads as "there is more",
+   a row that ends neatly reads as "that is all there is". The mask fades the
+   last one rather than slicing it, so the cut looks intended. */
+.list {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: var(--sp-2);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  /* Room for a chip's focus ring, which a tight overflow box would clip. */
+  padding-block: 3px;
+  scroll-snap-type: x proximity;
+  mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent);
+}
+
+.list > li {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+}
+
+/* A phone swipes the row; a mouse cannot. A vertical wheel does not move a
+   horizontal box, so on a pointer device the scrollbar IS the affordance and
+   hiding it would leave a row that is visibly cut off with no way to move it.
+   Thin rather than absent. */
+@media (min-width: 768px) {
+  .list {
+    scrollbar-width: thin;
+    scrollbar-color: var(--c-primary-200) transparent;
+    padding-bottom: var(--sp-2);
+  }
+}
+
+/* Below that, the swipe is the affordance and a bar is just clutter. */
+@media (max-width: 767px) {
+  .list {
+    scrollbar-width: none;
+    /* Bleed to the screen edge, so the row visibly runs off it. Only here:
+       on a desktop this pulled the chips 16px left of every other element on
+       the page, and a row that does not share the page's left edge reads as
+       misplaced rather than as full-bleed. */
+    margin-inline: calc(var(--container-pad, var(--sp-4)) * -1);
+    padding-inline: var(--container-pad, var(--sp-4));
+  }
+
+  .list::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  height: 40px;
+  padding-inline: var(--sp-4);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--c-primary-800);
+  background-color: var(--color-surface);
+  border: 1px solid var(--c-primary-200);
+  border-radius: var(--radius-pill);
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.chip:hover {
+  background-color: var(--c-primary-500);
+  border-color: var(--c-primary-600);
+  color: var(--c-neutral-900);
+  text-decoration: none;
+}
+
+.active {
+  background-color: var(--c-primary-500);
+  border-color: var(--c-primary-600);
+  color: var(--c-neutral-900);
+}
+
+.count {
+  font-size: var(--fs-xs);
+  opacity: 0.75;
+}
+
+/* Link back up to the parent when viewing a subcategory */
+.parentChip {
+  background-color: var(--color-surface-sunken);
+  border-color: var(--color-border-strong);
+  color: var(--color-text);
+}

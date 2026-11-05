@@ -1,0 +1,195 @@
+/* The one thing on the confirmation page the customer cannot proceed without,
+   so it is given the weight of a callout rather than another summary block. */
+.panel {
+  margin-bottom: var(--sp-6);
+  padding: var(--sp-6);
+  text-align: start;
+  background-color: var(--color-surface);
+  border: 2px solid var(--c-primary-600);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+}
+
+.headRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-3);
+}
+
+.heading {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-bold);
+  color: var(--color-heading);
+}
+
+/* Says what state the order is in without another sentence to read. Paired
+   with the lede below, which carries the same meaning in words. */
+.badge {
+  flex-shrink: 0;
+  padding: 2px var(--sp-3);
+  border-radius: var(--radius-pill);
+  background-color: var(--c-primary-50);
+  border: 1px solid var(--c-primary-200);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  color: var(--c-primary-800);
+  white-space: nowrap;
+}
+
+.lede {
+  margin-bottom: var(--sp-5);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-relaxed);
+  color: var(--color-text);
+}
+
+.warn {
+  display: block;
+  margin-top: var(--sp-2);
+  font-weight: var(--fw-bold);
+  color: var(--c-primary-800);
+}
+
+/* The amount leads: it is the first thing needed at the transfer screen. */
+.amountRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--sp-2) var(--sp-3);
+  margin-bottom: var(--sp-5);
+  padding: var(--sp-4);
+  border-radius: var(--radius-lg);
+  background-color: var(--c-primary-50);
+}
+
+.amountLabel {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--c-primary-800);
+}
+
+.amountValue {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.amount {
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-tight);
+  color: var(--color-heading);
+}
+
+.details {
+  display: grid;
+  gap: var(--sp-2);
+}
+
+/* Label, value, button. Below 480px the button drops to its own line rather
+   than squeezing a katakana account holder into a sliver. */
+.detailRow {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--sp-1) var(--sp-3);
+  align-items: center;
+  padding: var(--sp-2) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.detailRow:last-child {
+  border-bottom: none;
+}
+
+.label {
+  grid-column: 1;
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+.value {
+  grid-column: 1;
+  font-size: var(--fs-base);
+  font-weight: var(--fw-medium);
+  color: var(--color-heading);
+}
+
+.rowAction {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: center;
+}
+
+@media (min-width: 480px) {
+  .detailRow {
+    grid-template-columns: 7.5rem 1fr auto;
+    gap: var(--sp-4);
+  }
+
+  .label {
+    grid-column: 1;
+  }
+
+  .value {
+    grid-column: 2;
+  }
+
+  .rowAction {
+    grid-column: 3;
+    grid-row: 1;
+  }
+}
+
+/* Read aloud or retyped into a banking app, so these get size and tracking.
+   Allowed to wrap: a long katakana holder name must never be clipped. */
+.emphasis .valueText {
+  display: inline-block;
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-bold);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.06em;
+  word-break: break-all;
+}
+
+.suffix {
+  margin-inline-start: var(--sp-2);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-regular);
+  color: var(--color-text-muted);
+}
+
+.allRow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--sp-2) var(--sp-3);
+  margin-top: var(--sp-4);
+  padding-top: var(--sp-4);
+  border-top: 1px dashed var(--color-border);
+}
+
+.allHint {
+  font-size: var(--fs-xs);
+  line-height: var(--lh-relaxed);
+  color: var(--color-text-muted);
+}
+
+.note {
+  margin-top: var(--sp-5);
+  padding-top: var(--sp-4);
+  border-top: 1px solid var(--color-border);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-relaxed);
+  color: var(--color-text-muted);
+}
+
+.txnRow {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin-top: var(--sp-1);
+}

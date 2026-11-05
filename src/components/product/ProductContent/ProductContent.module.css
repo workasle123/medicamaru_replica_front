@@ -1,0 +1,209 @@
+/* Long-form body sections. The 目次 styles moved to ProductToc. */
+
+/* --- Long-form body --------------------------------------------------- */
+
+.section {
+  margin-bottom: var(--sp-10);
+  /* Breathing room above the heading when jumped to from the TOC */
+  scroll-margin-top: calc(var(--header-clear) + var(--sp-6));
+}
+
+.sectionTitle {
+  font-size: var(--fs-xl);
+  margin-bottom: var(--sp-4);
+  padding-bottom: var(--sp-2);
+  border-bottom: 2px solid var(--c-primary-100);
+}
+
+/* Styling for admin-authored HTML. Scoped tightly so editor output cannot
+   leak arbitrary layout into the page. */
+.body {
+  font-size: var(--fs-base);
+  line-height: var(--lh-normal);
+  color: var(--color-text);
+
+  /* The text column, in rem and NOT in ch.
+
+     ch is relative to the element's own font size, so one `78ch` declaration
+     resolves to 693px on 16px body copy and 1288px on a 30px heading — the
+     headings would run the full column while the paragraphs under them sat
+     centred and narrower, which is the ragged edge this is meant to avoid.
+     43.25rem is that same 692px for everything.
+
+     It is about 39 Japanese characters a line: full-width glyphs are roughly
+     two of the half-width unit the measure is reckoned in, and 35-45 is the
+     comfortable band. The whole column would be about 59. */
+  --prose-measure: 43.25rem;
+}
+
+/* The measure sits on the running text, NOT on .body.
+
+   It used to be `max-width: 78ch` on .body itself, with `max-width: 100%` on
+   the tables and images as their "exemption". That exemption could never work:
+   100% of a 693px parent is 693px, so the tables were held at the prose measure
+   as well, and 352px of the 1045px column sat empty down the right of every
+   product page. Measuring the paragraphs instead gives the same line length and
+   lets the wide blocks actually be wide.
+
+   78ch is about 39 Japanese characters — full-width glyphs are roughly 2ch —
+   which is inside the comfortable 35-45 range. Removing the measure altogether
+   would run to about 59 a line. */
+.body p,
+.body ul,
+.body ol,
+.body blockquote,
+.body dl,
+.body h2,
+.body h3,
+.body h4 {
+  max-width: var(--prose-measure);
+}
+
+/* Inside a table the cell already constrains the line; a measure there would
+   only stop a wide cell using the width it was given. */
+.body table p,
+.body table ul,
+.body table ol {
+  max-width: none;
+}
+
+.body img,
+.body figure,
+.body iframe {
+  max-width: 100%;
+}
+
+/* --- Hierarchy -------------------------------------------------------- */
+
+/* These headings sit INSIDE 商品について, which is --fs-xl. Nothing styled them
+   before, so they fell through to the global sizes and came out at 28px and
+   24px — bigger than, and equal to, the title of the section containing them.
+   Each step down is one token. */
+/* letter-spacing is restated on all three because the global heading rule
+   applies --ls-tight (-0.02em). Tightening display type is a Latin move; on
+   kanji at 18-20px it closes the counters and the denser characters start to
+   look like ink blots. Positive, lighter than the body's, since a heading is
+   short and set bold. */
+.body h2 {
+  font-size: var(--fs-lg);
+  line-height: var(--lh-snug);
+  letter-spacing: 0.03em;
+}
+
+.body h3 {
+  font-size: var(--fs-md);
+  line-height: var(--lh-snug);
+  letter-spacing: 0.03em;
+}
+
+.body h4 {
+  font-size: var(--fs-base);
+  line-height: var(--lh-snug);
+  letter-spacing: 0.03em;
+}
+
+/* --- Rhythm ----------------------------------------------------------- */
+
+/* The default gap between blocks. */
+.body > * + * {
+  margin-top: var(--sp-4);
+}
+
+/* A heading opens a topic, so it takes its space from ABOVE — the bigger the
+   heading, the bigger the break. Without this every block sat 16px apart and
+   a new section looked exactly like the next paragraph. */
+.body > * + h2 {
+  margin-top: var(--sp-10);
+}
+
+.body > * + h3 {
+  margin-top: var(--sp-8);
+}
+
+.body > * + h4 {
+  margin-top: var(--sp-6);
+}
+
+/* …and gives almost none back, so it binds to the text it introduces rather
+   than floating between two blocks. */
+.body > h2 + *,
+.body > h3 + *,
+.body > h4 + * {
+  margin-top: var(--sp-2);
+}
+
+.body p {
+  line-height: var(--lh-normal);
+}
+
+/* Tracking. Japanese characters sit in fixed-width boxes and read cramped
+   without it — the band is +0.05 to +0.15em, and the global --ls-normal is 0.
+   Set here rather than on the token, which is used site-wide.
+
+   Numerals and Latin inside the copy (50mg, ED, PDE5) inherit it too, which is
+   correct: a run of half-width characters tracked to match the kanji around it
+   keeps the line even. */
+.body p,
+.body li,
+.body dt,
+.body dd,
+.body th,
+.body td {
+  letter-spacing: 0.05em;
+}
+
+.body ul,
+.body ol {
+  padding-left: 1.4em;
+}
+
+.body li + li {
+  margin-top: var(--sp-2);
+}
+
+/* Coloured, not just underlined. An underline alone inside a wall of
+   Japanese reads as 傍線 emphasis rather than as a link — and emphasis is
+   exactly what an underline means in Japanese typesetting. */
+.body a {
+  color: var(--c-primary-800);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.body a:hover,
+.body a:focus-visible {
+  color: var(--c-primary-900);
+}
+
+.body table {
+  width: 100%;
+  font-size: var(--fs-sm);
+  border: 1px solid var(--color-border);
+}
+
+.body th,
+.body td {
+  padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--color-border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.body th {
+  background-color: var(--c-primary-50);
+  font-weight: var(--fw-bold);
+  /* The label column is the scanning path through a spec table, so it should
+     not wrap more than it has to. */
+  white-space: nowrap;
+}
+
+/* Striped rows. These tables run to a dozen rows of 成分 and 用法用量, and a
+   reader tracking across a wide row needs the horizontal guide — density in
+   Mode A has to stay organised to be worth anything. */
+.body tbody tr:nth-child(even) {
+  background-color: var(--color-bg);
+}
+
+.body img {
+  border-radius: var(--radius-md);
+}

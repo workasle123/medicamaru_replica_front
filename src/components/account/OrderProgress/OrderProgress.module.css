@@ -1,0 +1,274 @@
+.wrap {
+  margin: 0 0 var(--sp-6);
+  padding: var(--sp-5) var(--sp-4);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+/* ===========================================================================
+   THE TRACK
+
+   Equal columns, so the five steps divide the width however long their
+   labels are. `list-style: none` with an explicit reset because this is an
+   <ol> — chosen for its semantics, not its markers.
+   =========================================================================== */
+.track {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0 var(--sp-1);
+}
+
+/* The connector, drawn by each step toward the one on its left.
+
+   Per step rather than one bar behind the row: the filled portion has to end
+   exactly at the current marker, and the steps are not evenly spaced once
+   Japanese labels wrap. Starting at -50% and running to +50% of this cell
+   lands the segment precisely between two markers whatever their widths.
+
+   The first step has nothing to its left, so it draws none. */
+.step::before {
+  content: '';
+  position: absolute;
+  top: 11px; /* half the 22px marker */
+  left: -50%;
+  width: 100%;
+  height: 2px;
+  background-color: var(--color-border);
+}
+
+.step:first-child::before {
+  display: none;
+}
+
+/* ===========================================================================
+   MARKERS
+   =========================================================================== */
+.marker {
+  position: relative; /* above the connector */
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  margin-bottom: var(--sp-2);
+  border-radius: var(--radius-pill);
+  border: 2px solid var(--color-border-strong);
+  background-color: var(--color-surface);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  line-height: 1;
+  color: var(--color-text-inverse);
+}
+
+/* Label + hint. Keeps the step to two children, so switching .step between
+   column and row is the only change the phone layout needs. */
+.body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.label {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  line-height: 1.4;
+  color: var(--color-text-muted);
+  /* 「ご入金確認」 and 「発送準備」 must not break mid-word into a column
+     one character wide, which is what happens at five-across on a small
+     laptop without this. */
+  word-break: keep-all;
+}
+
+/* The explanation under the step currently being waited on. Only ever one is
+   rendered — see orderProgress — so this does not need to reserve height. */
+.hint {
+  margin-top: var(--sp-1);
+  font-size: var(--fs-2xs);
+  line-height: 1.5;
+  color: var(--color-text-subtle);
+}
+
+/* ===========================================================================
+   STATES
+
+   Success green for what is finished, brand amber for what is happening now.
+   The 500 steps are the vivid, non-text values — correct here, because they
+   are used as fills behind a glyph or as a 2px rule, never as text colour.
+   =========================================================================== */
+.done .marker {
+  background-color: var(--c-success-500);
+  border-color: var(--c-success-500);
+}
+
+.done .label {
+  color: var(--color-text);
+}
+
+/* A completed step fills the connector BEHIND it — the segment between it and
+   the previous step, which is the stretch already travelled. */
+.done::before,
+.current::before {
+  background-color: var(--c-success-500);
+}
+
+.current .marker {
+  background-color: var(--c-primary-500);
+  border-color: var(--c-primary-500);
+  /* A ring, so the live step reads as the focus of the bar without animation.
+     Nothing here blinks: a moving element beside an order total is a
+     distraction, and the brief rules out animated status chrome. */
+  box-shadow: 0 0 0 4px var(--c-primary-100);
+}
+
+.current .label {
+  color: var(--c-primary-800);
+}
+
+.todo .marker {
+  border-color: var(--color-border-strong);
+  background-color: var(--color-surface);
+}
+
+/* Passed but not satisfied — see orderProgress. Amber with a 「!」, so the bar
+   does not claim money has arrived when it has not. The connector either side
+   stays green: the ORDER really has moved on, which is the whole reason this
+   case exists. Last, so it wins over .done above without !important. */
+.unsettled .marker {
+  background-color: var(--c-warning-500);
+  border-color: var(--c-warning-500);
+}
+
+.unsettled .label {
+  color: var(--c-warning-700);
+}
+
+/* ===========================================================================
+   NOTES BESIDE THE BAR
+   =========================================================================== */
+.note {
+  margin: var(--sp-4) 0 0;
+  padding-top: var(--sp-3);
+  border-top: 1px solid var(--color-border);
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+  color: var(--color-text-muted);
+}
+
+.noteAlert {
+  color: var(--c-warning-700);
+  font-weight: var(--fw-bold);
+}
+
+.noteLink {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.cancelled {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin: 0;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: var(--color-text-muted);
+}
+
+.cancelledMark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  flex: none;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-surface-sunken);
+  color: var(--color-text-muted);
+  font-weight: var(--fw-bold);
+}
+
+/* ===========================================================================
+   PHONE
+
+   Vertical, not squeezed. Five Japanese labels across a 375px screen leaves
+   about 60px each and wraps mid-word; a vertical timeline is also what
+   Japanese EC sites show at this width, so it reads as familiar.
+   =========================================================================== */
+@media (max-width: 640px) {
+  .track {
+    grid-template-columns: 1fr;
+  }
+
+  .step {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: var(--sp-3);
+    text-align: left;
+    padding: 0 0 var(--sp-4);
+  }
+
+  .step:last-child {
+    padding-bottom: 0;
+  }
+
+  /* The connector becomes vertical: down the left gutter, from this marker to
+     the next one. Drawn forward here rather than backward, because in a
+     column the gap that needs filling sits below the marker. */
+  .step::before {
+    top: 22px;
+    left: 10px; /* marker centre, less half the 2px rule */
+    width: 2px;
+    height: 100%;
+  }
+
+  .step:first-child::before {
+    display: block;
+  }
+
+  .step:last-child::before {
+    display: none;
+  }
+
+  /* Reversed with the direction: in a column each segment belongs to the step
+     ABOVE it, so a finished step fills the run leading away from itself. */
+  .done::before {
+    background-color: var(--c-success-500);
+  }
+
+  .current::before {
+    background-color: var(--color-border);
+  }
+
+  .marker {
+    margin-bottom: 0;
+    flex: none;
+  }
+
+  .label {
+    font-size: var(--fs-sm);
+    padding-top: 2px;
+  }
+
+  .hint {
+    margin-top: 2px;
+  }
+
+  .body {
+    flex: 1;
+    text-align: left;
+  }
+}

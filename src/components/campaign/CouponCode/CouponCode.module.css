@@ -1,0 +1,144 @@
+/* A ticket, not a form field. The dashed edge and the notch at each side are
+   the one piece of ornament on the page, and they are doing a job: this is the
+   element a visitor came for, and it has to be findable while scrolling past
+   eight cards that otherwise look alike. */
+.wrap {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2) var(--sp-3);
+  padding: var(--sp-3) var(--sp-5);
+  border: 2px dashed var(--c-primary-300);
+  border-radius: var(--radius-md);
+  background-color: var(--c-primary-50);
+}
+
+/* The notches. Inset by the border width so they sit ON the dashes and read as
+   a perforation rather than as two dots floating nearby. */
+.wrap::before,
+.wrap::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: var(--color-surface);
+  transform: translateY(-50%);
+}
+
+.wrap::before {
+  left: -9px;
+}
+
+.wrap::after {
+  right: -9px;
+}
+
+.label {
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-wide);
+  color: var(--c-primary-700);
+}
+
+/* Monospace and wide tracking, because these are read character by character
+   to be typed into another field — FIRST10%OFF has to survive being copied by
+   eye. The codes are Latin, so the Japanese letter-spacing rule does not
+   apply. */
+.code {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-family: var(--font-numeric), ui-monospace, monospace;
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.08em;
+  color: var(--color-heading);
+  /* A long code on a 320px screen breaks rather than widening the card. */
+  overflow-wrap: anywhere;
+  /* Selecting the code alone, not the label with it, when copied by hand. */
+  user-select: all;
+}
+
+.button {
+  flex: 0 0 auto;
+  min-height: var(--control-h-sm);
+  padding-inline: var(--sp-4);
+  border: 1px solid var(--c-primary-600);
+  border-radius: var(--radius-pill);
+  background-color: var(--c-primary-600);
+  color: var(--color-text-inverse);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+
+.button:hover {
+  background-color: var(--c-primary-700);
+}
+
+/* Confirmation has to be visible without reading: the label text changes, but
+   the colour change is what registers in peripheral vision at the moment of
+   the click. */
+.button[data-state='copied'] {
+  border-color: var(--c-success-500);
+  background-color: var(--c-success-500);
+}
+
+/* Not a success colour and not a quiet one. A failed copy means the visitor
+   must select the code by hand, and the button is the only thing that can say
+   so. */
+.button[data-state='failed'] {
+  border-color: var(--c-warning-500);
+  background-color: var(--c-warning-50);
+  color: var(--c-warning-700);
+}
+
+/* --- phones -------------------------------------------------------------
+
+   The three parts do not fit on one row below 640px. Measured at 390px: the
+   ticket's inner width is 277px, and 「クーポンコード」 (80) + REFERRALBONUS
+   (193) + コピー (70) + two gaps (24) needs 367px — so the button wrapped
+   below, and six of the eight live codes did it.
+
+   The label is what gives way. Shrinking the code instead would need it at
+   0.7x to fit, and this is a string read character by character to be typed
+   somewhere else. The dashed ticket and the コピー button already say what
+   the row is, so the label is hidden rather than deleted — it stays in the
+   accessibility tree, where it is still the only thing naming the code.
+
+   Without it the worst case is 271px against 293px of room. A code longer
+   than any in use shrinks and wraps inside its own box rather than pushing
+   the button out, because the code keeps `min-width: 0` and
+   `overflow-wrap: anywhere`. */
+@media (max-width: 639px) {
+  .wrap {
+    flex-wrap: nowrap;
+    padding-inline: var(--sp-3);
+    gap: var(--sp-2);
+  }
+
+  .label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

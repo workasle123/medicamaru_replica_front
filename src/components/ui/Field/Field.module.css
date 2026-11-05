@@ -1,0 +1,135 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.labelRow {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.label {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+}
+
+/* A bare asterisk, not the badge this used to be. It sits tight against the
+   label rather than floating beside it, so the pairing is unmistakable, and it
+   is raised slightly because an asterisk sits on the cap line in most fonts and
+   otherwise reads as detached from the text. No background: a coloured pill
+   around a single character looks like a bullet, not a marker. */
+.required {
+  font-size: var(--fs-base);
+  line-height: 1;
+  margin-left: calc(var(--sp-2) * -1 + 2px);
+  color: var(--c-danger-700);
+  font-weight: var(--fw-bold);
+}
+
+.optional {
+  font-size: var(--fs-2xs);
+  padding: 1px var(--sp-2);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-surface-sunken);
+  color: var(--color-text-muted);
+}
+
+.input {
+  width: 100%;
+  height: var(--control-h-md);
+  padding-inline: var(--sp-3);
+  font-size: var(--fs-base);
+  color: var(--color-text);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+
+.input:hover {
+  border-color: var(--c-primary-300);
+}
+
+.input:focus {
+  border-color: var(--c-primary-500);
+  outline: 2px solid var(--c-primary-200);
+  outline-offset: 0;
+}
+
+.invalid {
+  border-color: var(--c-danger-500);
+}
+
+.invalid:focus {
+  outline-color: var(--c-danger-50);
+}
+
+/* Below the input now — see Field.jsx. */
+.hint {
+  margin-top: var(--sp-1);
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+  line-height: var(--lh-snug);
+}
+
+.error {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-1);
+  font-size: var(--fs-xs);
+  color: var(--c-danger-700);
+  font-weight: var(--fw-medium);
+}
+
+/* --- password reveal ------------------------------------------------------ */
+
+/* Positioning context for the toggle. Present on every field, not only password
+   ones, so the markup does not differ by type — it has no visual effect where
+   there is no button inside it. */
+.inputWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.inputWrap > .input {
+  width: 100%;
+}
+
+/* Room for the button, so a long password does not run underneath it. */
+.inputWithToggle {
+  padding-inline-end: 44px;
+}
+
+.reveal {
+  position: absolute;
+  inset-inline-end: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* 36px, not the 44px minimum: this sits INSIDE the input, and a target as tall
+     as the field would overlap its border on both edges. The field itself is the
+     44px target, and this is a secondary control within it. */
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+
+.reveal:hover {
+  color: var(--color-heading);
+  background-color: var(--color-surface-sunken);
+}
+
+/* Out of the tab order, but still focusable by script and by click — so the ring
+   has to work when it does receive focus. */
+.reveal:focus-visible {
+  outline: 2px solid var(--c-primary-600);
+  outline-offset: 1px;
+  color: var(--color-heading);
+}

@@ -1,0 +1,163 @@
+/* Stacked below 1024px: 40% of a tablet is too narrow for a headline, and the
+   rail needs the full width to show more than two cards. */
+.lead {
+  display: grid;
+  gap: var(--sp-6);
+  padding-block: var(--sp-4) var(--sp-4);
+  /* Stretch, so the left column takes the row height and the banner inside it
+     can grow into whatever the headline and button leave over. The H1 still
+     sits at the top: the column is a flex stack, so its first child starts at
+     the top edge regardless of how tall the box is. Centring — which this used
+     to do — pushed the H1 down and left dead space above it. */
+  align-items: stretch;
+}
+
+@media (min-width: 1024px) {
+  .lead {
+    /* 40/60, not 50/50 — see the note in the component. */
+    grid-template-columns: minmax(0, 4fr) minmax(0, 6fr);
+    gap: var(--sp-8);
+  }
+}
+
+/* --- left column --------------------------------------------------------- */
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--sp-4);
+}
+
+/* Held to TWO lines across the phone range, re-measured after the headline
+   gained ｜メディカ丸 and went from 25 characters to 32:
+
+     375px phone, 343px column — 22px wraps to three, 21px is the threshold
+     320px phone, 288px column — 19px wraps to three, 18px is the threshold
+
+   A clamp rather than a breakpoint, so it moves continuously between those two
+   measured endpoints — 18px at 320, 21px at 375 and above — instead of jumping
+   at an arbitrary width. Lengthening this headline again will need the same
+   two measurements taken afresh. */
+.heading {
+  margin: 0;
+  font-size: clamp(1.125rem, calc(5.45vw + 0.55px), 1.3125rem);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-tight);
+  color: var(--color-heading);
+  text-wrap: balance;
+}
+
+@media (min-width: 768px) {
+  .heading {
+    font-size: var(--fs-2xl);
+  }
+}
+
+@media (min-width: 1024px) {
+  .heading {
+    font-size: var(--fs-3xl);
+  }
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  min-height: var(--control-h-md);
+  padding-inline: var(--sp-5);
+  border-radius: var(--radius-pill);
+  background-color: var(--c-primary-500);
+  color: var(--c-neutral-900);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+}
+
+.cta:hover {
+  text-decoration: none;
+  background-color: var(--c-primary-600);
+}
+
+/* --- right column: the moving rail --------------------------------------- */
+
+.railWrap {
+  min-width: 0;
+}
+
+.railTitle {
+  margin: 0 0 var(--sp-3);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-wide);
+  color: var(--color-text-muted);
+}
+
+/* Clips the track and fades both edges, so cards enter and leave rather than
+   being sliced off at a hard border. */
+.viewport {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 3%, #000 97%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 3%, #000 97%, transparent);
+}
+
+.track {
+  display: flex;
+  gap: var(--sp-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  width: max-content;
+  animation: marquee 48s linear infinite;
+}
+
+/* Pausing on hover and on keyboard focus: a card that slides out from under
+   the pointer mid-click is the classic auto-carousel failure. */
+.viewport:hover .track,
+.track:focus-within {
+  animation-play-state: paused;
+}
+
+/* Exactly -50%: the list is rendered twice, so at the halfway point the second
+   copy sits precisely where the first began and the reset is invisible. */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* A fixed card width is what makes "4 to 5 in view" work at every size — the
+   viewport simply fits however many it can, rather than the cards stretching. */
+.item {
+  flex: 0 0 auto;
+  width: 152px;
+}
+
+@media (min-width: 768px) {
+  .item { width: 168px; }
+}
+
+/* 164px is what puts exactly four cards in the 711px column at a 1280px
+   viewport — 180px left the fourth half-cut. Because the width is fixed rather
+   than a fraction, wider screens simply fit more: five at 1600px, closer to six
+   at 1920px, with the cards themselves staying a consistent size. */
+@media (min-width: 1024px) {
+  .item { width: 164px; }
+}
+
+/* Motion that cannot be stopped is a vestibular hazard. With it reduced the
+   rail becomes an ordinary horizontal scroller — same content, user-driven. */
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    animation: none;
+    width: 100%;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+  }
+
+  .item { scroll-snap-align: start; }
+
+  .viewport {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}

@@ -1,0 +1,165 @@
+.wrap {
+  display: flex;
+  justify-content: center;
+  padding-block: var(--sp-8) var(--sp-16);
+}
+
+.card {
+  width: 100%;
+  max-width: 480px;
+}
+
+/* Registration only. Fifteen fields in a 480px column runs to 1,726px — over
+   three screens — so it gets a wider card and pairs its fields two-up. Login
+   and password reset have three fields between them and stay narrow, where a
+   wide card would just leave a short form stranded in white space. */
+.cardWide {
+  max-width: 760px;
+}
+
+.header {
+  margin-bottom: var(--sp-6);
+  text-align: center;
+}
+
+.title {
+  font-size: var(--fs-2xl);
+  letter-spacing: var(--ls-tight);
+}
+
+.subtitle {
+  margin-top: var(--sp-2);
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+.panel {
+  padding: var(--sp-6);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+/* --- Grouped sections -------------------------------------------------- */
+/* Registration asks for twelve fields. Presented as one unbroken column that
+   is a wall of inputs, so it is grouped — a real <fieldset>/<legend> rather
+   than a styled heading, which is what tells a screen reader which group each
+   field belongs to. */
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  /* Reset the UA fieldset box; the legend below carries the visual weight. */
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.group + .group {
+  margin-top: var(--sp-3);
+  padding-top: var(--sp-5);
+  border-top: 1px solid var(--color-border);
+}
+
+.legend {
+  /* A legend is not a flex item — it sits outside the column flow — so its
+     spacing is set here rather than by the parent's gap. */
+  padding: 0;
+  margin-bottom: var(--sp-4);
+  font-size: var(--fs-base);
+  font-weight: var(--fw-bold);
+  color: var(--color-heading);
+}
+
+/* Family/given name pairs sit side by side: they are one logical name, and
+   stacking them reads as two separate questions. Single column below 480px,
+   where two inputs would each be too narrow for kanji. */
+.pair {
+  display: grid;
+  gap: var(--sp-4);
+}
+
+@media (min-width: 640px) {
+  .pair {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.actions {
+  margin-top: var(--sp-2);
+}
+
+.checkboxRow {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+}
+
+.checkbox {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  accent-color: var(--c-primary-600);
+}
+
+.checkboxError {
+  margin-top: var(--sp-2);
+}
+
+.meta {
+  margin-top: var(--sp-5);
+  padding-top: var(--sp-5);
+  border-top: 1px solid var(--color-border);
+  text-align: center;
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+.metaLink {
+  font-weight: var(--fw-medium);
+}
+
+.helper {
+  display: block;
+  margin-top: var(--sp-3);
+  text-align: right;
+  font-size: var(--fs-sm);
+}
+
+/* Development-only credential hint. Removed with the mock adapter. */
+.demo {
+  margin-bottom: var(--sp-4);
+}
+
+/* --- Resend verification ------------------------------------------------ */
+
+/* Set apart from the form it follows: it is a different request, offered
+   after one failed, and running it straight on from the password fields
+   reads as part of signing in. */
+.resendForm {
+  display: grid;
+  gap: var(--sp-3);
+  margin-top: var(--sp-5);
+  padding: var(--sp-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface-sunken);
+}
+
+.resendLead {
+  margin: 0;
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}

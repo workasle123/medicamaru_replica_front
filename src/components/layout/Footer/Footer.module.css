@@ -1,0 +1,452 @@
+/* White footer.
+ *
+ * Three bands separated by hairlines rather than by colour: a faint tinted
+ * trust strip, the white link block, and a slightly sunken legal band. On a
+ * white footer the separation has to come from rules and weight, since there is
+ * no tonal contrast doing the work.
+ *
+ * The teal is the logo's own #008c87, used on the column icons, the heading
+ * rules and the chevrons — enough to carry the brand without tinting the type,
+ * which stays near-black for reading.
+ */
+
+.footer {
+  --f-teal: #008c87;
+  --f-teal-deep: #00615e;
+  --f-line: var(--color-border);
+
+  position: relative;
+  margin-top: var(--section-gap-lg);
+  background-color: #fff;
+  color: var(--color-text);
+}
+
+/* ROOM FOR THE PHONE TAB BAR.
+   MobileTabBar is `position: fixed; bottom: 0` and ~60px tall below 768px, and
+   nothing in the document reserved that space — so the last 60px of every
+   page sat permanently underneath it. In practice that is the copyright and
+   the 「Managed by」 line, which could only be read by over-scrolling and
+   holding the page there against the bounce.
+
+   Keyed to the same token the bar is sized from, so the two cannot drift, plus
+   the safe-area inset the bar also adds for a home indicator. */
+@media (max-width: 767px) {
+  .footer {
+    padding-bottom: calc(var(--mobile-tabbar-h) + env(safe-area-inset-bottom));
+  }
+}
+
+/* Logo teal into its lighter tint. A graphical element, so 3:1 is the bar. */
+.footer::before {
+  content: '';
+  display: block;
+  height: 3px;
+  background: linear-gradient(90deg, var(--f-teal) 0%, #6cc2bb 100%);
+}
+
+/* --- Trust strip ------------------------------------------------------ */
+
+.trust {
+  background-color: var(--c-accent-50);
+  border-bottom: 1px solid var(--f-line);
+  padding-block: var(--sp-6);
+}
+
+.trustGrid {
+  display: grid;
+  gap: var(--sp-5);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+@media (min-width: 768px) {
+  .trustGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.trustItem {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+}
+
+.trustIcon {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  background-color: var(--f-teal);
+  color: #fff;
+}
+
+.trustTitle {
+  display: block;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: var(--color-heading);
+  margin-bottom: 2px;
+}
+
+.trustBody {
+  display: block;
+  font-size: var(--fs-xs);
+  line-height: var(--lh-snug);
+  color: var(--color-text-muted);
+}
+
+/* --- Main block ------------------------------------------------------- */
+
+.main {
+  padding-block: var(--sp-10);
+}
+
+/* Brand block, then four link columns. The categories column takes double
+   width, so the track list is 1.6fr for the brand and 1fr each after it, with
+   the category column spanning two. */
+.columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sp-8) var(--sp-6);
+}
+
+@media (min-width: 640px) {
+  .columns {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .columns {
+    /* SIX tracks, not five: brand(1) + guide(1) + categories(2) + site(1) +
+       support(1). At five the category span left no room for the last column
+       and it wrapped to a second row. */
+    grid-template-columns: 1.5fr repeat(5, minmax(0, 1fr));
+    gap: var(--sp-6);
+  }
+}
+
+/* --- Brand block ------------------------------------------------------ */
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--sp-4);
+}
+
+@media (min-width: 640px) {
+  .brand {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 1024px) {
+  .brand {
+    grid-column: auto;
+    padding-right: var(--sp-4);
+  }
+}
+
+.brandLogo {
+  display: block;
+}
+
+/* 48px, up from 42px, for the same reason as the header: the lockup is
+   squarer than the wordmark it replaced and carries its name in about a third
+   of its height. 92px wide at this height. The file is cropped to the ink —
+   see the note in Header.module.css before swapping it. */
+.brandLogoImg {
+  width: auto;
+  height: 48px;
+  object-fit: contain;
+}
+
+/* Clamped: the site description runs to three lines here and a fourth would
+   push the social row out of line with the top of the link columns. */
+.brandText {
+  margin: 0;
+  font-size: var(--fs-xs);
+  line-height: var(--lh-relaxed);
+  color: var(--color-text-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.social {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-pill);
+  background-color: var(--c-neutral-800);
+  color: #fff;
+}
+
+.social:hover {
+  text-decoration: none;
+  filter: brightness(1.12);
+}
+
+/* Each account in its own colour, which is how these are recognised — a row of
+   identical grey circles reads as decoration rather than as links. */
+.social_line { background-color: #06c755; }
+.social_x { background-color: #000; }
+.social_instagram { background-color: #d62976; }
+.social_facebook { background-color: #1877f2; }
+.social_youtube { background-color: #ff0000; }
+
+.contactBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  min-height: 44px;
+  padding-inline: var(--sp-5);
+  border: 1px solid var(--f-line);
+  border-radius: var(--radius-pill);
+  background-color: #fff;
+  color: var(--color-heading);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+}
+
+.contactBtn:hover {
+  border-color: var(--f-teal);
+  color: var(--f-teal-deep);
+  text-decoration: none;
+}
+
+/* --- Link columns ----------------------------------------------------- */
+
+.column {
+  min-width: 0;
+}
+
+/* Eight categories against columns of five would run to twice their height, so
+   this one takes two tracks and splits its list in half. */
+@media (min-width: 1024px) {
+  .columnWide {
+    grid-column: span 2;
+  }
+}
+
+.heading {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: var(--color-heading);
+  margin-bottom: var(--sp-3);
+  padding-bottom: var(--sp-2);
+  border-bottom: 1px solid var(--f-line);
+}
+
+.headingIcon {
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+  color: var(--f-teal);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+@media (min-width: 1024px) {
+  .listWide {
+    display: block;
+    columns: 2;
+    column-gap: var(--sp-5);
+  }
+
+  .listWide .item {
+    break-inside: avoid;
+    margin-bottom: var(--sp-2);
+  }
+}
+
+/* The chevron is a pseudo-element, so it stays out of the link text, the
+   accessible name and anything copied from the page. */
+.item {
+  position: relative;
+  padding-left: var(--sp-4);
+}
+
+.item::before {
+  content: '›';
+  position: absolute;
+  left: 0;
+  top: -0.05em;
+  color: var(--c-primary-600);
+  font-weight: var(--fw-bold);
+  line-height: inherit;
+}
+
+.item a {
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+  color: var(--color-text);
+}
+
+.item a:hover {
+  color: var(--f-teal-deep);
+}
+
+/* --- Legal ------------------------------------------------------------ */
+
+.legal {
+  background-color: var(--c-neutral-50);
+  border-top: 1px solid var(--f-line);
+  padding-block: var(--sp-6);
+}
+
+/* Disclaimer left, tags right. Stacked below 1024px: the disclaimer needs a
+   readable measure and the pills need room to wrap, and neither gets it in half
+   a tablet. */
+.legalRow {
+  display: grid;
+  gap: var(--sp-6);
+}
+
+@media (min-width: 1024px) {
+  .legalRow {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    gap: var(--sp-8);
+    align-items: start;
+  }
+}
+
+.legalText {
+  min-width: 0;
+}
+
+/* No max-width now: the grid column already sets the measure, and 80ch on top
+   of it left the text stopping short of its own column. */
+.disclaimer {
+  font-size: var(--fs-xs);
+  line-height: var(--lh-normal);
+  color: var(--color-text-muted);
+  margin-bottom: var(--sp-4);
+}
+
+/* A full-width line under the disclaimer/tag row, centred on the page. The
+   rule above it separates it from the two columns it no longer belongs to. */
+.copyright {
+  margin-top: var(--sp-6);
+  padding-top: var(--sp-4);
+  border-top: 1px solid var(--f-line);
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+/* Sits directly under the copyright and shares its rule — a second border here
+   would fence off one line of attribution as if it were its own section. Only
+   the margin separates them. */
+.operator {
+  margin-top: var(--sp-1);
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+/* Underlined rather than coloured. This is the one outbound commercial link in
+   a footer of internal navigation, and giving it the link colour would pull the
+   eye to it over the categories and policies people actually come here for. */
+.operatorLink {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.operatorLink:hover,
+.operatorLink:focus-visible {
+  color: var(--color-text);
+}
+
+/* --- Tag band ---------------------------------------------------------- */
+
+/* Sits beside the legal text rather than in a band of its own, which fills the
+   empty half of that row instead of adding another. Tags are the shop's own
+   vocabulary — 1,309 of them carry live products — so this is a genuine index
+   rather than filler, and it gives the most-used ones an internal link from
+   every page on the site. */
+/* The divider between the disclaimer and the tags. It follows the layout:
+   a vertical rule between the two columns on desktop, and a horizontal one
+   above the tags once they stack below the text. Drawn on the tag side so it
+   disappears with the tags when there are none to show. */
+.tagBand {
+  min-width: 0;
+  padding-top: var(--sp-6);
+  border-top: 1px solid var(--f-line);
+}
+
+@media (min-width: 1024px) {
+  .tagBand {
+    padding-top: 0;
+    border-top: none;
+    padding-left: var(--sp-8);
+    border-left: 1px solid var(--f-line);
+  }
+}
+
+/* One rule for both column headings, so they cannot drift apart — the whole
+   point is that the two columns line up. */
+.tagTitle,
+.legalTitle {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-wide);
+  color: var(--color-text-muted);
+  margin-bottom: var(--sp-3);
+}
+
+.tagList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Separate blocks, not a comma-separated run: tags of uneven length read as a
+   wall of text otherwise.
+
+   These stopped being links (see Footer.jsx), so the pill is gone with them —
+   a bordered white pill with a teal hover is the shape of something you press.
+   Flat tint, square-ish corner, no hover: a list of what the shop stocks. */
+.tag {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--sp-2);
+  padding: 5px var(--sp-2);
+  border-radius: var(--radius-sm);
+  background-color: rgb(255 255 255 / 0.55);
+  color: var(--color-text);
+  font-size: var(--fs-xs);
+  line-height: 1.4;
+}
+
+/* The count is the reason the order is what it is, so it is shown rather than
+   hidden — but muted, since the tag name is the point. */

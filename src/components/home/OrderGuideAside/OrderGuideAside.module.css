@@ -1,0 +1,94 @@
+/* Placeholder for the order-guide banner — see OrderGuideAside.jsx. */
+
+.card {
+  padding: var(--sp-5);
+  border: 1px solid var(--c-accent-200);
+  border-radius: var(--radius-xl);
+  background:
+    radial-gradient(80% 100% at 100% 0%, var(--c-accent-50) 0%, transparent 70%),
+    var(--color-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.title {
+  font-size: var(--fs-lg);
+  margin-bottom: var(--sp-4);
+  padding-bottom: var(--sp-2);
+  border-bottom: 2px solid var(--c-primary-100);
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.step {
+  display: flex;
+  gap: var(--sp-3);
+  align-items: flex-start;
+  font-size: var(--fs-sm);
+}
+
+/* Filled orange disc, matching the hero panel's check marks. */
+.num {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-pill);
+  background-color: var(--c-primary-500);
+  color: var(--c-neutral-900);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+}
+
+.stepTitle {
+  display: block;
+  font-weight: var(--fw-bold);
+}
+
+.stepBody {
+  display: block;
+  margin-top: 2px;
+  color: var(--color-text-muted);
+  line-height: var(--lh-normal);
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-top: var(--sp-5);
+  min-height: var(--control-h-md);
+  padding-inline: var(--sp-5);
+  border-radius: var(--radius-pill);
+  background-color: var(--c-primary-500);
+  color: var(--c-neutral-900);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+}
+
+.cta:hover {
+  /* Deepen the fill, keep the dark label — inverting to white on hover
+     would make the control appear to change identity. 4.96:1. */
+  background-color: var(--c-primary-600);
+  color: var(--c-neutral-900);
+  text-decoration: none;
+}
+
+/* --- Standing alone (no homepage FAQs beside it) ----------------------- */
+
+/* The three steps side by side: stacked in a page-wide card they would leave
+   most of the width empty. */
+@media (min-width: 768px) {
+  .wide .steps {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--sp-6);
+  }
+}

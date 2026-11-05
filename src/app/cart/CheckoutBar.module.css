@@ -1,0 +1,73 @@
+/* Hidden wherever the summary sidebar is already visible — from 1024px it sits
+   beside the items and carries the same total, so this would be a second copy
+   of a control that never left the screen. */
+.bar {
+  display: none;
+}
+
+@media (max-width: 1023px) {
+  .bar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    /* Directly on top of the tab bar, computed from its token rather than
+       guessed, plus the home-indicator inset on the phones that have one. */
+    bottom: calc(var(--mobile-tabbar-h) + env(safe-area-inset-bottom));
+    z-index: var(--z-sticky);
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+    padding: var(--sp-3) var(--sp-4);
+    background-color: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    /* Lifts it off the content scrolling underneath, which a flat border alone
+       does not do once a product image passes behind it. */
+    box-shadow: 0 -6px 20px rgb(0 0 0 / 0.07);
+  }
+}
+
+/* From 768px there is no tab bar, so it sits on the viewport edge. The gap
+   between 768 and 1024 is the one where the summary has already stacked below
+   the items but the bottom nav is gone. */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .bar {
+    bottom: 0;
+  }
+}
+
+.figures {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.label {
+  font-size: var(--fs-2xs);
+  color: var(--color-text-muted);
+}
+
+.total {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-bold);
+  color: var(--color-heading);
+  line-height: 1.2;
+}
+
+.action {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding-inline: var(--sp-4);
+  border-radius: var(--radius-md);
+  background-color: var(--c-primary-600, var(--c-primary-500));
+  color: var(--c-neutral-0, #fff);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+}
+
+.action:hover {
+  background-color: var(--c-primary-700, var(--c-primary-600));
+  text-decoration: none;
+}

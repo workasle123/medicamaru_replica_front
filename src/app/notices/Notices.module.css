@@ -1,0 +1,167 @@
+/* /notices and /notices/[id]. Both sit inside ContentPage's `.body`, which
+   styles every list and link as prose — hence the two-class selectors where
+   the list needs to shake that off, as on the FAQ page. */
+
+/* --- The list ------------------------------------------------------------ */
+
+.index .list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--color-border);
+}
+
+.index .list > li {
+  margin: 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.index .itemLink {
+  display: block;
+  padding: var(--sp-4) var(--sp-2);
+  color: inherit;
+  text-decoration: none;
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+
+.index .itemLink:hover {
+  background-color: var(--c-primary-50);
+  text-decoration: none;
+}
+
+.index .itemLink:focus-visible {
+  outline: 2px solid var(--c-primary-600);
+  outline-offset: -2px;
+}
+
+.date {
+  display: block;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: var(--c-primary-700);
+}
+
+.itemTitle {
+  display: block;
+  margin-top: var(--sp-1);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-snug);
+  color: var(--color-heading);
+}
+
+.itemLink:hover .itemTitle {
+  color: var(--c-primary-700);
+  text-decoration: underline;
+}
+
+/* Two lines: enough to tell notices apart; the rest is one tap away. */
+.excerpt {
+  display: -webkit-box;
+  margin-top: var(--sp-2);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-normal);
+  color: var(--color-text-muted);
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.empty {
+  padding: var(--sp-6);
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+/* --- One notice ---------------------------------------------------------- */
+
+/* The admin's text, in a card so it reads as the notice itself rather than
+   running on into the navigation below it. */
+.notice {
+  padding: var(--sp-6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+  overflow-wrap: anywhere;
+}
+
+.notice > * + * {
+  margin-top: var(--sp-4);
+}
+
+.notice > :first-child {
+  margin-top: 0;
+}
+
+/* Tighter than the page-level heading spacing, which is sized for long
+   articles rather than a card. */
+.notice > :is(h2, h3, h4):not(:first-child) {
+  margin-top: var(--sp-6);
+}
+
+/* A link whose address was not safe keeps its text but loses the address
+   (richTextHtml) — so it should not look like a link either. */
+.notice a:not([href]) {
+  color: inherit;
+  text-decoration: none;
+}
+
+.notice blockquote {
+  padding: var(--sp-3) var(--sp-4);
+  border-left: 3px solid var(--c-primary-500);
+  background-color: var(--c-primary-50);
+}
+
+/* Older on the left, newer on the right — the order they were published. */
+.pager {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-3);
+}
+
+.pager .pagerLink {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  height: 100%;
+  padding: var(--sp-3) var(--sp-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+  color: var(--color-heading);
+  text-decoration: none;
+}
+
+.pager .pagerLink:hover {
+  border-color: var(--c-primary-500);
+  background-color: var(--c-primary-50);
+  text-decoration: none;
+}
+
+.pagerNext {
+  grid-column: 2;
+  text-align: right;
+}
+
+.pagerLabel {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+.pagerTitle {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-snug);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.back {
+  text-align: center;
+  font-size: var(--fs-sm);
+}

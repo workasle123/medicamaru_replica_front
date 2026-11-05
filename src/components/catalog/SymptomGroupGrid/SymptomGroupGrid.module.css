@@ -1,0 +1,112 @@
+/* Two across on a phone, four from tablet, five on a wide screen — 19 groups
+   land as four full rows rather than a ragged tail. */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-3);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+@media (min-width: 640px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1200px) {
+  .grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+/* Icon over name over count. `height: 100%` so a two-line name does not make
+   its card shorter than the rest of the row. */
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-2);
+  height: 100%;
+  padding: var(--sp-5) var(--sp-3) var(--sp-4);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  text-align: center;
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.card:hover {
+  border-color: var(--c-primary-400);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition: border-color var(--dur-fast) var(--ease-out);
+  }
+
+  .card:hover {
+    transform: none;
+  }
+}
+
+.iconFrame {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  color: var(--c-primary-700);
+  background-color: var(--c-primary-50, var(--color-surface-sunken));
+  border-radius: var(--radius-pill);
+}
+
+.iconFrame svg {
+  width: 26px;
+  height: 26px;
+}
+
+.name {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--color-text);
+  /* Japanese has no spaces, so a long group name would otherwise overflow
+     rather than wrap. */
+  overflow-wrap: anywhere;
+  line-height: var(--lh-snug, 1.4);
+}
+
+.name:hover {
+  color: var(--c-primary-700);
+  text-decoration: none;
+}
+
+/* Stretched over the card, so the whole tile is clickable while the markup
+   stays at a single anchor. */
+.name::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+/* Pushed to the bottom so counts line up across a row whatever the name does. */
+.count {
+  margin-top: auto;
+  padding-top: var(--sp-1);
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}

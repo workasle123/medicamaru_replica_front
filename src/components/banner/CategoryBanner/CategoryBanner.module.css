@@ -1,0 +1,32 @@
+/* Full-width banner above a category rail. Deliberately the same width and
+   ratio as a carousel slide — see CategoryBanner.jsx. */
+
+.banner {
+  position: relative;
+  display: block;
+  margin-bottom: var(--sp-5);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background-color: var(--c-primary-700);
+  color: var(--color-text-inverse);
+}
+
+/* Only the linked variant lifts — a banner with no destination must not look
+   interactive. Frame renders a <div> in that case. */
+a.banner:hover {
+  text-decoration: none;
+  color: var(--color-text-inverse);
+  box-shadow: var(--shadow-md);
+}
+
+/* Matches the carousel exactly: every uploaded banner asset is 1330x300, so
+   `cover` has nothing to crop. */
+.media {
+  aspect-ratio: 1330 / 300;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

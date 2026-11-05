@@ -1,0 +1,126 @@
+/* Add-to-cart controls beneath a favourites card.
+ *
+ * Sits outside ProductCard rather than inside it, so every other listing — the
+ * homepage rails, category pages, search — keeps the card it has.
+ */
+
+.addForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  margin-top: var(--sp-2);
+}
+
+.packSelect {
+  width: 100%;
+  height: var(--control-h-sm);
+  padding-inline: var(--sp-2);
+  font-size: var(--fs-xs);
+  color: var(--color-text);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+}
+
+.packSelect:focus-visible {
+  outline: 2px solid var(--c-primary-600);
+  outline-offset: 1px;
+}
+
+/* Stepper and button share a row on wider cards and stack on narrow ones, so a
+   two-across mobile grid does not squeeze the button to an unreadable width. */
+.addRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.stepper {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+  overflow: hidden;
+}
+
+.stepBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: var(--control-h-sm);
+  border: 0;
+  background: transparent;
+  color: var(--color-heading);
+  font-size: var(--fs-sm);
+  line-height: 1;
+  cursor: pointer;
+}
+
+.stepBtn:hover:not(:disabled) {
+  background-color: var(--c-accent-50);
+  color: var(--c-primary-800);
+}
+
+.stepBtn:disabled {
+  color: var(--color-text-subtle);
+  cursor: not-allowed;
+}
+
+.stepBtn:focus-visible {
+  outline: 2px solid var(--c-primary-600);
+  outline-offset: -2px;
+}
+
+/* Fixed width so the button beside it does not shift as the number changes from
+   one digit to two. */
+.qtyValue {
+  min-width: 28px;
+  text-align: center;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  border-inline: 1px solid var(--color-border);
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.addBtn {
+  flex: 1;
+  min-width: 8rem;
+  min-height: var(--control-h-sm);
+  padding-inline: var(--sp-3);
+  border: 0;
+  border-radius: var(--radius-md);
+  background-color: var(--c-primary-600);
+  color: #fff;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  cursor: pointer;
+}
+
+.addBtn:hover:not(:disabled) {
+  background-color: var(--c-primary-700);
+}
+
+.addBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.addBtn:focus-visible {
+  outline: 2px solid var(--c-primary-600);
+  outline-offset: 2px;
+}
+
+/* Shown instead of the form when nothing is purchasable, so the card says why
+   rather than offering a control that cannot work. */
+.unavailable {
+  margin-top: var(--sp-2);
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}

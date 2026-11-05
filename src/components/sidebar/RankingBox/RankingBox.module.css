@@ -1,0 +1,106 @@
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.list > li + li {
+  border-top: 1px solid var(--color-border);
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-3);
+  color: var(--color-heading);
+  text-decoration: none;
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+
+.link:hover {
+  background-color: var(--c-primary-50);
+  color: var(--color-heading);
+  text-decoration: none;
+}
+
+.link:hover .name {
+  color: var(--c-primary-700);
+  text-decoration: underline;
+}
+
+.link:focus-visible {
+  outline: 2px solid var(--c-primary-600);
+  outline-offset: -2px;
+}
+
+/* Rank disc: gold, silver and bronze for the top three, neutral after. The
+   metals are deep enough for white digits to pass 4.5:1 (4.96, 4.84, 5.38) —
+   the bright gold most sites use sits near 2:1. */
+.rank {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-pill);
+  background-color: var(--c-neutral-200);
+  color: var(--c-neutral-800);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+}
+
+.rank1 {
+  background-color: #8f6a00;
+  color: #fff;
+}
+
+.rank2 {
+  background-color: #6b7280;
+  color: #fff;
+}
+
+.rank3 {
+  background-color: #9a5b25;
+  color: #fff;
+}
+
+.image {
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-surface);
+  object-fit: contain;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.name {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-snug);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.price {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: var(--c-primary-700);
+}
+
+.perUnit {
+  margin-left: 2px;
+  font-size: var(--fs-xs);
+  font-weight: normal;
+  color: var(--color-text-muted);
+}

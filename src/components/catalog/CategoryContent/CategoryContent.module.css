@@ -1,0 +1,105 @@
+/* Editorial block below the product grid.
+   The source platform's category pages carry substantial long-form content
+   under the products — that copy is what makes them rank, so it gets a
+   readable measure and proper table styling rather than being an afterthought. */
+
+.wrap {
+  margin-top: var(--sp-12);
+  padding-top: var(--sp-8);
+  border-top: 1px solid var(--color-border);
+}
+
+/* Supervision + freshness. Same E-E-A-T signal as the product pages. */
+.byline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-1) var(--sp-4);
+  padding: var(--sp-3) var(--sp-4);
+  margin-bottom: var(--sp-8);
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+  background-color: var(--color-surface-sunken);
+  border-left: 3px solid var(--c-primary-600);
+  border-radius: var(--radius-sm);
+}
+
+.bylineLabel {
+  font-weight: var(--fw-bold);
+  color: var(--color-text);
+}
+
+.body {
+  max-width: 74ch;
+}
+
+.section {
+  margin-bottom: var(--sp-10);
+  scroll-margin-top: calc(var(--header-clear) + var(--sp-6));
+}
+
+.sectionTitle {
+  font-size: var(--fs-xl);
+  margin-bottom: var(--sp-4);
+  padding-bottom: var(--sp-2);
+  border-bottom: 2px solid var(--c-primary-100);
+}
+
+/* Styling for admin-authored HTML. Scoped tightly so editor output cannot
+   leak arbitrary layout into the page. */
+.html {
+  font-size: var(--fs-base);
+  line-height: var(--lh-normal);
+  color: var(--color-text);
+}
+
+.html > * + * {
+  margin-top: var(--sp-4);
+}
+
+.html h3 {
+  margin-top: var(--sp-6);
+  font-size: var(--fs-lg);
+}
+
+.html ul,
+.html ol {
+  padding-left: 1.5em;
+}
+
+.html li + li {
+  margin-top: var(--sp-2);
+}
+
+.html a {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+/* Tables are common in this content — comparison grids of ingredients,
+   goals, pros and cons. They must scroll inside themselves on mobile rather
+   than pushing the page sideways. */
+.html table {
+  display: block;
+  overflow-x: auto;
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.html th,
+.html td {
+  padding: var(--sp-3);
+  border: 1px solid var(--color-border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.html th {
+  background-color: var(--c-primary-50);
+  font-weight: var(--fw-bold);
+  color: var(--color-heading);
+  white-space: nowrap;
+}

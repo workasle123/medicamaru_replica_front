@@ -1,0 +1,730 @@
+/* minmax(0, 1fr), not the implicit `auto` track this used to get.
+
+   An auto track takes its floor from the widest thing inside it, so one item
+   that will not shrink drags the whole column past the container and the page
+   scrolls sideways — a wider 適用する button was enough to push the track to
+   390px inside a 358px container and bleed every card off the right edge.
+   A zero minimum cannot do that, whatever lands in the column later.
+
+   The 1024px rule below already states its own tracks this way; this only
+   makes the one-column case agree with it. */
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sp-6);
+  padding-bottom: var(--sp-12);
+}
+
+@media (min-width: 1024px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: var(--sp-8);
+    align-items: start;
+  }
+}
+
+.title {
+  font-size: var(--fs-2xl);
+  letter-spacing: var(--ls-tight);
+  margin-bottom: var(--sp-5);
+}
+
+/* --- Free shipping progress ------------------------------------------- */
+/* --- Line items -------------------------------------------------------- */
+
+.lines {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background-color: var(--color-surface);
+}
+
+/* Three columns at every width, not two.
+
+   On a phone this was 84px + 1fr, so the price — the third child — had
+   nowhere to go but a second grid row, where it landed in the 84px thumbnail
+   column. A 1,850円 set in --fs-lg bold, left-aligned under the picture,
+   read as a heading for whatever came next rather than as the total for the
+   row above it. It also cost 46px of the row's 199px.
+
+   Giving the price its own column puts it beside the name it belongs to and
+   takes the row to ~150px. The thumbnail shrinks to 56px to pay for the
+   column; the image is object-fit: contain, so it loses detail, not meaning. */
+.line {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+  column-gap: var(--sp-2);
+  row-gap: var(--sp-2);
+  align-items: start;
+  /* Tighter top-to-bottom than side-to-side: the row is short now, and the
+     price sits hard against the right column, so it needs the gutter. */
+  padding: var(--sp-3) var(--sp-4);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.line:last-child {
+  border-bottom: none;
+}
+
+@media (min-width: 640px) {
+  .line {
+    grid-template-columns: 96px minmax(0, 1fr) auto;
+    gap: var(--sp-4);
+    align-items: start;
+  }
+}
+
+/* Square, and pinned so. Packshots are square, so `height: auto` normally
+   lands on 56px by itself — but when an image fails the alt text renders in
+   its place, wraps down the 56px column and drags the whole row taller than
+   the rest. A row's height should not depend on whether a picture loaded. */
+.thumb {
+  aspect-ratio: 1;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background-color: var(--c-primary-50);
+  overflow: hidden;
+}
+
+.thumbImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.lineInfo {
+  min-width: 0;
+}
+
+.lineName {
+  font-size: var(--fs-base);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-snug);
+}
+
+.lineName a {
+  color: var(--color-text);
+}
+
+.linePack {
+  margin-top: 2px;
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+.lineUnit {
+  margin-top: var(--sp-1);
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+/* The dropdown and the bin, side by side. The gap is --sp-2 so the pair fits
+   the middle column on a 320px screen without wrapping; wrap stays on as the
+   last resort rather than as the normal outcome. */
+.lineControls {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+  margin-top: var(--sp-3);
+}
+
+/* The dropdown that replaced the stepper. Sized so the number is readable at
+   a glance rather than squeezed — this is the one control on the line a
+   customer actually operates. */
+.qtySelect {
+  height: var(--control-h-sm);
+  min-width: 72px;
+  padding-inline: var(--sp-2);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  font-size: var(--fs-sm);
+}
+
+/* data-pending, not :disabled — see the note in QuantitySelect: disabling it
+   would drop the value from the submission. */
+.qtySelect[data-pending] {
+  opacity: 0.6;
+}
+
+.qtyForm {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+/* Three forms submit with this: 変更 on a cart row, 適用する for a coupon and
+   利用する for points. Every label is a WORD, so it cannot share the 36x36
+   icon box below — 適用する wrapped inside it and spilled 「する」 out through
+   the border, and 適用中… did the same while submitting.
+
+   Primary rather than danger colours too. These three confirm something; the
+   red belongs to the one control that throws a row away. --c-primary-700 is
+   the lightest step the tokens mark as white-text safe (4.97:1). */
+.qtyApply {
+  flex: 0 0 auto;
+  min-height: var(--control-h-sm);
+  padding-inline: var(--sp-4);
+  border: 1px solid var(--c-primary-700);
+  border-radius: var(--radius-md);
+  background-color: var(--c-primary-700);
+  color: var(--color-text-inverse);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+
+.qtyApply:hover:not(:disabled),
+.qtyApply:focus-visible:not(:disabled) {
+  background-color: var(--c-primary-800);
+  border-color: var(--c-primary-800);
+}
+
+.qtyApply:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* Was the word 削除 as an underlined link — and declared twice, the second
+   rule only re-colouring the first. One rule now, and a square button with a
+   bin in it: at a glance a red control reads as "remove this" faster than a
+   word does, and it stops competing with the product link beside it. */
+.removeButton {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--c-danger-500);
+  border-radius: var(--radius-sm);
+  background-color: var(--c-danger-50);
+  color: var(--c-danger-700);
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+/* Fills on hover. --c-danger-500 is marked "vivid — non-text" in the tokens,
+   which is exactly what a filled button wants behind a white glyph. */
+.removeButton:hover,
+.removeButton:focus-visible {
+  background-color: var(--c-danger-500);
+  border-color: var(--c-danger-500);
+  color: var(--color-text-inverse);
+}
+
+/* Shown in place of the bin while a removal is in flight. Honours a reduced
+   motion preference by simply standing still — the swapped glyph and the
+   disabled state already say that something is happening. */
+.removeSpinner {
+  animation: removeSpin 0.7s linear infinite;
+}
+
+@keyframes removeSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .removeSpinner {
+    animation: none;
+  }
+}
+
+.linePricing {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.lineTotal {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-tight);
+}
+
+.linePoints {
+  display: block;
+  margin-top: 2px;
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+/* The number carries the emphasis, not the label — 獲得予定 is the same on
+   every row and the figure is the only part that differs. */
+.linePointsValue {
+  font-weight: var(--fw-bold);
+  color: var(--c-accent-700, var(--color-text));
+}
+
+/* --- Summary ----------------------------------------------------------- */
+
+.summary {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-5);
+}
+
+@media (min-width: 1024px) {
+  .summary {
+    position: sticky;
+    top: calc(var(--header-clear) + var(--sp-4));
+  }
+}
+
+.summaryTitle {
+  font-size: var(--fs-base);
+  font-weight: var(--fw-bold);
+  margin-bottom: var(--sp-4);
+}
+
+.row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding-block: var(--sp-2);
+  font-size: var(--fs-sm);
+}
+
+.rowDiscount {
+  color: var(--c-sale-600);
+}
+
+.totalRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  margin-top: var(--sp-3);
+  padding-top: var(--sp-3);
+  border-top: 2px solid var(--color-border);
+}
+
+.totalLabel {
+  font-size: var(--fs-base);
+  font-weight: var(--fw-bold);
+}
+
+.totalValue {
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-tight);
+}
+
+.pointsNote {
+  margin-top: var(--sp-2);
+  font-size: var(--fs-xs);
+  color: var(--c-primary-700);
+  text-align: right;
+}
+
+.checkoutAction {
+  margin-top: var(--sp-5);
+}
+
+.continueLink {
+  display: block;
+  margin-top: var(--sp-3);
+  text-align: center;
+  font-size: var(--fs-sm);
+}
+
+/* --- Coupon ------------------------------------------------------------ */
+
+/* No divider any more: each form sits in its own bordered card inside the
+   クーポン・ポイント panel, so the rule that separated them from the summary
+   rows above would now be a line inside a box. */
+.coupon {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.couponTitle {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  margin-bottom: var(--sp-2);
+}
+
+/* --- Points -------------------------------------------------------------
+
+   The balance as a figure rather than a clause. It is the number the panel
+   exists for, and it was previously the middle of a sentence about caps. */
+.pointsBalance {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  margin: 0 0 var(--sp-3);
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-surface-sunken);
+}
+
+.pointsBalanceLabel {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+.pointsBalanceValue {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-tight);
+  color: var(--c-accent-700, var(--color-heading));
+}
+
+.pointsCta {
+  margin: var(--sp-2) 0 0;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+}
+
+/* --- Coupon picker ------------------------------------------------------
+
+   A dropdown of what is actually running, above the free-text field. The
+   field stays below it because a code can arrive by email or LINE and never
+   appear in the list — the picker is a shortcut, not the only way in. */
+.couponPick {
+  margin-bottom: var(--sp-3);
+}
+
+.couponPickLabel {
+  display: block;
+  margin-bottom: var(--sp-1);
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+.couponSelect {
+  width: 100%;
+  min-width: 0;
+  height: var(--control-h-sm);
+  padding-inline: var(--sp-3);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  font-size: var(--fs-sm);
+}
+
+/* The conditions for whichever coupon is selected. Tinted rather than
+   bordered: another box inside a box is what made this panel look busy. */
+.couponTerms {
+  margin-top: var(--sp-3);
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-surface-sunken);
+}
+
+.couponFacts {
+  margin: 0;
+  font-size: var(--fs-xs);
+  color: var(--color-text);
+}
+
+/* The one line worth noticing — it is the difference between the coupon
+   working and not, and it is actionable while the basket is still on screen. */
+.couponShort {
+  margin: 2px 0 0;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  color: var(--c-warning-700);
+}
+
+.couponForm {
+  display: flex;
+  gap: var(--sp-2);
+}
+
+.couponInput {
+  flex: 1;
+  min-width: 0;
+  height: var(--control-h-sm);
+  padding-inline: var(--sp-3);
+  font-size: var(--fs-sm);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+  text-transform: uppercase;
+}
+
+.couponApplied {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-3);
+  background-color: var(--c-success-50);
+  border-radius: var(--radius-md);
+  font-size: var(--fs-sm);
+  color: var(--c-success-700);
+}
+
+.couponRemove {
+  font-size: var(--fs-xs);
+  text-decoration: underline;
+  color: var(--c-success-700);
+}
+
+.couponHint {
+  margin-top: var(--sp-2);
+  font-size: var(--fs-2xs);
+  color: var(--color-text-muted);
+  line-height: var(--lh-snug);
+}
+
+.alertSlot {
+  margin-bottom: var(--sp-4);
+}
+
+/* --- quantity stepper ----------------------------------------------------- */
+
+/* --- Coupon & points panel -------------------------------------------- */
+
+.promo {
+  margin-top: var(--sp-6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface);
+  overflow: hidden;
+}
+
+.promoHead {
+  padding: var(--sp-4) var(--sp-5);
+  border-bottom: 1px solid var(--color-border);
+  background-color: var(--color-surface-sunken);
+}
+
+.promoTitle {
+  margin: 0;
+  font-size: var(--fs-base);
+  font-weight: var(--fw-bold);
+  color: var(--color-heading);
+}
+
+.promoSub {
+  margin: 2px 0 0;
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+/* One column on a phone; two from 640px, which is where the input and its
+   button stop competing for the same line. */
+.promoGrid {
+  display: grid;
+  gap: var(--sp-5);
+  padding: var(--sp-5);
+}
+
+@media (min-width: 640px) {
+  .promoGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* PointsForm always renders something now, so this should never fire. Kept
+     as a guard: if it ever returns nothing again, one full-width coupon beats
+     a coupon in the left half with a blank right half beside it. */
+  .promoGrid:has(> .promoCard:empty) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Only ever drawn when a second, non-empty card is actually beside the
+     first — a hidden points card is display: none, so it is not adjacent. */
+  .promoCard + .promoCard {
+    padding-left: var(--sp-5);
+    border-left: 1px solid var(--color-border);
+  }
+}
+
+/* No border and no padding of its own. The section is already a bordered
+   panel with a titled header, so a bordered box inside it framed the same
+   content twice and stacked 20px of panel padding on 16px of card padding.
+   The grid gap separates the two cards; on two columns a rule between them
+   does the dividing instead.
+
+   :empty still matters — PointsForm renders nothing for a guest or when
+   redemption is switched off, and the divider must not appear beside it. */
+.promoCard {
+  min-width: 0;
+}
+
+.promoCard:empty {
+  display: none;
+}
+
+/* --- Personal-import terms, above the items --------------------------- */
+
+/* The conditions the quantity on every line is subject to, so they sit above
+   the lines rather than in the summary. Quiet: they are terms, not a warning,
+   and styling them as an alert would cry wolf on every cart. */
+/* 送料無料 progress.
+
+   Two states on one element rather than two classes: the message changes but
+   its place in the layout must not, or the item list below jumps a few pixels
+   the moment a cart crosses the threshold.
+
+   The reached state is the accent green the site uses for 在庫あり — the same
+   "this is good news" ink — while the countdown stays in body ink, because a
+   target you have not met yet is information, not an achievement. */
+.freeShip {
+  margin: 0 0 var(--sp-4);
+  padding: var(--sp-3) var(--sp-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+}
+
+.freeShip[data-reached='true'] {
+  border-color: var(--c-accent-300);
+  background-color: var(--c-accent-50);
+  color: var(--c-accent-900);
+  font-weight: var(--fw-bold);
+}
+
+.terms {
+  margin: 0 0 var(--sp-4);
+  padding: var(--sp-3) var(--sp-4);
+  list-style: disc;
+  padding-inline-start: calc(var(--sp-4) + 1.1em);
+  background-color: var(--color-surface-sunken);
+  border-radius: var(--radius-md);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-normal);
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+}
+
+.terms > li + li {
+  margin-top: var(--sp-1);
+}
+
+/* --- Over-limit confirmation ------------------------------------------ */
+
+/* A native <dialog>, so the modality, the focus trap and Escape are the
+   browser's rather than ours. ::backdrop only exists for showModal(). */
+.limitDialog {
+  /* A modal <dialog> is centred by the UA's own `margin: auto`, which the
+     global reset in base.css zeroes — so it lands in the top-left corner
+     instead. Restated here. */
+  margin: auto;
+  width: min(420px, calc(100vw - var(--sp-8)));
+  padding: var(--sp-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: var(--shadow-lg);
+}
+
+.limitDialog::backdrop {
+  background-color: rgb(0 0 0 / 45%);
+}
+
+.limitTitle {
+  margin: 0 0 var(--sp-2);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.03em;
+  color: var(--color-heading);
+}
+
+.limitBody {
+  margin: 0 0 var(--sp-5);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-normal);
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+}
+
+.limitActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--sp-2);
+}
+
+/* Cancel is the quiet one. The customer is being told something, not warned
+   off — the shop has no objection to the larger order, it just splits. */
+.limitCancel,
+.limitProceed {
+  min-height: var(--control-h-sm);
+  padding-inline: var(--sp-4);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+}
+
+.limitCancel {
+  border: 1px solid var(--color-border-strong);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+}
+
+.limitProceed {
+  border: 1px solid var(--c-primary-700);
+  background-color: var(--c-primary-700);
+  color: var(--color-text-inverse);
+}
+
+.limitCancel:hover,
+.limitProceed:hover {
+  filter: brightness(0.97);
+}
+
+/* --- Split delivery ------------------------------------------------------
+   A row over the personal-import limit can be shipped in several parcels.
+   Set apart from .lineControls with a tinted panel rather than sitting inline
+   beside the quantity: it changes the postage, so it is not another small
+   adjustment to make by accident. */
+.splitForm {
+  margin-top: var(--sp-3);
+  padding: var(--sp-3);
+  border: 1px solid var(--c-primary-200);
+  border-radius: var(--radius-sm);
+  background-color: var(--c-primary-50);
+}
+
+.splitState {
+  margin: 0 0 var(--sp-2);
+  font-size: var(--fs-xs);
+  line-height: var(--lh-relaxed);
+  color: var(--color-text-muted);
+}
+
+/* The state, not the action — so a glance at a long cart says which rows are
+   being split without reading the button on each one. */
+.splitOn {
+  display: inline-block;
+  margin-right: var(--sp-2);
+  padding: 2px var(--sp-2);
+  border-radius: var(--radius-pill);
+  background-color: var(--c-primary-700);
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-bold);
+  color: var(--color-text-inverse);
+}
+
+.splitButton {
+  min-height: var(--control-h-sm);
+  padding-inline: var(--sp-4);
+  border: 1px solid var(--c-primary-700);
+  border-radius: var(--radius-sm);
+  background-color: transparent;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--c-primary-700);
+  cursor: pointer;
+}
+
+.splitButton:hover {
+  background-color: var(--c-primary-100);
+}

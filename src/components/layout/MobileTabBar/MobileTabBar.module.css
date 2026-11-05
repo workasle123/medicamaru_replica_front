@@ -1,0 +1,87 @@
+/* Thumb-reachable bottom navigation. Mobile UX is designed here, not
+   inherited by stacking the desktop layout (brief §9). */
+.tabbar {
+  position: fixed;
+  bottom: 0;
+  /* The application is full-bleed, so the bar simply spans the viewport.
+     It previously had to be re-centred and capped to the frame width; with
+     the frame gone that would leave gaps at the screen edges. */
+  left: 0;
+  right: 0;
+  z-index: var(--z-sticky);
+  display: flex;
+  background-color: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+@media (min-width: 768px) {
+  .tabbar {
+    display: none;
+  }
+}
+
+.tab {
+  flex: 1;
+  /* Without this a flex item refuses to shrink below its content, so a long
+     customer name in the account tab widens that tab and squeezes the other
+     four. The name truncates instead. */
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-height: var(--mobile-tabbar-h);
+  padding-block: var(--sp-2);
+  font-size: var(--fs-2xs);
+  color: var(--color-text-muted);
+}
+
+.tab:hover,
+.tab:focus-visible {
+  color: var(--c-primary-700);
+  text-decoration: none;
+}
+
+.label {
+  line-height: 1;
+}
+
+/* The icon needs a positioning context of its own now that the cart tab
+   carries a count. Inline-flex so it does not add a line box above the
+   label. */
+.iconWrap {
+  position: relative;
+  display: inline-flex;
+}
+
+/* Matches the header's badge, pulled in a little: the tab bar's icons sit
+   closer to their neighbours than the header's do. */
+.badge {
+  position: absolute;
+  top: -5px;
+  inset-inline-end: -10px;
+  min-width: 17px;
+  height: 17px;
+  padding-inline: 4px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-pill);
+  background-color: var(--c-sale-600);
+  color: var(--color-text-inverse);
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-bold);
+  line-height: 1;
+}
+
+/* The account tab shows the customer's name when there is one. Five tabs
+   share the width, so this is the narrowest label on the site — truncate,
+   never wrap, or this tab grows taller than the four beside it. */
+.labelName {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

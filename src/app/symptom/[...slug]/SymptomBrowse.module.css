@@ -1,0 +1,17 @@
+/* The refinement strip, between the breadcrumbs and the product grid.
+
+   NOT the global `.section`, which is vertical rhythm between top-level blocks
+   and put 48px of white above this while leaving nothing below it — so the
+   chips floated away from the breadcrumb they belong to and butted straight
+   into the grid. This is the same rhythm SubcategoryNav uses on a category
+   page, because it is the same thing in the same place. */
+.refine {
+  margin-bottom: var(--sp-5);
+}
+
+.heading {
+  margin-bottom: var(--sp-2);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: var(--color-text-muted);
+}

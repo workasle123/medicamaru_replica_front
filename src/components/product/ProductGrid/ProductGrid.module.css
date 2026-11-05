@@ -1,0 +1,42 @@
+/* Two columns on mobile is deliberate. A single-column product list on a
+   390px screen forces endless scrolling; every competitor in this market
+   uses two. */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-3);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+@media (min-width: 640px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--sp-4);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1280px) {
+  .grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+/* A column, not a row. The cell held exactly one child until the favourites page
+   started adding an actions block beneath the card; as a row the two sat side by
+   side, each stretched to 100%, and overflowed the cell. */
+.item {
+  display: flex;
+  flex-direction: column;
+}
+
+.item > * {
+  width: 100%;
+}

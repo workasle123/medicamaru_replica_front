@@ -1,0 +1,74 @@
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.list > li + li {
+  border-top: 1px solid var(--color-border);
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  min-height: 48px;
+  padding: var(--sp-2) var(--sp-4);
+  color: var(--color-heading);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-snug);
+  text-decoration: none;
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+
+.link:hover {
+  background-color: var(--c-primary-50);
+  color: var(--color-heading);
+  text-decoration: none;
+}
+
+.link:focus-visible {
+  outline: 2px solid var(--c-primary-600);
+  outline-offset: -2px;
+}
+
+/* Same tinted disc as the FAQ page's topic tiles, a size smaller. */
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-pill);
+  background-color: var(--c-primary-50);
+  color: var(--c-primary-700);
+}
+
+.icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.name {
+  flex: 1;
+  min-width: 0;
+  word-break: auto-phrase;
+}
+
+.count {
+  flex-shrink: 0;
+  font-size: var(--fs-xs);
+  font-weight: normal;
+  color: var(--color-text-muted);
+}
+
+.all {
+  display: block;
+  padding: var(--sp-3) var(--sp-4);
+  border-top: 1px solid var(--color-border);
+  background-color: var(--color-surface-sunken);
+  font-size: var(--fs-sm);
+  text-align: center;
+}

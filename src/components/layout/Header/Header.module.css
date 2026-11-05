@@ -1,0 +1,478 @@
+/* Not sticky — the header scrolls away with the page, like the reference
+   sites. `relative` + z-index stays because the category dropdown is
+   absolutely positioned inside this element: without a positioned ancestor
+   carrying a z-index, the panel would be left competing with whatever
+   section follows the header in the root stacking context. */
+.header {
+  position: relative;
+  z-index: var(--z-header);
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* --- Main bar --------------------------------------------------------- */
+
+/* Mobile: a simple row — logo, then the search filling what is left. The
+   action buttons are desktop-only, so nothing else competes for the space. */
+.bar {
+  flex-wrap: wrap;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  min-height: var(--header-bar-h-mobile);
+}
+
+/* Below 1024px the bar is a wrapping flex row: logo and the two buttons on
+   the first line, search wrapping to the second.
+
+   From 1024px it becomes a THREE-COLUMN grid instead. Flex gave the search
+   `flex: 1`, so it swallowed everything left over and sat 20px off centre,
+   because the logo and the actions are not the same width. With
+   `1fr <capped> 1fr` the outer columns are equal by definition, so the middle
+   one is centred on the bar whatever they measure. */
+
+@media (min-width: 1024px) {
+  .bar {
+    min-height: var(--header-bar-h-desktop);
+    gap: var(--sp-6);
+    display: grid;
+    /* Widened from 480px: the middle cell now carries the delivery destination
+       beside the search field. The search still gets the larger share — it flexes
+       and お届け先 does not — and the cell stays centred, which was the point of
+       the 1fr/1fr outer columns. */
+    /* 620, not 680. The signed-out actions column carries four controls once
+       新規登録 is among them — お気に入り, ログイン/新規登録, カート, AIに相談 —
+       which measured 312px against the 304px the wider middle column left it, so
+       they overlapped. The search field still clears 440px here. */
+    grid-template-columns: 1fr minmax(0, 620px) 1fr;
+  }
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  flex-shrink: 0;
+  min-height: 44px;
+  color: var(--c-primary-700);
+  /* Grid: hold the left column's start edge rather than stretching across it. */
+  justify-self: start;
+}
+
+.logo:hover {
+  text-decoration: none;
+  color: var(--c-primary-800);
+}
+
+/* THE FILE MUST BE CROPPED TO THE INK. Height is fixed here and the width
+   follows from the aspect ratio, so the box the header reserves is whatever
+   the PNG says its proportions are — transparent margin included.
+
+   This has now bitten twice. The logo delivered in November 2026 was 403x123
+   with the artwork only 225px wide inside it: 79px of empty space on the left
+   and 99px on the right, 44% of the file. The header dutifully reserved a
+   157px slot to show 88px of logo, sitting off-centre in it. Cropping the PNG
+   to its own getbbox() is the fix — not padding or nudging in CSS, which only
+   hides the symptom and leaves the next person the same puzzle.
+
+   So: before replacing /brand/logo.png, crop it to the ink and update the
+   width/height props in Header.jsx and Footer.jsx to the new pixel size. */
+/* One lockup at every width. It used to be swapped for the monogram below
+   1024px, which left the brand name off the page entirely on a phone — the
+   wordmark is the half people actually read. Height is fixed and the width
+   follows the aspect ratio, so it can never distort. */
+.logoFull {
+  display: block;
+  width: auto;
+  object-fit: contain;
+  /* 40px in the 56px mobile bar. At the cropped 1.92:1 that is 77px wide,
+     leaving 254px of the 343px row for the search beside it — more than the
+     previous wordmark left, because this lockup is squarer.
+
+     40 rather than 36: the brand name occupies about a third of this artwork
+     vertically, the circular motif around 丸 taking the rest, so it reads
+     smaller than the old katakana wordmark did at the same box height. This
+     buys some of that back. It cannot buy all of it — see the note above
+     .logoFull on what would. */
+  height: 40px;
+}
+
+@media (min-width: 1024px) {
+  .logoFull {
+    /* 56px in the 96px bar: 20px clear above and below, 108px wide. Half the
+       bar (48px) is the conventional ratio and is what the old wide wordmark
+       used, but this lockup carries its name in a third of its height, so it
+       needs the extra 8px to read at arm's length. */
+    height: 56px;
+  }
+}
+
+/* Wraps to a line of its own below 1024px: flex-basis 100% pushes it past
+   the logo and the two buttons, which stay on the first line. Above that
+   the bar becomes a grid and the search takes the middle column. */
+.searchSlot {
+  order: 3;
+  flex-basis: 100%;
+  min-width: 0;
+  padding-bottom: var(--sp-3);
+  /* A row from 1024px, where DeliverTo becomes visible. Below that it holds only
+     the search field, which fills it. */
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+/* The field takes what the destination does not. */
+.searchSlot > form {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (min-width: 1024px) {
+  .searchSlot {
+    order: 0;
+    flex-basis: auto;
+    width: 100%;
+    padding-bottom: 0;
+    justify-self: center;
+  }
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+  /* Pushes the actions right in the mobile flex row. Redundant once the bar
+     is a grid, where justify-self does it instead. */
+  margin-inline-start: auto;
+}
+
+@media (min-width: 768px) {
+  .actions {
+    margin-inline-start: 0;
+    gap: var(--sp-2);
+    justify-self: end;
+  }
+}
+
+.action {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-width: 44px;
+  min-height: 44px;
+  padding-inline: var(--sp-1);
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  font-size: var(--fs-2xs);
+}
+
+.action:hover {
+  background-color: var(--color-surface-sunken);
+  color: var(--c-primary-800);
+  text-decoration: none;
+}
+
+.iconWrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.badge {
+  position: absolute;
+  top: -6px;
+  inset-inline-end: -8px;
+  min-width: 18px;
+  height: 18px;
+  padding-inline: 4px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-pill);
+  /* 600 step — carries white text at 11px */
+  background-color: var(--c-sale-600);
+  color: var(--color-text-inverse);
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-bold);
+  line-height: 1;
+}
+
+/* A name, not a fixed word: it has no length limit upstream, and the actions
+   row has no spare width at 1024px. Truncated rather than wrapped, which
+   would make this action taller than the ones beside it. */
+.actionLabelName {
+  display: inline-block;
+  max-width: 10ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
+}
+
+.actionLabel {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .actionLabel {
+    display: block;
+    /* Never wrap. 「お気に入り」 broke to two lines once the middle column grew
+       to hold the delivery destination, which made the whole action row two
+       lines tall and pushed the bar out of alignment. */
+    white-space: nowrap;
+  }
+}
+
+/* Hide the cart/wishlist actions on mobile — the bottom tab bar owns them,
+   so duplicating here would waste scarce header width. */
+.desktopOnlyAction {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .desktopOnlyAction {
+    display: inline-flex;
+  }
+}
+
+/* --- Category nav row ------------------------------------------------- */
+
+.nav {
+  display: none;
+  border-top: 1px solid var(--color-border);
+}
+
+@media (min-width: 1024px) {
+  .nav {
+    display: block;
+  }
+}
+
+.navList {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* --- Category dropdown ------------------------------------------------- */
+/* Opens on hover AND on keyboard focus (`:focus-within`), so it is reachable
+   by tab as well as by mouse. No JavaScript — which also means it works
+   before hydration. */
+
+.navItemDropdown {
+  position: relative;
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  inset-inline-start: 0;
+  z-index: var(--z-dropdown);
+  width: max-content;
+  max-width: min(880px, calc(100vw - var(--sp-8)));
+  padding: var(--sp-5);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-top: 3px solid var(--c-primary-600);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+
+  /* Hidden by default without leaving a click-trap: visibility + pointer
+     events are both off, so the closed panel cannot swallow clicks. */
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(-4px);
+  transition:
+    opacity var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out),
+    visibility var(--dur-fast);
+}
+
+.navItemDropdown:hover .dropdown,
+.navItemDropdown:focus-within .dropdown {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.dropdownGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(180px, 1fr));
+  gap: var(--sp-4) var(--sp-6);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.dropdownCat {
+  min-width: 0;
+}
+
+.dropdownCatLink {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  padding-bottom: var(--sp-1);
+  margin-bottom: var(--sp-2);
+  border-bottom: 1px solid var(--color-border);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: var(--color-heading);
+}
+
+.dropdownCatLink:hover {
+  color: var(--c-primary-800);
+  border-bottom-color: var(--c-primary-300);
+  text-decoration: none;
+}
+
+.dropdownCount {
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-regular);
+  color: var(--color-text-subtle);
+}
+
+.dropdownSubs {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.dropdownSubLink {
+  display: block;
+  padding: 3px 0;
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+.dropdownSubLink:hover {
+  color: var(--c-primary-800);
+}
+
+.dropdownFooter {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--sp-4);
+  padding-top: var(--sp-3);
+  border-top: 1px solid var(--color-border);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+}
+
+/* Chevron on the trigger, rotating when the panel is open */
+.navChevron {
+  margin-inline-start: var(--sp-1);
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+.navItemDropdown:hover .navChevron,
+.navItemDropdown:focus-within .navChevron {
+  transform: rotate(180deg);
+}
+
+.navLink {
+  display: inline-flex;
+  align-items: center;
+  height: 46px;
+  padding-inline: var(--sp-3);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--color-text);
+  border-bottom: 2px solid transparent;
+}
+
+.navLink:hover {
+  color: var(--c-primary-800);
+  border-bottom-color: var(--c-primary-500);
+  text-decoration: none;
+}
+
+/* Placeholder for the account link while its state is being fetched. Holds the
+   row's width so the cart icon beside it does not shift when マイページ or
+   ログイン arrives — the two are different lengths, and a header that reflows
+   after paint is worse than one that is briefly blank. */
+.actionPending {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* --- signed-out account pair ---------------------------------------------- */
+
+/* A span, not a link: it contains two links, and nesting anchors is invalid. The
+   icon belongs to the pair rather than to either one. */
+.authPair {
+  cursor: default;
+}
+
+.authLinks {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--fs-2xs);
+  white-space: nowrap;
+}
+
+.authLink {
+  color: inherit;
+}
+
+.authLink:hover {
+  color: var(--c-primary-800);
+  text-decoration: underline;
+}
+
+.authDivider {
+  color: var(--color-border-strong);
+}
+
+/* --- Mobile action row ------------------------------------------------
+ 
+   The row used --sp-1 below 768px, which put 4px between two 44px targets
+   and read as one blob. It now holds お知らせ, LINE and the menu button on a
+   375px line, so they need separating properly. --sp-2 matches what the row
+   already used from 768px up. */
+@media (max-width: 767px) {
+  .actions {
+    gap: var(--sp-2);
+  }
+
+  /* The labels come off the screen on a phone — three of them will not fit
+     beside the logo — but NOT out of the accessibility tree. `display: none`
+     would have done both: the icons are aria-hidden, so each link would have
+     been left with no accessible name at all, announced as just "link".
+     Clipped instead, so a screen reader still reads お知らせ / LINE. */
+  .actionLabel {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  /* Without a label the target would collapse to the icon, so the 44px
+     minimum has to be held explicitly. */
+  .action {
+    min-width: 44px;
+    padding-inline: 0;
+  }
+}
+
+/* The mark carries its own colours, so nothing here sets `color` — the label
+   stays in the header's text colour like every other action. Only the hover
+   wash is tinted, so the row does not gain a second accent. */
+.lineAction:hover {
+  background-color: rgb(6 199 85 / 0.08);
+}

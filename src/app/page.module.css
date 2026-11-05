@@ -1,0 +1,37 @@
+/* Homepage layout.
+   Only the rules that are specific to this page's section order live here;
+   everything else uses the shared `.section` / `.container` utilities. */
+
+/* Closes the lead block. The section that follows brings its own top gap, so
+   this only needs to separate the tiles from the carousel above them. */
+.leadTiles {
+  padding-bottom: var(--sp-2);
+}
+
+/* --- FAQ + aside ------------------------------------------------------- */
+
+/* FAQs on the left, with a column beside them for the order-guide banner.
+   Single column below 1024px: a banner squeezed into half of a 900px screen
+   is smaller than it is legible. */
+.faqRow {
+  display: grid;
+  gap: var(--sp-6);
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .faqRow {
+    grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
+    gap: var(--sp-8);
+  }
+}
+
+/* The aside tracks the FAQ list as it is read, rather than sitting marooned
+   at the top of a column that can run to 1,600px when everything is open. */
+@media (min-width: 1024px) {
+  .faqAside {
+    position: sticky;
+    top: calc(var(--header-clear) + var(--sp-6));
+  }
+}
+

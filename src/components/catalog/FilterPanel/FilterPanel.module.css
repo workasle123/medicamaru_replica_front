@@ -1,0 +1,152 @@
+.panel {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-4);
+}
+
+.group {
+  padding-block: var(--sp-4);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.group:first-child {
+  padding-top: 0;
+}
+
+.group:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.groupTitle {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  margin-bottom: var(--sp-3);
+}
+
+.count {
+  font-size: var(--fs-xs);
+  opacity: 0.75;
+}
+
+/* --- Category tree ----------------------------------------------------- */
+/* Native <details> per category, so the subcategory dropdown needs no
+   JavaScript, is keyboard accessible for free, and works before hydration.
+   A group is rendered open when the active category is that parent or one of
+   its children, so you always land with your own branch already expanded. */
+
+.categoryGroup {
+  border-radius: var(--radius-sm);
+}
+
+.categoryGroup + .categoryGroup {
+  margin-top: var(--sp-1);
+}
+
+.categorySummary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  min-height: 40px;
+  padding-inline: var(--sp-2);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--color-text);
+  cursor: pointer;
+  list-style: none;
+}
+
+.categorySummary::-webkit-details-marker {
+  display: none;
+}
+
+.categorySummary:hover {
+  background-color: var(--c-primary-50);
+  color: var(--c-primary-800);
+}
+
+.summaryActive {
+  background-color: var(--c-primary-500);
+  color: var(--c-neutral-900);
+  font-weight: var(--fw-bold);
+}
+
+.summaryActive:hover {
+  background-color: var(--c-primary-700);
+  color: var(--color-text-inverse);
+}
+
+.summaryMain {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  min-width: 0;
+}
+
+/* Chevron rotates when the group is open */
+.chevron {
+  flex-shrink: 0;
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+.categoryGroup[open] > .categorySummary .chevron {
+  transform: rotate(90deg);
+}
+
+.subList {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin: var(--sp-1) 0 var(--sp-2);
+  padding: 0 0 0 var(--sp-3);
+  list-style: none;
+  /* A guide rail makes the parent/child relationship readable at a glance */
+  border-left: 2px solid var(--color-border);
+  margin-left: var(--sp-3);
+}
+
+.subLink {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  min-height: 36px;
+  padding-inline: var(--sp-2);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+.subLink:hover {
+  background-color: var(--c-primary-50);
+  color: var(--c-primary-800);
+  text-decoration: none;
+}
+
+.subActive {
+  background-color: var(--c-primary-100);
+  color: var(--c-primary-900);
+  font-weight: var(--fw-bold);
+}
+
+.subActive:hover {
+  background-color: var(--c-primary-200);
+}
+
+/* "All of this category" row at the top of an expanded group */
+.viewAll {
+  font-size: var(--fs-xs);
+  color: var(--color-link);
+}
+
+.reset {
+  display: block;
+  margin-top: var(--sp-4);
+  font-size: var(--fs-sm);
+  text-align: center;
+}
+
+/* --- Symptom search --------------------------------------------------- */

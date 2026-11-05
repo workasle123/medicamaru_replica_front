@@ -1,0 +1,192 @@
+.doc {
+  display: flex;
+  flex-direction: column;
+}
+
+.intro {
+  padding-bottom: var(--sp-6);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.section {
+  margin-top: var(--sp-10);
+}
+
+/* --- Headings ----------------------------------------------------------
+
+   A banded h2, not a hairline rule. These documents run to fourteen sections
+   and people arrive looking for one of them, so the section starts have to be
+   findable while scrolling fast — a 1px underline is not. The brand tint plus
+   a solid left bar reads as a section start at a glance and survives the
+   greyscale print these pages actually get.
+
+   h3 (第N条 and friends) deliberately gets the bar WITHOUT the fill: same
+   family, clearly one level down, so 34 of them in a row do not turn the
+   terms page into a wall of colour. */
+/* `.doc` is on every selector below to outrank ContentPage's `.body h2`,
+   `.body h3` and `.body ul` — those dress ad-hoc page content, and a
+   descendant selector (0,1,1) beats a bare class (0,1,0). Without it the
+   banded heading also kept ContentPage's bottom rule and font size. The
+   inherited bits are reset explicitly rather than left to luck. */
+.doc .heading {
+  scroll-margin-top: calc(var(--header-clear) + var(--sp-4));
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  margin: 0 0 var(--sp-5);
+  padding: var(--sp-3) var(--sp-4);
+  border-bottom: none;
+  border-left: 4px solid var(--c-primary-500);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  background-color: var(--c-primary-50);
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-snug);
+  color: var(--color-heading);
+}
+
+.doc .subheading {
+  scroll-margin-top: calc(var(--header-clear) + var(--sp-4));
+  margin: var(--sp-7) 0 var(--sp-2);
+  padding-left: var(--sp-3);
+  border-left: 3px solid var(--c-primary-300);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-snug);
+  color: var(--color-heading);
+}
+
+/* First child of a section: the h2 already provides the space above it. */
+.doc .section > .subheading:first-of-type {
+  margin-top: 0;
+}
+
+/* --- Body --------------------------------------------------------------- */
+.doc .paragraph {
+  margin: 0 0 var(--sp-4);
+  line-height: var(--lh-relaxed);
+}
+
+.doc .paragraph:last-child {
+  margin-bottom: 0;
+}
+
+.doc .list,
+.doc .steps {
+  margin: 0 0 var(--sp-4);
+  padding-left: 1.5em;
+  line-height: var(--lh-relaxed);
+}
+
+.doc .list {
+  list-style: disc;
+}
+
+.doc .steps {
+  list-style: decimal;
+}
+
+.doc .list li + li,
+.doc .steps li + li {
+  margin-top: var(--sp-2);
+}
+
+@media (max-width: 767px) {
+  .doc .heading {
+    padding: var(--sp-3);
+    font-size: var(--fs-md);
+  }
+}
+
+/* --- Figures ------------------------------------------------------------
+   Screenshots of the shop, in the お薬ガイド. The border and rounded corner
+   matter more than they look: these are pictures of a white UI on a white
+   page, and without an edge they read as part of the document rather than as
+   a picture of a screen. */
+.doc .figure {
+  margin: 0 0 var(--sp-5);
+}
+
+.doc .figureImage {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+}
+
+.doc .figureCaption {
+  margin-top: var(--sp-2);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-normal);
+  color: var(--color-text-muted);
+}
+
+/* Inside a numbered step. Pulled in from the list marker so the picture lines
+   up with its own text rather than with the digits. */
+.doc .figureInStep {
+  margin: var(--sp-3) 0 0;
+}
+
+/* The step's own sentence, above its screenshot. A block so the image starts
+   on its own line however long the sentence runs. */
+.doc .stepText {
+  display: block;
+}
+
+/* Steps carrying a figure need room between them — the default --sp-2 put the
+   next number hard against the previous picture. */
+.doc .steps li:has(.figure) + li {
+  margin-top: var(--sp-6);
+}
+
+.doc .inlineLink {
+  font-weight: var(--fw-bold);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* --- Operator disclosure ------------------------------------------------
+   A <dl> of label/value pairs. Stacked on a phone and two columns from
+   640px: the labels run to twelve characters (カスタマーサポート受付時間), so
+   side by side on a 390px screen would leave the values nowhere to go. */
+.definitions {
+  margin: var(--sp-4) 0 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.definitionRow {
+  display: grid;
+  gap: 2px var(--sp-4);
+  padding: var(--sp-3) var(--sp-4);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-relaxed);
+}
+
+.definitionRow + .definitionRow {
+  border-top: 1px solid var(--color-border);
+}
+
+@media (min-width: 640px) {
+  .definitionRow {
+    grid-template-columns: 15rem minmax(0, 1fr);
+    align-items: baseline;
+  }
+}
+
+.definitionLabel {
+  font-weight: var(--fw-bold);
+  color: var(--color-text-muted);
+}
+
+/* min-width: 0 and a break, because the registered address and the URL are
+   both long single tokens that would otherwise widen the grid. */
+.definitionValue {
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: var(--color-text);
+}

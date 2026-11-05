@@ -1,0 +1,67 @@
+/* Symptom index search. Mirrors the sidebar's control in FilterPanel so the
+   two read as the same feature in two places. */
+
+.search {
+  display: flex;
+  gap: var(--sp-2);
+  margin-block: var(--sp-4) var(--sp-6);
+  max-width: 520px;
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  height: var(--control-h-md);
+  padding-inline: var(--sp-4);
+  font-size: var(--fs-base);
+  color: var(--color-text);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+}
+
+.input::placeholder {
+  color: var(--color-text-subtle);
+}
+
+.input:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 1px;
+  border-color: var(--c-accent-600);
+}
+
+/* Brand orange with dark text — the palette's light hues cannot carry white
+   (see tokens.css). */
+.button {
+  flex-shrink: 0;
+  height: var(--control-h-md);
+  padding-inline: var(--sp-5);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: var(--c-neutral-900);
+  background-color: var(--c-primary-500);
+  border: 0;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: var(--c-primary-600);
+}
+
+/* Search results are bucketed under their browse group, so each bucket needs
+   its own heading and breathing room from the one above. */
+.resultGroup {
+  margin-top: var(--sp-6);
+}
+
+.resultGroup:first-of-type {
+  margin-top: var(--sp-4);
+}
+
+.resultHeading {
+  margin: 0 0 var(--sp-3);
+  font-size: var(--fs-base);
+  font-weight: var(--fw-bold);
+  color: var(--color-text);
+}

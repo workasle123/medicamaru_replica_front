@@ -1,0 +1,332 @@
+/* Zero-JavaScript gallery.
+   The images sit in a scroll-snap strip — swipeable on touch, scrollable on
+   desktop — and the thumbnails are ordinary anchor links that scroll the
+   strip to the matching slide natively. No state, no client component, and
+   no per-index CSS rules. */
+
+.gallery {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.strip {
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background-color: var(--c-primary-50);
+  /* Hide the scrollbar; the thumbnails are the affordance */
+  scrollbar-width: none;
+}
+
+.strip::-webkit-scrollbar {
+  display: none;
+}
+
+.slide {
+  flex: 0 0 100%;
+  scroll-snap-align: center;
+  aspect-ratio: 1 / 1;
+  /* Breathing room above an anchor target when linked directly */
+  scroll-margin-top: calc(var(--header-clear) + var(--sp-4));
+}
+
+/* The photo is a button now — see ProductGallery.jsx. A button inherits none
+   of the surrounding typography and brings its own border, padding and
+   background, so all three are cleared before it can fill the slide. */
+.slideButton {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  color: inherit;
+  /* zoom-in, not pointer: it says what the click DOES. The browser has a
+     cursor for exactly this and it is the clearest affordance available
+     without putting a label over the photo. */
+  cursor: zoom-in;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* A small magnifier in the corner. The cursor only tells people with a mouse
+   who happen to hover; on a phone there is no hover at all, and a photo that
+   does something when tapped has to look like it. */
+.zoomHint {
+  position: absolute;
+  right: var(--sp-2);
+  bottom: var(--sp-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--color-text);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
+  pointer-events: none;
+}
+
+.slideButton:focus-visible {
+  outline: 2px solid var(--c-primary-600);
+  outline-offset: -2px;
+}
+
+/* --- Lightbox --------------------------------------------------------- */
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal, 600);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-4);
+  /* Darker than the popup overlays: this one exists so the photo is the only
+     thing on screen. */
+  background: rgba(0, 0, 0, 0.82);
+}
+
+.lightboxInner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  max-width: 1100px;
+}
+
+/* The photo's box. Sized by the viewport rather than the file, because the
+   whole point is to be as large as will fit without cropping. */
+.lightboxFrame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  max-height: calc(100dvh - var(--sp-16));
+}
+
+.lightboxImage {
+  object-fit: contain;
+}
+
+.lightboxBtn {
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* 44px: the usual minimum for a touch target, and these sit over a dark
+     photo where a smaller hit area is genuinely hard to land on. */
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--color-text);
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+}
+
+.lightboxBtn:hover {
+  background: #fff;
+}
+
+.lightboxBtn:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.lightboxClose {
+  top: 0;
+  right: 0;
+}
+
+.lightboxPrev {
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.lightboxNext {
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.lightboxCount {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  padding: var(--sp-1) var(--sp-3);
+  border-radius: var(--radius-pill);
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: var(--fs-xs);
+  font-family: var(--font-numeric), inherit;
+}
+
+@media (max-width: 640px) {
+  .lightbox {
+    padding: var(--sp-2);
+  }
+
+  /* The arrows move off the photo's sides and sit at the bottom, where a
+     thumb reaches them — at phone width, side arrows overlap the image
+     itself and cover the thing being looked at. */
+  .lightboxPrev,
+  .lightboxNext {
+    top: auto;
+    bottom: 0;
+    transform: none;
+  }
+
+  .lightboxPrev {
+    left: var(--sp-4);
+  }
+
+  .lightboxNext {
+    right: var(--sp-4);
+  }
+
+  .lightboxFrame {
+    max-height: calc(100dvh - var(--sp-20));
+  }
+}
+
+/* --- Thumbnails ------------------------------------------------------- */
+
+.thumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* A <button>, not a link — see GalleryThumbs.jsx. So the browser's own button
+   styling has to be cleared: `font: inherit` and the explicit cursor are the
+   two that bite, since a button does not inherit either. */
+.thumb {
+  display: block;
+  width: 64px;
+  height: 64px;
+  padding: 3px;
+  background-color: var(--color-surface);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+
+.thumb:hover {
+  border-color: var(--c-primary-500);
+}
+
+.thumbImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.count {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+/* --- Phone layout ------------------------------------------------------
+   Thumbnails BESIDE the photo rather than under it, and the photo smaller.
+
+   The point is what sits below: a full-width square plus a wrapped thumbnail
+   row plus the caption pushed the product name and its star rating off the
+   bottom of the screen, so the first thing a visitor saw was a picture with
+   no idea what it was. Putting the thumbnails in a column reclaims their
+   whole row, and capping the photo at 68% of the width reclaims the rest —
+   together roughly 150px, which is the difference between the name being
+   below the fold and above it.
+
+   The caption is dropped here too: 「横スクロールでご覧いただけます」 explains
+   a swipe the thumbnails now make unnecessary, and it was costing a line of
+   its own.
+   ----------------------------------------------------------------------- */
+@media (max-width: 639px) {
+  .gallery {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: var(--sp-2);
+  }
+
+  .strip {
+    /* Not 100%: the thumbnail column takes the rest. */
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  /* The photo is no longer square here. Left square it came out ~279px tall,
+     which put the star rating at y=767 on a 375x812 phone — inside the
+     viewport but UNDERNEATH the fixed bottom navigation, so it was invisible
+     in exactly the way this change exists to prevent. A 240px band clears it
+     with room to spare.
+
+     Width is still the full column and the image is `object-fit: contain`, so
+     nothing is cropped — a tall packshot simply gets letterboxed sideways,
+     and tapping it opens the uncropped original anyway. */
+  .slide {
+    aspect-ratio: auto;
+    height: 240px;
+  }
+
+  .thumbs {
+    /* A column down the right-hand side, scrollable when there are more than
+       fit. flex-wrap must be cleared — the base rule wraps a row.
+
+       `align-self: stretch` ties the column's height to the photo beside it
+       rather than to a guessed vw figure, and `min-height: 0` is what lets
+       it actually scroll: without it a flex item refuses to shrink below its
+       content, so eight thumbnails would stretch the row and undo the
+       vertical space this layout exists to save. */
+    flex: 0 0 56px;
+    align-self: stretch;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: var(--sp-1);
+    min-height: 0;
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+
+  .thumbs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .thumb {
+    width: 56px;
+    height: 56px;
+  }
+
+  /* Its row is worth more than its words here — see above. */
+  .count {
+    display: none;
+  }
+}

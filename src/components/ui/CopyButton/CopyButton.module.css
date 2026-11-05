@@ -1,0 +1,104 @@
+/* Sized to sit on the same line as a value without pushing it around: the row
+   beside it is the thing being read, and a button that outweighs the account
+   number would be the wrong way round. */
+.button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  flex-shrink: 0;
+  /* 32px tall, but the tap target is stretched to 44 below — the visual size
+     and the touch size are not the same thing. */
+  min-height: 32px;
+  padding-inline: var(--sp-3);
+  border: 1px solid var(--c-primary-300);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-surface);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  line-height: 1;
+  color: var(--c-primary-700);
+  cursor: pointer;
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+/* The 44px target, without the 44px box: a pseudo-element reaches past the
+   border on the cross axis only, so rows keep their rhythm. */
+.button::before {
+  content: '';
+  position: absolute;
+  inset-block: -6px;
+  inset-inline: 0;
+}
+
+.button:hover {
+  background-color: var(--c-primary-50);
+  border-color: var(--c-primary-500);
+}
+
+.button:active {
+  transform: translateY(1px);
+}
+
+/* Confirmation is carried by colour AND by the word and the tick beside it —
+   a green pill alone would say nothing to a reader who cannot see it. */
+.done {
+  border-color: var(--c-primary-600);
+  background-color: var(--c-primary-600);
+  color: var(--color-text-inverse);
+}
+
+.done:hover {
+  background-color: var(--c-primary-700);
+  border-color: var(--c-primary-700);
+}
+
+/* For rows that are useful to copy but are not the ones people fumble. */
+.subtle {
+  border-color: var(--color-border);
+  color: var(--color-text-muted);
+}
+
+.subtle:hover {
+  border-color: var(--c-primary-300);
+  color: var(--c-primary-700);
+}
+
+/* Only on genuinely tiny screens is the word dropped and the icon left to
+   carry it; the accessible name is on the button itself, so nothing is lost to
+   a screen reader either way.
+
+   The cut-off is 339px, not 379px as first written: 375px is the width of an
+   iPhone SE and mini and a large share of Japanese phone traffic, and at that
+   width the row has room for the word with ~220px to spare. An icon-only
+   control is a worse affordance for the older end of a pharmacy's customers,
+   so it is kept for 320px phones only, where the row genuinely runs out. */
+@media (max-width: 339px) {
+  .text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .button {
+    padding-inline: var(--sp-2);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button {
+    transition: none;
+  }
+
+  .button:active {
+    transform: none;
+  }
+}

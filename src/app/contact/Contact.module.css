@@ -1,0 +1,72 @@
+/* Centred in its column, not pinned to the left of it.
+   The 560px cap is a measure for form fields — a text input much wider than
+   this is unpleasant to scan back along — but without auto margins the slack
+   all collected on the right, so in a 633px column the form sat 36px left of
+   the centre everything above it was aligned to. The cap sets the width; the
+   margins decide where the leftover space goes, and it belongs on both sides. */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  width: 100%;
+  max-width: 560px;
+  margin-inline: auto;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+}
+
+.required {
+  font-size: var(--fs-2xs);
+  padding: 1px var(--sp-2);
+  border-radius: var(--radius-sm);
+  background-color: var(--c-danger-50);
+  color: var(--c-danger-700);
+}
+
+.textarea {
+  width: 100%;
+  padding: var(--sp-3);
+  font-size: var(--fs-base);
+  line-height: var(--lh-normal);
+  color: var(--color-text);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  resize: vertical;
+  min-height: 160px;
+}
+
+.textarea:hover {
+  border-color: var(--c-primary-300);
+}
+
+.textarea:focus {
+  border-color: var(--c-primary-500);
+  outline: 2px solid var(--c-primary-200);
+  outline-offset: 0;
+}
+
+.invalid {
+  border-color: var(--c-danger-500);
+}
+
+.error {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-1);
+  font-size: var(--fs-xs);
+  color: var(--c-danger-700);
+  font-weight: var(--fw-medium);
+}

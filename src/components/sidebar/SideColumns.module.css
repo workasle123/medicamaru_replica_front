@@ -1,0 +1,11 @@
+/* A side box left out on phones. `contents` elsewhere, so the box inside is
+   still a direct item of the side column's flex stack and keeps its gap. */
+.notOnPhone {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .notOnPhone {
+    display: contents;
+  }
+}

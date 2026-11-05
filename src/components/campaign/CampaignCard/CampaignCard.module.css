@@ -1,0 +1,252 @@
+.card {
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-xs);
+  /* /campaign#campaign-107 links to one offer, which is worth keeping for
+     anything that wants to point at a single campaign. Without this the card's
+     top edge lands under the sticky header. */
+  scroll-margin-top: calc(var(--header-clear, 0px) + var(--sp-4));
+}
+
+/* --- artwork ------------------------------------------------------------
+
+   No fixed ratio, because the uploaded artwork is not one shape. The live
+   library runs from 4.43:1 (816x184) to 2:1 (693x349), and any single ratio
+   serves one of them badly. At 1330/300 — the shape four of the eight live
+   banners are — `object-fit: contain` pillarboxed every 2:1 banner to 45% of
+   the card width, and on a phone it painted 161x81. Cropping instead was
+   never an option: these are composed graphics with wording in them.
+
+   `height: auto` takes the ratio from the decoded file, so each banner fills
+   the card width at its own shape with nothing cropped and no band either
+   side. The width/height on the <Image> govern layout only until the file
+   decodes; they state the 2:1 artwork spec we publish, so a banner cut to
+   spec reserves exactly the right box and shifts nothing.
+
+   The tint still shows while the file is in flight. */
+.figure {
+  margin: 0;
+  background-color: var(--c-primary-50);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: auto;
+  /* Nothing to fit once the box carries the image's own ratio. Kept so that
+     artwork which disagrees with the declared ratio pads rather than crops. */
+  object-fit: contain;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  padding: var(--sp-5);
+}
+
+@media (min-width: 768px) {
+  .body {
+    padding: var(--sp-6);
+  }
+}
+
+/* --- heading ------------------------------------------------------------
+
+   The number earns its place on its own: eight cards with similar artwork and
+   near-identical terms are hard to tell apart while scrolling, and 「03」 in the
+   corner is what gives the eye something to count by. */
+.header {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: baseline;
+  gap: var(--sp-1) var(--sp-3);
+}
+
+.index {
+  font-family: var(--font-numeric), ui-monospace, monospace;
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-bold);
+  line-height: 1;
+  color: var(--c-primary-200);
+}
+
+/* Scoped past ContentPage's `.body h2`, which is (0,1,1) to this rule's
+   (0,1,0) and was winning: every card title arrived with a 2px bottom border
+   and 40px of space above it, inside a card that supplies its own. */
+.card .title {
+  margin: 0;
+  /* Same as the index heading: the underline and the padding under it come
+     from `.body h2` and have to be named to be removed. A card already has an
+     edge; a rule under its title is one line too many. */
+  padding-bottom: 0;
+  border-bottom: 0;
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-snug);
+  letter-spacing: 0.03em;
+  color: var(--color-heading);
+}
+
+@media (min-width: 768px) {
+  .card .title {
+    font-size: var(--fs-xl);
+  }
+}
+
+/* Sits under the title in the second column, so it lines up with the title's
+   left edge rather than with the number. */
+.benefit {
+  grid-column: 2;
+  margin: 0;
+  justify-self: start;
+  padding: 2px var(--sp-3);
+  border-radius: var(--radius-pill);
+  background-color: var(--c-sale-500);
+  color: var(--color-text-inverse);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.04em;
+}
+
+/* --- the facts ----------------------------------------------------------
+
+   A two-column grid, not a table: there are two or three rows and no column
+   relationships, so a table would be markup pretending to a structure that is
+   not there. The label column is fixed so the values align down the card. */
+.facts {
+  display: grid;
+  gap: var(--sp-2);
+  margin: 0;
+  padding-top: var(--sp-1);
+}
+
+.fact {
+  display: grid;
+  grid-template-columns: 7.5rem minmax(0, 1fr);
+  gap: var(--sp-3);
+  align-items: baseline;
+  font-size: var(--fs-sm);
+  line-height: var(--lh-normal);
+  letter-spacing: 0.05em;
+}
+
+.fact dt {
+  color: var(--color-text-muted);
+}
+
+.fact dd {
+  margin: 0;
+  color: var(--color-text);
+  font-weight: var(--fw-medium);
+}
+
+/* Only appears inside 30 days of the end date. Warning colours rather than
+   sale colours: this is a deadline, not a discount, and the two should not
+   compete for the same attention. */
+.ending {
+  display: inline-block;
+  margin-inline-start: var(--sp-2);
+  padding: 1px var(--sp-2);
+  border-radius: var(--radius-sm);
+  background-color: var(--c-warning-50);
+  color: var(--c-warning-700);
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-bold);
+}
+
+/* --- terms --------------------------------------------------------------
+
+   Closed by default. The four paragraphs inside are the same coupon
+   boilerplate on all eight offers, so showing them open would bury the parts
+   of each card that actually differ under identical small print repeated eight
+   times down the page. */
+.terms {
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--sp-4);
+}
+
+.summary {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: var(--color-link);
+  cursor: pointer;
+  /* The default triangle is replaced below, and Safari needs this to drop it. */
+  list-style: none;
+}
+
+.summary::-webkit-details-marker {
+  display: none;
+}
+
+/* A chevron that turns, rather than the UA triangle, so the control matches
+   the rest of the site's disclosure affordances. */
+.summary::before {
+  content: '';
+  width: 0.5em;
+  height: 0.5em;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(-45deg);
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+.terms[open] .summary::before {
+  transform: rotate(45deg);
+}
+
+.summary:hover {
+  color: var(--color-link-hover);
+}
+
+.termsBody {
+  padding-top: var(--sp-3);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-relaxed);
+  letter-spacing: 0.05em;
+  color: var(--color-text);
+}
+
+.termsBody :global(p) {
+  margin: 0 0 var(--sp-3);
+}
+
+.termsBody :global(p:last-child) {
+  margin-bottom: 0;
+}
+
+/* The editor marks whole paragraphs of terms bold, which at this size turns
+   the small print into a wall of heavy text. Kept as emphasis, dropped as
+   weight. */
+.termsBody :global(strong) {
+  font-weight: var(--fw-medium);
+  color: var(--color-heading);
+}
+
+/* Stands in for the coupon chip on a referral campaign, so the card keeps its
+   rhythm — the block below it expects something of roughly this height. */
+.referralCta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--control-h-md);
+  margin-bottom: var(--sp-4);
+  padding-inline: var(--sp-4);
+  border: 2px dashed var(--c-accent-300);
+  border-radius: var(--radius-md);
+  background-color: var(--c-accent-50);
+  color: var(--c-accent-900);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  text-align: center;
+}
+
+.referralCta:hover {
+  background-color: var(--c-accent-100);
+}
