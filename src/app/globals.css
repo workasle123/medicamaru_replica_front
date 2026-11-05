@@ -11,3 +11,7 @@
 /* The one exception to the rule above. Admin-authored descriptions carry
    mm-* classes that a hashed module class could never match — see the file. */
 @import '../styles/product-description.css';
+
+/* Visual refresh layer — loaded last so it can retune tokens and refine
+   components without editing every module. Delete this line to revert. */
+@import '../styles/theme-refresh.css';
