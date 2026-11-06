@@ -25,6 +25,7 @@ import SubcategoryTags from '@/components/home/SubcategoryTags/SubcategoryTags';
  *   to — their URLs nest under it.
  * @param {number} [props.limit]
  * @param {boolean} [props.priority] Above-the-fold rail
+ * @param {boolean} [props.packImages] Cards show the pack photo (second image)
  */
 export default function ProductRail({
   title,
@@ -35,6 +36,7 @@ export default function ProductRail({
   parentSlug,
   limit = 10,
   priority = false,
+  packImages = false,
 }) {
   if (!products.length) return null;
 
@@ -53,7 +55,7 @@ export default function ProductRail({
           <li key={product.id}>
             {/* Only the first row can be above the fold, so only it is worth
                 preloading — priority on all ten would compete with the LCP. */}
-            <ProductCard product={product} priority={priority && i < 5} />
+            <ProductCard product={product} priority={priority && i < 5} preferPack={packImages} />
           </li>
         ))}
       </ScrollRail>

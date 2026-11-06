@@ -193,6 +193,7 @@ function manufacturerName(raw) {
 export function normaliseProductSummary(raw) {
   const variants = (raw.variants ?? []).map((v) => normaliseVariant(v, raw));
   const image = pickImage(raw);
+  const packs = pickPackImages(raw);
 
   /* Fall back to the product-level price when a row carries no variants.
      That fallback is a LAST RESORT and reads wrong when it fires:
@@ -221,6 +222,11 @@ export function normaliseProductSummary(raw) {
       width: 600,
       height: 600,
     },
+    /* The pack photos (every image after the first, in the admin's order).
+       Homepage cards show the first of these that loads, never the banner. */
+    packImages: packs.length
+      ? packs.map((url) => ({ url, alt: `${raw.product_name || ''}のパッケージ画像`, width: 600, height: 600 }))
+      : undefined,
     brand: manufacturerName(raw),
     fromPrice,
     fromUnitPrice,
@@ -356,6 +362,19 @@ function productImage(product) {
   if (!product) return null;
   const images = product.active_images ?? product.activeImages ?? product.images ?? [];
   return images.length ? pickImage({ ...product, images }) : null;
+}
+
+/* Every active image after the first, in admin order (the pack photos), or an
+   empty list when the product has only one. The first is the banner-style
+   picture. Images without an order number are skipped: they sort ahead of
+   numbered ones and are not part of the gallery sequence. */
+function pickPackImages(raw) {
+  return (raw.images ?? [])
+    .filter((i) => int(i.product_image_status, 1) === 1 && i.order != null)
+    .sort((a, b) => int(a.order) - int(b.order))
+    .slice(1)
+    .map((i) => mediaUrl(i.product_image))
+    .filter(Boolean);
 }
 
 function pickImage(raw) {
