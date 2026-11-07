@@ -2,6 +2,8 @@ import { Suspense } from 'react';
 import { Noto_Sans_JP } from 'next/font/google';
 import Script from 'next/script';
 import './globals.css';
+import '../styles/themerefresh.css';
+import '../styles/themehome.css';
 
 import Header from '@/components/layout/Header/Header';
 import Footer from '@/components/layout/Footer/Footer';
