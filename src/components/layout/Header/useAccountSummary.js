@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useSyncExternalStore } from 'react';
 
 /**
  * Sign-in state and the visitor's default delivery address.
@@ -25,13 +25,38 @@ let inflight = null;
 let lastPath = null;
 let cached = null;
 
+/* The cache is read through useSyncExternalStore, not useState(cached).
+ *
+ * useState(cached) seeded the first render with whatever the module held at
+ * that moment. During hydration that is a race: the header's account link
+ * mounts first, its fetch can resolve, and `cached` is filled in BEFORE a
+ * lazily-hydrating component such as SidebarLogin renders — so the browser's
+ * first render produced the login box while the server HTML held the
+ * placeholder, and React threw hydration error #418 and rebuilt the tree.
+ *
+ * useSyncExternalStore takes a separate server snapshot (null, matching the
+ * HTML) and only switches to the live value after hydration, so the server
+ * and first client render always agree. */
+const listeners = new Set();
+
+function subscribe(listener) {
+  listeners.add(listener);
+  return () => listeners.delete(listener);
+}
+
+function setCached(data) {
+  cached = data;
+  listeners.forEach((listener) => listener());
+}
+
+const getSnapshot = () => cached;
+const getServerSnapshot = () => null;
+
 export function useAccountSummary() {
   const pathname = usePathname();
-  const [summary, setSummary] = useState(cached);
+  const summary = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
   useEffect(() => {
-    let cancelled = false;
-
     /* A new path means the answer may have changed — a login redirect being the
        case that matters — so the shared promise is dropped and refetched. */
     if (lastPath !== pathname) {
@@ -43,19 +68,11 @@ export function useAccountSummary() {
       inflight = fetch('/api/account/summary')
         .then((res) => (res.ok ? res.json() : null))
         .then((data) => {
-          cached = data;
+          setCached(data);
           return data;
         })
         .catch(() => null);
     }
-
-    inflight.then((data) => {
-      if (!cancelled) setSummary(data);
-    });
-
-    return () => {
-      cancelled = true;
-    };
   }, [pathname]);
 
   return summary;

@@ -92,7 +92,11 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang={SITE.lang} className={notoSansJp.variable}>
+    <html
+      lang={SITE.lang}
+      className={notoSansJp.variable}
+      data-scroll-behavior="smooth"
+    >
       <body>
         {/* No structured data here. Organization and WebSite are declared on
             the HOMEPAGE (src/schema/home.js) and referenced by @id from the

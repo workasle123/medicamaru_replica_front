@@ -4,6 +4,32 @@ import ScrollRail from '@/components/ui/ScrollRail/ScrollRail';
 import SubcategoryTags from '@/components/home/SubcategoryTags/SubcategoryTags';
 
 /**
+ * Keeps only the pack photos whose files actually exist on the media server.
+ * Some products list an image that was never uploaded; sending that URL to the
+ * browser logs a 404 in its console for every visitor. A HEAD request is
+ * cached for a day, so this costs one check per image, not one per page view.
+ * A network failure is treated as "exists" — better a rare 404 than hiding a
+ * good photo because of a hiccup.
+ */
+async function reachablePacks(packs) {
+  const checked = await Promise.all(
+    packs.map(async (pack) => {
+      try {
+        const res = await fetch(pack.url, {
+          method: 'HEAD',
+          next: { revalidate: 86400 },
+          signal: AbortSignal.timeout(4000),
+        });
+        return res.ok ? pack : null;
+      } catch {
+        return pack;
+      }
+    }),
+  );
+  return checked.filter(Boolean);
+}
+
+/**
  * ProductRail — a titled row of products.
  *
  * Ten products in a single row, five visible at a time, paged by the rail's
@@ -27,7 +53,7 @@ import SubcategoryTags from '@/components/home/SubcategoryTags/SubcategoryTags';
  * @param {boolean} [props.priority] Above-the-fold rail
  * @param {boolean} [props.packImages] Cards show the pack photo (second image)
  */
-export default function ProductRail({
+export default async function ProductRail({
   title,
   subtitle,
   href,
@@ -40,7 +66,20 @@ export default function ProductRail({
 }) {
   if (!products.length) return null;
 
-  const items = products.slice(0, limit);
+  let items = products.slice(0, limit);
+
+  // Homepage cards show a pack photo, so drop the ones whose file is missing.
+  // `[]` (rather than undefined) tells the card to show an empty box and not
+  // fall back to the banner-style primary image.
+  if (packImages) {
+    items = await Promise.all(
+      items.map(async (product) =>
+        product.packImages
+          ? { ...product, packImages: await reachablePacks(product.packImages) }
+          : product,
+      ),
+    );
+  }
 
   return (
     <section>

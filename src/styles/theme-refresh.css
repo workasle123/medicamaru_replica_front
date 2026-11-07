@@ -203,10 +203,7 @@ body::before {
   transition: background-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
 }
 
-[class*="Header-module"][class*="__action"]:hover {
-  background-color: var(--c-accent-100);
-  color: var(--c-ink);
-}
+
 
 /* Navigation: ivory band, hairline top, animated navy underline */
 [class*="Header-module"][class*="__nav"]:not([class*="__navLink"]):not([class*="__navList"]):not([class*="__navItem"]):not([class*="__navChevron"]) {
@@ -1076,9 +1073,6 @@ body::before {
 }
 
 /* Active/hover filled controls keep white text on the teal */
-[class*="Header-module"][class*="__action"]:hover {
-  background-color: var(--c-primary-50);
-}
 
 /* ==========================================================================
    Round 4: typography fixes and visual polish
