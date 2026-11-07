@@ -14,7 +14,7 @@
 
 /* Visual refresh layer — loaded last so it can retune tokens and refine
    components without editing every module. Delete this line to revert. */
-@import '../styles/theme-refresh.css';
+@import '../styles/themerefresh.css';
 
 /* Homepage composition layer — scoped to the homepage via :has(). Delete this line to revert it. */
-@import '../styles/theme-home.css';
+@import '../styles/themehome.css';
