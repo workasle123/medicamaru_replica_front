@@ -4,6 +4,10 @@
    Component styles live in co-located CSS Modules, never here.
    ========================================================================== */
 
+/* External web fonts first: an @import must precede every other rule.
+   Keep it in its own file — see the note in fonts.css. */
+@import '../styles/fonts.css';
+
 @import '../styles/tokens.css';
 @import '../styles/base.css';
 @import '../styles/utilities.css';
