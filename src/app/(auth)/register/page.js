@@ -11,7 +11,7 @@ import { REFERRAL_PARAM } from '@/lib/referral';
 
 export const generateMetadata = pageMetadata('/register', {
   title: '新規会員登録',
-  description: 'メディカ丸の会員登録ページです。登録は無料です。',
+  description: 'お薬らくの会員登録ページです。登録は無料です。',
   noIndex: true,
 });
 

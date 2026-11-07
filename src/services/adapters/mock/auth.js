@@ -55,7 +55,7 @@ const addresses = new Map([
         prefecture: '東京都',
         city: '渋谷区',
         street: '神宮前1-1-1',
-        building: 'メディカ丸ビル 101',
+        building: 'お薬らくビル 101',
         phone: '090-1234-5678',
         isDefault: true,
       },
@@ -110,7 +110,7 @@ const orders = new Map([
           postalCode: '150-0001',
           prefecture: '東京都',
           line1: '渋谷区 神宮前1-1-1',
-          line2: 'メディカ丸ビル 101',
+          line2: 'お薬らくビル 101',
           country: '日本',
         },
         lines: [
@@ -176,7 +176,7 @@ const orders = new Map([
           postalCode: '150-0001',
           prefecture: '東京都',
           line1: '渋谷区 神宮前1-1-1',
-          line2: 'メディカ丸ビル 101',
+          line2: 'お薬らくビル 101',
           country: '日本',
         },
         lines: [

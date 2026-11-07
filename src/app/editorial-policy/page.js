@@ -7,7 +7,7 @@ import { pageMetadata } from '@/lib/seo';
 export const generateMetadata = pageMetadata('/editorial-policy', {
   title: '編集方針',
   description:
-    'メディカ丸のコンテンツ制作における編集方針、情報源の取扱い、制作・確認体制についてご説明します。',
+    'お薬らくのコンテンツ制作における編集方針、情報源の取扱い、制作・確認体制についてご説明します。',
 });
 
 /* No placeholders left in this document, so no draft notice: the text is the

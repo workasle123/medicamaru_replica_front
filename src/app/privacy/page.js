@@ -6,7 +6,7 @@ import { pageMetadata } from '@/lib/seo';
 
 export const generateMetadata = pageMetadata('/privacy', {
   title: 'プライバシーポリシー',
-  description: 'メディカ丸における個人情報の取り扱いについてご説明します。',
+  description: 'お薬らくにおける個人情報の取り扱いについてご説明します。',
 });
 
 /** ⚠️ Still carries [最終改定日] — hence the notice. */

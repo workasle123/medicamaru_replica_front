@@ -5,11 +5,11 @@
  */
 
 export const SITE = {
-  name: 'メディカ丸',
-  nameEn: 'メディカ丸',
+  name: 'お薬らく',
+  nameEn: 'お薬らく',
   tagline: '海外医薬品・ジェネリック医薬品の個人輸入通販',
   description:
-    'メディカ丸は、海外医薬品・ジェネリック医薬品・サプリメントの個人輸入をサポートする通販サイトです。症状から探せる検索と、わかりやすい商品情報で、はじめての方も安心してご利用いただけます。',
+    'お薬らくは、海外医薬品・ジェネリック医薬品・サプリメントの個人輸入をサポートする通販サイトです。症状から探せる検索と、わかりやすい商品情報で、はじめての方も安心してご利用いただけます。',
   locale: 'ja_JP',
   lang: 'ja',
   // Domain is not final — see docs/DECISIONS.md Q6. Override with NEXT_PUBLIC_SITE_URL.

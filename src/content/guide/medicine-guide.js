@@ -12,7 +12,7 @@
  * 1. 「お薬ショップ」 and 「医薬品ショップ」 are RETIRED BRAND NAMES — see
  *    RETIRED_BRANDS in lib/seo.js, which exists to stop pre-rebrand copy
  *    reaching a title or a search result. The source used both as ordinary
- *    nouns, including in the welcome line. Replaced with メディカ丸 or a
+ *    nouns, including in the welcome line. Replaced with お薬らく or a
  *    neutral phrase. The keyword block at the top of the source is SEO
  *    working notes, not page copy, and is not carried over at all.
  *
@@ -60,7 +60,7 @@ const content = {
     },
     {
       type: 'p',
-      text: 'メディカ丸へようこそ。お薬の通販をご検討中の方も、海外医薬品をお探しの方も、購入前にわかりやすいお薬の情報を確認したい方も、このガイドが一つひとつのステップをご案内します。薬の使用方法を解説し、オンラインで医薬品の商品一覧をご覧になる際に押さえておきたいポイントもご紹介します。',
+      text: 'お薬らくへようこそ。お薬の通販をご検討中の方も、海外医薬品をお探しの方も、購入前にわかりやすいお薬の情報を確認したい方も、このガイドが一つひとつのステップをご案内します。薬の使用方法を解説し、オンラインで医薬品の商品一覧をご覧になる際に押さえておきたいポイントもご紹介します。',
     },
   ],
 
@@ -111,7 +111,7 @@ const content = {
           src: '/guide/categories.webp',
           width: 1400,
           height: 656,
-          alt: 'メディカ丸のカテゴリー一覧ページ。ED・男性の健康、AGA・薄毛、ダイエット・体重管理、女性の健康、スキンケア・美容、メンタルヘルス・睡眠などのカテゴリーがアイコン付きで並んでいる。',
+          alt: 'お薬らくのカテゴリー一覧ページ。ED・男性の健康、AGA・薄毛、ダイエット・体重管理、女性の健康、スキンケア・美容、メンタルヘルス・睡眠などのカテゴリーがアイコン付きで並んでいる。',
           caption: '目的やお悩みからカテゴリーを選んで商品をお探しいただけます。',
         },
       ],
@@ -250,7 +250,7 @@ const content = {
       blocks: [
         {
           type: 'p',
-          text: '医薬品をオンラインで検索すると、製品情報を比較し、購入方法について理解しやすくなります。メディカ丸のご注文手続きは、わずか数分で完了します。以下のステップに沿ってお進みください。',
+          text: '医薬品をオンラインで検索すると、製品情報を比較し、購入方法について理解しやすくなります。お薬らくのご注文手続きは、わずか数分で完了します。以下のステップに沿ってお進みください。',
         },
         {
           type: 'steps',

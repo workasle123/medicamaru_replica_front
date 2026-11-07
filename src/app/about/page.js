@@ -6,7 +6,7 @@ import { pageMetadata } from '@/lib/seo';
 
 export const generateMetadata = pageMetadata('/about', {
   title: '運営者情報',
-  description: 'メディカ丸の運営方針と運営者情報についてご案内します。',
+  description: 'お薬らくの運営方針と運営者情報についてご案内します。',
 });
 
 /**

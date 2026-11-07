@@ -6,7 +6,7 @@ import { pageMetadata } from '@/lib/seo';
 
 export const generateMetadata = pageMetadata('/terms', {
   title: '利用規約',
-  description: 'メディカ丸のご利用にあたっての規約です。',
+  description: 'お薬らくのご利用にあたっての規約です。',
 });
 
 /**

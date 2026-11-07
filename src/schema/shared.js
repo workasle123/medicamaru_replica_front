@@ -42,7 +42,7 @@ export const ORG_LOGO = abs('/brand/logo.png');
 /* Long-form description. Deliberately the SEO team's wording, which differs in
    its last clause from SITE.description (which feeds the meta tag). */
 export const ORG_DESCRIPTION =
-  'メディカ丸は、海外医薬品・ジェネリック医薬品・サプリメントの個人輸入をサポートする通販サイトです。症状から探せる検索と、わかりやすい商品情報で、はじめての方にもわかりやすい情報を提供しています。';
+  'お薬らくは、海外医薬品・ジェネリック医薬品・サプリメントの個人輸入をサポートする通販サイトです。症状から探せる検索と、わかりやすい商品情報で、はじめての方にもわかりやすい情報を提供しています。';
 
 /* No ORG_SAME_AS. It listed x.com/medicamaru, an Instagram and a TikTok as
    the profiles proving this is the same entity across the web — a claim

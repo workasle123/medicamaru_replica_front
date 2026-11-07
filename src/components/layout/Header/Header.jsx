@@ -45,8 +45,8 @@ export default async function Header() {
       {/* Main bar */}
       <div className="container">
         <div className={styles.bar}>
-          {/* Full lockup — capsule mark plus the メディカ丸 wordmark — with a
-            {/* Full lockup — capsule mark plus the メディカ丸 wordmark, shown
+          {/* Full lockup — capsule mark plus the お薬らく wordmark — with a
+            {/* Full lockup — capsule mark plus the お薬らく wordmark, shown
                 at every width.
 
               Both files are cropped to the artwork’s ink. The supplied PNG sits
@@ -67,8 +67,8 @@ export default async function Header() {
             <Image
               src="/brand/logo.png"
               alt={SITE.name}
-              width={225}
-              height={117}
+              width={164}
+              height={168}
               className={styles.logoFull}
               priority
               unoptimized

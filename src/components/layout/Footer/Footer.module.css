@@ -161,7 +161,7 @@
    see the note in Header.module.css before swapping it. */
 .brandLogoImg {
   width: auto;
-  height: 48px;
+  height: 64px;
   object-fit: contain;
 }
 

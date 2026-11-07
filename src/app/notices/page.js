@@ -13,7 +13,7 @@ import styles from './Notices.module.css';
 
 export const generateMetadata = pageMetadata('/notices', {
   title: 'お知らせ',
-  description: 'メディカ丸からのお知らせ一覧です。発送スケジュールやサービスの最新情報をお届けします。',
+  description: 'お薬らくからのお知らせ一覧です。発送スケジュールやサービスの最新情報をお届けします。',
 });
 
 /* Admin → Notices edits appear within ten minutes, the API fetch's window. */
@@ -37,7 +37,7 @@ export default async function NoticesPage() {
   return (
     <ContentPage
       title="お知らせ"
-      lead="メディカ丸からの最新のお知らせです。"
+      lead="お薬らくからの最新のお知らせです。"
       {...noticeColumns({ categories, ranked, faqGroups })}
     >
       {notices.length === 0 ? (

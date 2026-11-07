@@ -66,8 +66,8 @@ export default async function Footer() {
                 <Image
                   src="/brand/logo.png"
                   alt={SITE.name}
-                  width={225}
-                  height={117}
+                  width={164}
+                  height={168}
                   className={styles.brandLogoImg}
                   unoptimized
                 />
@@ -178,7 +178,7 @@ export default async function Footer() {
               column of a two-column grid, so centring the text would have
               centred it against the disclaimer rather than the footer. As its
               own full-width line it is centred on the page. */}
-          <p className={styles.copyright}>© 2026 メディカ丸  All Rights Reserved.</p>
+          <p className={styles.copyright}>© 2026 お薬らく  All Rights Reserved.</p>
 
           {/* Its own line rather than appended to the copyright: they are two
               different statements, and a reader scanning the footer should not

@@ -40,7 +40,7 @@ const CATEGORY_TREE = [
         metaTitle: 'EDサプリメントの通販｜男性の活力と健康維持をサポート',
         metaDescription:
           '男性の活力・スタミナ・自信の維持をサポートするEDサプリメントを取り扱っています。成分や選び方もあわせてご紹介します。',
-        supervisedBy: '薬剤師 メディカ丸医療監修チーム',
+        supervisedBy: '薬剤師 お薬らく医療監修チーム',
         updatedAt: '2026-08-13',
         content: [
           {
@@ -262,7 +262,7 @@ function makeProduct(spec) {
     ],
     shippingEstimate: '通常10〜14日で発送予定',
     updatedAt: spec.updatedAt,
-    supervisedBy: 'メディカ丸医療監修チーム',
+    supervisedBy: 'お薬らく医療監修チーム',
     content: [
       { id: 'about', heading: '', html: `<p>${spec.desc}</p>` },
       { id: 'usage', heading: '使用方法', html: `<p>${spec.dosage}を目安にご使用ください。用量は医師の指示に従って調整してください。</p>` },

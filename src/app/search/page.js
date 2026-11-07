@@ -23,7 +23,7 @@ export async function generateMetadata({ searchParams }) {
   // to the products they link to (follow).
   return buildMetadata({
     title: q ? `「${q}」の検索結果` : '商品検索',
-    description: 'メディカ丸の商品検索結果です。',
+    description: 'お薬らくの商品検索結果です。',
     path: '/search',
     noIndex: true,
   });
