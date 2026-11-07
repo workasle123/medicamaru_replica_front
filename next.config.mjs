@@ -1,3 +1,6 @@
+import { createHash } from 'node:crypto';
+import path from 'node:path';
+
 /**
  * The local backend runs under XAMPP at http://localhost/adminpanel/public.
  * Next refuses to optimise images from a host that resolves to a private IP,
@@ -48,9 +51,94 @@ const devApiHostPattern = (() => {
   }
 })();
 
+/**
+ * CSS Module class names in the Turbopack format, for the webpack build.
+ *
+ * `next dev` runs on Turbopack, which names a class `.action` in
+ * Header.module.css as `Header-module__<hash>__action`. `next build --webpack`
+ * (webpack is required on Hostinger, see package.json) would otherwise name
+ * it `Header_action__<hash>`.
+ *
+ * The theme layers in src/styles/themerefresh.css and themehome.css select
+ * components by those names — `[class*="Header-module"][class*="__action"]`,
+ * over 300 rules. With webpack's default names, none of them matched anything
+ * on live: the :root colour tokens applied, but every component-level rule
+ * did not, so production looked half-themed while localhost looked right.
+ *
+ * Emitting the same format in both bundlers keeps what a designer sees in
+ * localhost DevTools true on the deployed site.
+ */
+function turbopackStyleLocalIdent(context, _localIdentName, localName) {
+  const relativePath = path
+    .relative(context.rootContext, context.resourcePath)
+    .replace(/\\+/g, '/');
+  // Header.module.css -> Header-module
+  const stem = path
+    .basename(context.resourcePath)
+    .replace(/\.(css|scss|sass)$/, '')
+    .replace(/\./g, '-');
+  // One hash per file (as Turbopack does); the local name keeps it unique.
+  const hash = createHash('sha1').update(relativePath).digest('hex').slice(0, 8);
+
+  return `${stem}__${hash}__${localName}`
+    .replace(/[^a-zA-Z0-9_-]/g, '_')
+    .replace(/^(\d|--|-\d)/, '__$1');
+}
+
+/** Swap Next's getLocalIdent on every css-loader that builds CSS Modules. */
+function applyTurbopackStyleCssModuleNames(rules) {
+  let patched = 0;
+  for (const rule of rules ?? []) {
+    if (!rule || typeof rule !== 'object') continue;
+    patched += applyTurbopackStyleCssModuleNames(rule.oneOf);
+    patched += applyTurbopackStyleCssModuleNames(rule.rules);
+
+    const uses = Array.isArray(rule.use) ? rule.use : rule.use ? [rule.use] : [];
+    for (const use of uses) {
+      const modules = use?.options?.modules;
+      if (
+        typeof use?.loader === 'string' &&
+        /[\\/]css-loader[\\/]/.test(use.loader) &&
+        modules &&
+        typeof modules.getLocalIdent === 'function'
+      ) {
+        modules.getLocalIdent = turbopackStyleLocalIdent;
+        patched += 1;
+      }
+    }
+  }
+  return patched;
+}
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactCompiler: true,
+
+  /**
+   * Webpack build only (`next build --webpack`). See turbopackStyleLocalIdent.
+   *
+   * Fails the build if Next's css-loader can no longer be found, because a
+   * Next upgrade that changes its internals would otherwise silently bring
+   * the half-themed live site back.
+   */
+  webpack(config, { nextRuntime }) {
+    const patched = applyTurbopackStyleCssModuleNames(config.module?.rules);
+    if (patched === 0 && nextRuntime !== 'edge') {
+      throw new Error(
+        'next.config.mjs: could not find the CSS Modules css-loader to apply ' +
+          'Turbopack-style class names. The theme layers in src/styles/ depend ' +
+          'on them; see turbopackStyleLocalIdent.'
+      );
+    }
+    return config;
+  },
+
+  /**
+   * Required now that a webpack() hook exists: without it, Next 16 refuses to
+   * start a plain `next dev` (Turbopack) for fear the webpack config was
+   * meant to apply. Turbopack needs nothing here; it already emits these names.
+   */
+  turbopack: {},
 
   /**
    * Opening the dev server from another device on the LAN — a phone at
