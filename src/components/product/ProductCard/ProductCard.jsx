@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import CardImage from './CardImage';
 import Link from 'next/link';
 import styles from './ProductCard.module.css';
 import Badge from '@/components/ui/Badge/Badge';
@@ -30,12 +31,15 @@ import { formatYenPrefix, formatPerUnit, formatDiscount } from '@/lib/format';
  *   shallower 2:1 image box.
  * @param {boolean} [props.priority] Set on above-the-fold images only
  */
-export default function ProductCard({ product, compact = false, priority = false }) {
+export default function ProductCard({ product, compact = false, priority = false, preferPack = false }) {
   const {
     slug, name, brand, image,
     fromUnitPrice, unitLabel,
     maxDiscountPct, inStock, rating,
   } = product;
+  // The homepage asks for the pack photo; everywhere else shows the primary image.
+  const packs = preferPack ? product.packImages : null;
+  const shown = image;
 
   return (
     <article className={[styles.card, compact ? styles.compact : ''].filter(Boolean).join(' ')}>
@@ -53,12 +57,21 @@ export default function ProductCard({ product, compact = false, priority = false
             listing with 「問題が発生しました」 rather than losing one thumbnail.
             An empty box is the right failure here: the name, price and link
             are all still usable. */}
-        {image?.url ? (
+        {packs?.length ? (
+          <CardImage
+            sources={packs}
+            name={name}
+            className={styles.image}
+            missingClassName={styles.imageMissing}
+            sizes="(max-width: 767px) 45vw, (max-width: 1023px) 30vw, 240px"
+            priority={priority}
+          />
+        ) : shown?.url ? (
         <Image
-          src={image.url}
-          alt={image.alt || name}
-          width={image.width || 600}
-          height={image.height || 600}
+          src={shown.url}
+          alt={shown.alt || name}
+          width={shown.width || 600}
+          height={shown.height || 600}
           className={styles.image}
           sizes="(max-width: 767px) 45vw, (max-width: 1023px) 30vw, 240px"
           priority={priority}

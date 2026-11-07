@@ -2,12 +2,6 @@
    Only the rules that are specific to this page's section order live here;
    everything else uses the shared `.section` / `.container` utilities. */
 
-/* Closes the lead block. The section that follows brings its own top gap, so
-   this only needs to separate the tiles from the carousel above them. */
-.leadTiles {
-  padding-bottom: var(--sp-2);
-}
-
 /* --- FAQ + aside ------------------------------------------------------- */
 
 /* FAQs on the left, with a column beside them for the order-guide banner.

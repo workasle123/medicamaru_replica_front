@@ -1,0 +1,550 @@
+/* ==========================================================================
+   Homepage composition layer  (CSS only — no markup, route or data changes)
+
+   SCOPE
+   Every rule below is nested inside
+       body:has([class*="LeadIntro-module"][class*="__lead"])
+   LeadIntro is rendered by the homepage and nowhere else, so nothing here can
+   reach /category, /product, /cart, /account … even for shared components such
+   as ProductCard, SectionHeader or the header.
+
+   PALETTE
+   Uses only the existing tokens (logo blue, ink, neutral scale, one orange
+   accent), so it moves with theme-refresh.css if the palette is retuned.
+
+   TO REVERT: delete the @import of this file in globals.css.
+   ========================================================================== */
+
+body:has([class*="LeadIntro-module"][class*="__lead"]) {
+  --hp-radius: 12px;
+  --hp-radius-lg: 16px;
+  --hp-line: var(--c-neutral-200);
+  --hp-shadow: 0 1px 2px rgba(15, 26, 43, 0.05), 0 4px 14px rgba(15, 26, 43, 0.05);
+  --hp-shadow-hover: 0 2px 4px rgba(15, 26, 43, 0.06), 0 12px 28px rgba(10, 53, 119, 0.14);
+
+  background-color: var(--c-neutral-50);
+
+  /* ------------------------------------------------------------------------
+     Header — quieter chrome: hairline, ink text, animated underline
+     ---------------------------------------------------------------------- */
+  & [class*="Header-module"][class*="__navLink"] {
+    position: relative;
+    color: var(--c-neutral-800);
+    font-weight: var(--fw-medium);
+    letter-spacing: 0.02em;
+  }
+  & [class*="Header-module"][class*="__navLink"]::after {
+    content: '';
+    position: absolute;
+    inset-inline: var(--sp-3);
+    bottom: 6px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--c-primary-500);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--dur-base) var(--ease-out);
+  }
+  & [class*="Header-module"][class*="__navLink"]:hover,
+  & [class*="Header-module"][class*="__navLink"]:focus-visible {
+    color: var(--c-ink);
+    text-decoration: none;
+  }
+  & [class*="Header-module"][class*="__navLink"]:hover::after,
+  & [class*="Header-module"][class*="__navLink"]:focus-visible::after {
+    transform: scaleX(1);
+  }
+
+  /* ------------------------------------------------------------------------
+     Hero — an editorial masthead, not "text left / product right".
+     LeadIntro's .intro wrapper is dissolved (display: contents) so the
+     headline, banner and button become grid items of .lead and can be placed
+     independently:
+
+        desktop   [ headline        ][ LINE banner ]
+                  [ button          ][ LINE banner ]
+
+        mobile    headline → banner → button
+     ---------------------------------------------------------------------- */
+  & [class*="LeadIntro-module"][class*="__lead"] {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--sp-4);
+    padding: var(--sp-4);
+    margin-block: var(--sp-3) var(--sp-5);
+    background: #fff;
+    background-image: none;
+    border: 1px solid var(--hp-line);
+    border-radius: var(--hp-radius-lg);
+    box-shadow: var(--hp-shadow);
+  }
+  & [class*="LeadIntro-module"][class*="__intro"] {
+    display: contents;
+  }
+
+  & [class*="LeadIntro-module"][class*="__heading"] {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    max-width: 18em;
+    font-size: clamp(1.375rem, 1rem + 1.5vw, 2.125rem);
+    font-weight: var(--fw-bold);
+    line-height: 1.35;
+    letter-spacing: 0.01em;
+    color: var(--c-ink);
+    text-wrap: balance;
+  }
+  /* A short rule above the headline: the editorial cue that replaces the old
+     left border bar. Purely decorative, so it is generated. */
+  & [class*="LeadIntro-module"][class*="__heading"]::before {
+    content: '';
+    display: block;
+    width: 44px;
+    height: 3px;
+    margin-bottom: var(--sp-3);
+    border-radius: 3px;
+    background: var(--c-highlight-400);
+  }
+
+  & [class*="LeadIntro-module"][class*="__cta"] {
+    justify-self: stretch;
+    justify-content: center;
+    min-height: 52px;
+    padding-inline: var(--sp-6);
+    border-radius: var(--hp-radius);
+    font-size: var(--fs-md);
+    letter-spacing: 0.04em;
+    box-shadow: 0 6px 16px rgba(0, 96, 192, 0.25);
+    transition:
+      background-color var(--dur-fast) var(--ease-out),
+      box-shadow var(--dur-fast) var(--ease-out),
+      transform var(--dur-fast) var(--ease-out);
+  }
+  & [class*="LeadIntro-module"][class*="__cta"]:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 22px rgba(0, 96, 192, 0.32);
+  }
+  & [class*="LeadIntro-module"][class*="__cta"] span {
+    transition: transform var(--dur-fast) var(--ease-out);
+  }
+  & [class*="LeadIntro-module"][class*="__cta"]:hover span {
+    transform: translateX(3px);
+  }
+
+  /* The LINE banner: framed like a printed insert, not floated on the page. */
+  & [class*="LineBanner-module"][class*="__banner"] {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    border-radius: var(--hp-radius);
+    border: 1px solid var(--hp-line);
+    box-shadow: var(--hp-shadow);
+    aspect-ratio: auto;
+    height: auto;
+    transition:
+      box-shadow var(--dur-base) var(--ease-out),
+      transform var(--dur-base) var(--ease-out);
+  }
+  & a[class*="LineBanner-module"][class*="__banner"]:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--hp-shadow-hover);
+  }
+  & [class*="LineBanner-module"][class*="__image"] {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  @media (min-width: 1024px) {
+    & [class*="LeadIntro-module"][class*="__lead"] {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: var(--sp-8);
+      row-gap: var(--sp-5);
+      padding: var(--sp-8);
+      margin-block: var(--sp-4) var(--sp-2);
+    }
+    & [class*="LeadIntro-module"][class*="__heading"] {
+      grid-column: 1 / span 6;
+      grid-row: 1;
+      align-self: end;
+    }
+    & [class*="LeadIntro-module"][class*="__cta"] {
+      grid-column: 1 / span 6;
+      grid-row: 2;
+      justify-self: start;
+      align-self: start;
+    }
+    & [class*="LineBanner-module"][class*="__banner"] {
+      grid-column: 7 / -1;
+      grid-row: 1 / span 2;
+      align-self: center;
+    }
+  }
+
+  /* ------------------------------------------------------------------------
+     Promo tiles & category banners — clean frames, one subtle scrim
+     ---------------------------------------------------------------------- */
+  & [class*="BannerShowcase-module"] img,
+  & [class*="CategoryBanner-module"][class*="__banner"],
+  & [class*="PromoTiles-module"][class*="__tile"] {
+    border-radius: var(--hp-radius);
+  }
+  & [class*="CategoryBanner-module"][class*="__banner"] {
+    overflow: hidden;
+    margin: var(--sp-4) 0 0;
+    border: 1px solid var(--hp-line);
+    box-shadow: var(--hp-shadow);
+  }
+  & [class*="PromoTiles-module"][class*="__tile"] {
+    border: 1px solid var(--hp-line);
+    box-shadow: var(--hp-shadow);
+  }
+  & [class*="PromoTiles-module"][class*="__tile"]:hover {
+    box-shadow: var(--hp-shadow-hover);
+  }
+  & [class*="PromoTiles-module"][class*="__overlay"] {
+    padding: var(--sp-4) var(--sp-5);
+    background: linear-gradient(
+      to top,
+      rgba(10, 53, 119, 0.88) 0%,
+      rgba(10, 53, 119, 0.35) 55%,
+      rgba(10, 53, 119, 0) 100%
+    );
+  }
+  & [class*="PromoTiles-module"][class*="__title"] {
+    color: #fff;
+    letter-spacing: 0.04em;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  }
+  & [class*="PromoTiles-module"][class*="__subtitle"] {
+    color: rgba(255, 255, 255, 0.92);
+  }
+
+  /* ------------------------------------------------------------------------
+     Section headers — ink title, short accent rule, outlined "see all" pill
+     ---------------------------------------------------------------------- */
+  & [class*="SectionHeader-module"][class*="__header"] {
+    align-items: flex-end;
+    margin-bottom: var(--sp-4);
+    padding-bottom: var(--sp-3);
+    border-bottom: 1px solid var(--hp-line);
+  }
+  & [class*="SectionHeader-module"][class*="__title"] {
+    margin: 0;
+    color: var(--c-ink);
+    font-size: clamp(1.25rem, 1.05rem + 0.8vw, 1.625rem);
+    letter-spacing: 0.02em;
+  }
+  & [class*="SectionHeader-module"][class*="__title"]::after {
+    display: none;
+  }
+  & [class*="SectionHeader-module"][class*="__titleGroup"] {
+    position: relative;
+    padding-inline-start: var(--sp-4);
+  }
+  & [class*="SectionHeader-module"][class*="__titleGroup"]::before {
+    content: '';
+    position: absolute;
+    inset-block: 0.25em 0.25em;
+    inset-inline-start: 0;
+    width: 4px;
+    border-radius: 4px;
+    background: linear-gradient(180deg, var(--c-primary-500), var(--c-highlight-400));
+  }
+  & [class*="SectionHeader-module"][class*="__subtitle"] {
+    margin-top: var(--sp-1);
+    font-size: var(--fs-sm);
+    color: var(--c-neutral-500);
+  }
+  & [class*="SectionHeader-module"][class*="__link"] {
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+    padding-inline: var(--sp-4);
+    border: 1px solid var(--c-primary-300);
+    border-radius: var(--radius-pill);
+    background: #fff;
+    color: var(--c-primary-600);
+    font-weight: var(--fw-bold);
+    transition:
+      background-color var(--dur-fast) var(--ease-out),
+      color var(--dur-fast) var(--ease-out),
+      border-color var(--dur-fast) var(--ease-out);
+  }
+  & [class*="SectionHeader-module"][class*="__link"]:hover {
+    background: var(--c-primary-500);
+    border-color: var(--c-primary-500);
+    color: #fff;
+    text-decoration: none;
+  }
+
+  /* ------------------------------------------------------------------------
+     Category index — left-aligned editorial tiles instead of centred stacks
+     ---------------------------------------------------------------------- */
+  & [class*="CategoryGrid-module"][class*="__grid"] {
+    gap: var(--sp-3);
+  }
+  /* Eight categories divide into 4 x 2; six columns left a half-empty row. */
+  @media (min-width: 1024px) {
+    & [class*="CategoryGrid-module"][class*="__grid"] {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: var(--sp-4);
+    }
+  }
+  & [class*="CategoryGrid-module"][class*="__card"] {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas:
+      'icon name'
+      'icon count'
+      'kids kids';
+    column-gap: var(--sp-3);
+    row-gap: 2px;
+    align-items: center;
+    justify-items: start;
+    padding: var(--sp-4);
+    text-align: left;
+    background: #fff;
+    border: 1px solid var(--hp-line);
+    border-radius: var(--hp-radius);
+    box-shadow: none;
+    transition:
+      border-color var(--dur-fast) var(--ease-out),
+      box-shadow var(--dur-base) var(--ease-out),
+      transform var(--dur-base) var(--ease-out);
+  }
+  & [class*="CategoryGrid-module"][class*="__card"]:hover,
+  & [class*="CategoryGrid-module"][class*="__card"]:focus-within {
+    border-color: var(--c-primary-300);
+    box-shadow: var(--hp-shadow-hover);
+    transform: translateY(-2px);
+  }
+  & [class*="CategoryGrid-module"][class*="__iconFrame"] {
+    grid-area: icon;
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    background: var(--c-primary-50);
+    border: 1px solid var(--c-primary-100);
+  }
+  & [class*="CategoryGrid-module"][class*="__iconFallback"] {
+    font-size: 1.375rem;
+    color: var(--c-primary-600);
+  }
+  & [class*="CategoryGrid-module"][class*="__name"] {
+    grid-area: name;
+    align-self: end;
+    color: var(--c-ink);
+    font-size: var(--fs-md);
+    letter-spacing: 0.01em;
+  }
+  & [class*="CategoryGrid-module"][class*="__count"] {
+    grid-area: count;
+    align-self: start;
+    color: var(--c-neutral-500);
+    font-size: var(--fs-xs);
+  }
+  & [class*="CategoryGrid-module"][class*="__children"] {
+    grid-area: kids;
+    justify-self: stretch;
+    margin-top: var(--sp-3);
+    padding-top: var(--sp-3);
+    border-top: 1px dashed var(--hp-line);
+    justify-content: flex-start;
+    text-align: left;
+  }
+  & [class*="CategoryGrid-module"][class*="__childLink"] {
+    color: var(--c-neutral-600);
+  }
+
+  /* ------------------------------------------------------------------------
+     Product cards — one consistent object: framed image well, brand eyebrow,
+     two-line name, prominent price, quiet meta row. Heights equalise because
+     the body is a column and the price group takes the free space.
+     ---------------------------------------------------------------------- */
+  & [class*="ProductCard-module"][class*="__card"] {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: #fff;
+    border: 1px solid var(--hp-line);
+    border-radius: var(--hp-radius);
+    box-shadow: none;
+    overflow: hidden;
+    transition:
+      border-color var(--dur-fast) var(--ease-out),
+      box-shadow var(--dur-base) var(--ease-out),
+      transform var(--dur-base) var(--ease-out);
+  }
+  & [class*="ProductCard-module"][class*="__card"]:hover,
+  & [class*="ProductCard-module"][class*="__card"]:focus-within {
+    border-color: var(--c-primary-300);
+    box-shadow: var(--hp-shadow-hover);
+    transform: translateY(-3px);
+  }
+  & [class*="ProductCard-module"][class*="__media"] {
+    background: var(--c-neutral-50);
+    border-bottom: 1px solid var(--c-neutral-100);
+    padding: var(--sp-3);
+  }
+  & [class*="ProductCard-module"][class*="__image"] {
+    mix-blend-mode: multiply;
+    transition: transform var(--dur-slow, 320ms) var(--ease-out);
+  }
+  & [class*="ProductCard-module"][class*="__card"]:hover [class*="ProductCard-module"][class*="__image"] {
+    transform: scale(1.04);
+  }
+  & [class*="ProductCard-module"][class*="__body"] {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: var(--sp-1);
+    padding: var(--sp-3) var(--sp-3) var(--sp-4);
+  }
+  & [class*="ProductCard-module"][class*="__brand"] {
+    color: var(--c-neutral-500);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-medium);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  & [class*="ProductCard-module"][class*="__name"] {
+    color: var(--c-ink);
+    line-height: 1.45;
+  }
+  & [class*="ProductCard-module"][class*="__priceGroup"] {
+    margin-top: auto;
+    padding-top: var(--sp-2);
+  }
+  & [class*="ProductCard-module"][class*="__unitPrice"] {
+    color: var(--c-ink);
+    letter-spacing: 0;
+  }
+  & [class*="ProductCard-module"][class*="__perUnit"] {
+    color: var(--c-neutral-500);
+  }
+  & [class*="ProductCard-module"][class*="__meta"] {
+    padding-top: var(--sp-2);
+    border-top: 1px solid var(--c-neutral-100);
+  }
+
+  /* Discount: a calm tag in the accent family instead of a flat red block. */
+  & [class*="ProductCard-module"] [class*="Badge-module"][class*="__sale"] {
+    background: #fff2e0;
+    color: #9a4a00;
+    border: 1px solid #ffd49b;
+    border-radius: 4px;
+    font-weight: var(--fw-bold);
+    letter-spacing: 0.02em;
+  }
+  /* Availability: a status dot and quiet text, no filled chip. */
+  & [class*="ProductCard-module"] [class*="Badge-module"][class*="__inStock"] {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0;
+    background: transparent;
+    color: var(--c-neutral-700);
+    font-weight: var(--fw-medium);
+  }
+  & [class*="ProductCard-module"] [class*="Badge-module"][class*="__inStock"]::before {
+    content: '';
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #1b9a6b;
+    box-shadow: 0 0 0 3px rgba(27, 154, 107, 0.16);
+  }
+
+  /* Rail arrows: quiet discs that match the cards. */
+  & [class*="ScrollRail-module"][class*="__arrow"] {
+    border: 1px solid var(--hp-line);
+    background: #fff;
+    color: var(--c-ink);
+    box-shadow: var(--hp-shadow);
+  }
+  & [class*="ScrollRail-module"][class*="__arrow"]:hover {
+    border-color: var(--c-primary-400);
+    color: var(--c-primary-600);
+  }
+
+  /* Subcategory chips under each rail heading. */
+  & [class*="SubcategoryTags-module"] a {
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--hp-line);
+    background: #fff;
+    color: var(--c-neutral-700);
+    transition:
+      border-color var(--dur-fast) var(--ease-out),
+      color var(--dur-fast) var(--ease-out),
+      background-color var(--dur-fast) var(--ease-out);
+  }
+  & [class*="SubcategoryTags-module"] a:hover {
+    border-color: var(--c-primary-400);
+    background: var(--c-primary-50);
+    color: var(--c-primary-700);
+    text-decoration: none;
+  }
+
+  /* ------------------------------------------------------------------------
+     FAQ and order guide — readable reference blocks
+     ---------------------------------------------------------------------- */
+  & [class*="FaqList-module"][class*="__item"] {
+    background: #fff;
+    border: 1px solid var(--hp-line);
+    border-radius: var(--hp-radius);
+    box-shadow: none;
+  }
+  & [class*="FaqList-module"][class*="__item"]:hover {
+    border-color: var(--c-primary-200);
+  }
+  & [class*="FaqList-module"][class*="__questionText"] {
+    color: var(--c-ink);
+    font-weight: var(--fw-bold);
+  }
+
+  & [class*="OrderGuideAside-module"][class*="__card"] {
+    background: #fff;
+    border: 1px solid var(--hp-line);
+    border-top: 3px solid var(--c-primary-500);
+    border-radius: var(--hp-radius);
+    box-shadow: var(--hp-shadow);
+  }
+  & [class*="OrderGuideAside-module"][class*="__title"] {
+    color: var(--c-ink);
+    letter-spacing: 0.03em;
+  }
+  & [class*="OrderGuideAside-module"][class*="__num"] {
+    background: var(--c-ink);
+    color: #fff;
+  }
+  & [class*="OrderGuideAside-module"][class*="__stepTitle"] {
+    color: var(--c-ink);
+  }
+  & [class*="OrderGuideAside-module"][class*="__cta"] {
+    border-radius: var(--hp-radius);
+    letter-spacing: 0.04em;
+  }
+
+  /* ------------------------------------------------------------------------
+     Footer — same structure, steadier rhythm and link legibility
+     ---------------------------------------------------------------------- */
+  & [class*="Footer-module"] a {
+    transition: color var(--dur-fast) var(--ease-out);
+  }
+  & [class*="Footer-module"] a:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    & * {
+      transition-duration: 0.01ms !important;
+    }
+    & [class*="ProductCard-module"][class*="__card"]:hover,
+    & [class*="CategoryGrid-module"][class*="__card"]:hover,
+    & a[class*="LineBanner-module"][class*="__banner"]:hover {
+      transform: none;
+    }
+  }
+}

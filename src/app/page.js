@@ -6,7 +6,6 @@ import { SITE } from '@/constants/site';
 import CategoryGrid from '@/components/home/CategoryGrid/CategoryGrid';
 import ProductRail from '@/components/home/ProductRail/ProductRail';
 import SectionHeader from '@/components/ui/SectionHeader/SectionHeader';
-import BannerShowcase from '@/components/banner/BannerShowcase/BannerShowcase';
 import LeadIntro from '@/components/home/LeadIntro/LeadIntro';
 import LineBanner from '@/components/home/LineBanner/LineBanner';
 import CategoryBanner from '@/components/banner/CategoryBanner/CategoryBanner';
@@ -47,23 +46,9 @@ export default async function HomePage() {
       <JsonLd data={homeSchema({ faqs })} />
 
       <div className="container">
-        {/* The campaign carousel used to open the page. It is replaced by the
-            H1 and a continuously moving best-seller rail — the headline earns
-            the space a rotating banner was taking, and the rail puts real
-            products above the fold instead of merchandising artwork. */}
-        <LeadIntro products={ranked} banner={<LineBanner banner={banners.homepageLine?.[0]} />} />
-
-        <section className={styles.leadTiles}>
-          <h2 className="visually-hidden">おすすめのご案内</h2>
-          <BannerShowcase left={banners.left} right={banners.right} />
-        </section>
-
-        {banners.promo.length > 0 && (
-          <section className="section">
-            <h2 className="visually-hidden">サイトのご案内</h2>
-            <PromoTiles banners={banners.promo} />
-          </section>
-        )}
+        {/* The H1, the LINE banner and a button into the catalogue open the
+            page; the campaign carousel and the slider banners are gone. */}
+        <LeadIntro banner={<LineBanner banner={banners.homepageLine?.[0]} />} />
 
         <section className="section">
           <SectionHeader
@@ -91,28 +76,30 @@ export default async function HomePage() {
             subtitle="よくご購入いただいている商品です。"
             products={ranked}
             priority
+            packImages
           />
         </section>
 
-        {/* Each category rail is introduced by its own banner, assigned in the
-            admin panel under the "Category Banner" position. A category with
-            none assigned simply renders without one. */}
+        {/* Products lead; each category rail is followed by its own banner,
+            assigned in the admin panel under the "Category Banner" position.
+            A category with none assigned simply renders without one. */}
         {categorySections.map((section) => (
           <section className="section" key={section.slug}>
-            <CategoryBanner banner={section.banner} />
             <ProductRail
               title={section.name}
               href={`/category/${section.slug}`}
               products={section.products}
               subcategories={section.subcategories}
               parentSlug={section.slug}
+              packImages
             />
+            <CategoryBanner banner={section.banner} />
           </section>
         ))}
 
         {/* The 健康コラム rail was removed along with /blogs. */}
 
-        {/* FAQs close the page, immediately above the footer — the questions
+        {/* FAQs follow the products — the questions
             someone still has once they have finished browsing — with the
             order guide beside them.
 
@@ -131,6 +118,14 @@ export default async function HomePage() {
             <OrderGuideAside wide />
           )}
         </div>
+
+        {/* Promotional banners come last, after the products and FAQ. */}
+        {banners.promo.length > 0 && (
+          <section className="section">
+            <h2 className="visually-hidden">サイトのご案内</h2>
+            <PromoTiles banners={banners.promo} />
+          </section>
+        )}
       </div>
     </>
   );
