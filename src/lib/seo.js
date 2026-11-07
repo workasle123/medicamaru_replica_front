@@ -188,7 +188,6 @@ export const CMS_PAGE_SLUG = {
   '/about-personal-import': 'about-personal-imports',
   '/pharmaceutical-law': 'pharmaceuticals-medical-devices-act',
   '/editorial-policy': 'editorial-policy',
-  '/column': 'health-column',
 };
 
 /**
