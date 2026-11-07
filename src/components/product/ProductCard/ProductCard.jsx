@@ -57,7 +57,8 @@ export default function ProductCard({ product, compact = false, priority = false
             listing with 「問題が発生しました」 rather than losing one thumbnail.
             An empty box is the right failure here: the name, price and link
             are all still usable. */}
-        {packs?.length ? (
+        {packs ? (
+          packs.length ? (
           <CardImage
             sources={packs}
             name={name}
@@ -66,6 +67,9 @@ export default function ProductCard({ product, compact = false, priority = false
             sizes="(max-width: 767px) 45vw, (max-width: 1023px) 30vw, 240px"
             priority={priority}
           />
+          ) : (
+            <div className={styles.imageMissing} aria-hidden="true" />
+          )
         ) : shown?.url ? (
         <Image
           src={shown.url}
