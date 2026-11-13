@@ -1,5 +1,5 @@
 /**
- * メディカ丸について — imported from 01_medicamaru_aboutus.docx.
+ * お薬らくについて — imported from 01_medicamaru_aboutus.docx.
  *
  * GENERATED CONTENT, edited only here. The page and its table of contents
  * are both built from this file, so a heading cannot appear in one and not
@@ -7,16 +7,16 @@
  */
 
 const content = {
-  "title": "メディカ丸について",
+  "title": "お薬らくについて",
   "intro": [],
   "sections": [
     {
       "id": "section-1",
-      "heading": "メディカ丸とは",
+      "heading": "お薬らくとは",
       "blocks": [
         {
           "type": "p",
-          "text": "メディカ丸（medicamaru.com）は、海外で製造・販売されている医薬品、医薬部外品、サプリメント、化粧品などについて、個人輸入という仕組みを通じてご希望の方に取り次ぐ情報提供・注文サポートサイトです。"
+          "text": "お薬らく（medicamaru.com）は、海外で製造・販売されている医薬品、医薬部外品、サプリメント、化粧品などについて、個人輸入という仕組みを通じてご希望の方に取り次ぐ情報提供・注文サポートサイトです。"
         },
         {
           "type": "p",
@@ -34,7 +34,7 @@ const content = {
         },
         {
           "type": "p",
-          "text": "また、身近な人に相談しづらい体調の悩みを抱えていたり、通院や対面での相談に時間を割くことが難しい方もいらっしゃいます。メディカ丸は、そうした方が自分の意思で情報を確認し、納得したうえで選択できる環境を用意したいという考えから生まれました。"
+          "text": "また、身近な人に相談しづらい体調の悩みを抱えていたり、通院や対面での相談に時間を割くことが難しい方もいらっしゃいます。お薬らくは、そうした方が自分の意思で情報を確認し、納得したうえで選択できる環境を用意したいという考えから生まれました。"
         }
       ]
     },
@@ -105,7 +105,7 @@ const content = {
       "blocks": [
         {
           "type": "p",
-          "text": "メディカ丸は SENSE PHARMACEUTICALS が運営しています。決済代行や国際配送などの一部業務は提携する外部事業者が担っており、これらの事業者は販売主体ではなく、業務委託先として関与しています。"
+          "text": "お薬らくは SENSE PHARMACEUTICALS が運営しています。決済代行や国際配送などの一部業務は提携する外部事業者が担っており、これらの事業者は販売主体ではなく、業務委託先として関与しています。"
         },
     
       {

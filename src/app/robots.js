@@ -56,12 +56,6 @@ export default function robots() {
              `page=` and `tag=` are deliberately NOT blocked: those reach
              products the first page does not. */
           '/*sort=',
-          /* WordPress's own plumbing, proxied under /column. The articles are
-             the point; the login form and the XML-RPC endpoint are not, and
-             both attract bots that have no business here. */
-          '/column/wp-admin/',
-          '/column/wp-login.php',
-          '/column/xmlrpc.php',
         ],
         /* Google ignores this; Bing, Yandex and most of the long tail honour
            it. Catalogue pages are server-rendered on every request, and the
@@ -71,12 +65,6 @@ export default function robots() {
         crawlDelay: 2,
       },
     ],
-    /* Two sitemaps: ours, and WordPress's own, which it generates for the
-       articles we proxy. The コラム lives on this domain as far as a crawler is
-       concerned, so its sitemap has to be discoverable from this robots.txt —
-       nothing else links to it. Listed only when one is actually configured. */
-    sitemap: process.env.COLUMN_ORIGIN
-      ? [absoluteUrl('/sitemap.xml'), absoluteUrl('/column/wp-sitemap.xml')]
-      : absoluteUrl('/sitemap.xml'),
+    sitemap: absoluteUrl('/sitemap.xml'),
   };
 }

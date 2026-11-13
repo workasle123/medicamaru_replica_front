@@ -32,18 +32,18 @@ const SEO_TTL = 60 * 60;
 /**
  * Brand markers that mean a title is already complete.
  *
- * The root layout appends 「｜メディカ丸」 to every title, so a meta_title that
+ * The root layout appends 「｜お薬らく」 to every title, so a meta_title that
  * already ends in a brand would double it. But only 18 of the 3,176 admin
- * titles carry one — the ED category's 「…通販｜メディカ丸」 does, while most
+ * titles carry one — the ED category's 「…通販｜お薬らく」 does, while most
  * read 「シルデナフィル」 or 「ビューティ グレース EX | …サプリ 通販」 and do not.
  * Blanket-treating them as complete would strip the site name from ~3,158
  * pages, so the suffix is added unless the title already brands itself.
  *
  * The other platform's names are included deliberately: a title ending
  * 「| お薬ショップ」 is still self-branded, and appending our name to it would
- * read 「…| お薬ショップ｜メディカ丸」, which is worse than either alone.
+ * read 「…| お薬ショップ｜お薬らく」, which is worse than either alone.
  */
-const BRAND_MARKERS = /メディカ|Medicamaru|お薬ショップ|メディスン|オクスリ/i;
+const BRAND_MARKERS = /メディカ|お薬らく|Medicamaru|お薬ショップ|メディスン|オクスリ/i;
 
 /**
  * Does this admin title already brand itself?

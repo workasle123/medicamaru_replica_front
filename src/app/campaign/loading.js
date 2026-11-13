@@ -20,7 +20,7 @@ export default function Loading() {
       <ContentPage
         title="キャンペーン・クーポン一覧"
         fitTitle
-        lead="メディカ丸で実施中のキャンペーンです。クーポンコードはご注文手続きの画面でご入力ください。"
+        lead="お薬らくで実施中のキャンペーンです。クーポンコードはご注文手続きの画面でご入力ください。"
         breadcrumbs={[{ name: 'キャンペーン' }]}
         start={{ label: '症状から探す・会員登録', phone: false, content: <SidePanelSkeleton /> }}
         end={{ label: '会員メニュー', phone: false, content: <SidePanelSkeleton /> }}

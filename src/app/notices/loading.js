@@ -19,7 +19,7 @@ export default function Loading() {
     <SkeletonScreen label="お知らせを読み込んでいます">
       <ContentPage
         title="お知らせ"
-        lead="メディカ丸からの最新のお知らせです。"
+        lead="お薬らくからの最新のお知らせです。"
         start={{ label: 'カテゴリー', phone: false, content: <SidePanelSkeleton /> }}
         end={{ label: '会員メニュー', phone: false, content: <SidePanelSkeleton /> }}
       >

@@ -22,7 +22,7 @@ export function categorySchema({ category, path, faqs = [] }) {
   const url = abs(path);
 
   /* The display name, not the meta title. A meta title is written for a SERP
-     snippet (「ED治療薬の通販｜メディカ丸」) whereas `name` identifies the
+     snippet (「ED治療薬の通販｜お薬らく」) whereas `name` identifies the
      collection itself, and the SEO team's document uses the plain name. */
   const name = category.name;
 

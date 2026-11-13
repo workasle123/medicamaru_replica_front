@@ -85,7 +85,8 @@
   display: block;
   width: auto;
   object-fit: contain;
-  /* 40px in the 56px mobile bar. At the cropped 1.92:1 that is 77px wide,
+  /* NOTE: the お薬らく mascot lockup is nearly square (0.98:1), so it is drawn a little taller than the old wide lockup: 44px mobile, 64px desktop.
+   Earlier note, kept for the reasoning: 40px in the 56px mobile bar. At the cropped 1.92:1 that is 77px wide,
      leaving 254px of the 343px row for the search beside it — more than the
      previous wordmark left, because this lockup is squarer.
 
@@ -94,7 +95,7 @@
      smaller than the old katakana wordmark did at the same box height. This
      buys some of that back. It cannot buy all of it — see the note above
      .logoFull on what would. */
-  height: 40px;
+  height: 44px;
 }
 
 @media (min-width: 1024px) {
@@ -103,7 +104,7 @@
        bar (48px) is the conventional ratio and is what the old wide wordmark
        used, but this lockup carries its name in a third of its height, so it
        needs the extra 8px to read at arm's length. */
-    height: 56px;
+    height: 64px;
   }
 }
 

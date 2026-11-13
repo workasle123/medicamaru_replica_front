@@ -15,7 +15,7 @@ import { DEMO_CREDENTIALS } from '@/services/adapters/mock/auth';
 
 export const generateMetadata = pageMetadata('/login', {
   title: 'ログイン',
-  description: 'メディカ丸のアカウントにログインします。',
+  description: 'お薬らくのアカウントにログインします。',
   noIndex: true,
 });
 

@@ -12,7 +12,7 @@ import styles from './Campaign.module.css';
 export const metadata = buildMetadata({
   title: 'キャンペーン・クーポン一覧',
   description:
-    'メディカ丸で実施中のキャンペーンとクーポンコードの一覧です。割引率、最低ご注文金額、実施期間をまとめてご確認いただけます。',
+    'お薬らくで実施中のキャンペーンとクーポンコードの一覧です。割引率、最低ご注文金額、実施期間をまとめてご確認いただけます。',
   path: '/campaign',
 });
 
@@ -56,7 +56,7 @@ export default async function CampaignPage() {
       /* Thirteen characters — the longest title on the site, and the only one
          that needs two lines on a phone without this. */
       fitTitle
-      lead="メディカ丸で実施中のキャンペーンです。クーポンコードはご注文手続きの画面でご入力ください。"
+      lead="お薬らくで実施中のキャンペーンです。クーポンコードはご注文手続きの画面でご入力ください。"
       breadcrumbs={[{ name: 'キャンペーン' }]}
       /* The left column is this page's alone: promos in place of the category
          menu, the login box and the newsletter sign-up that noticeColumns puts

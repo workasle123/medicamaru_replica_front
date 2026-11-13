@@ -9,7 +9,7 @@ export const revalidate = 3600;
 export const metadata = buildMetadata({
   title: 'カテゴリー一覧',
   description:
-    'メディカ丸で取り扱う商品のカテゴリー一覧です。ED・AGA・ダイエット・スキンケアなど、目的別にお探しいただけます。',
+    'お薬らくで取り扱う商品のカテゴリー一覧です。ED・AGA・ダイエット・スキンケアなど、目的別にお探しいただけます。',
   path: '/category',
 });
 

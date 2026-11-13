@@ -22,7 +22,7 @@ import {
  */
 
 /** The `name` of the homepage node. SEO-authored; not the <title> template. */
-const PAGE_NAME = 'メディカ丸 | 海外医薬品・ジェネリック医薬品・サプリメント';
+const PAGE_NAME = 'お薬らく | 海外医薬品・ジェネリック医薬品・サプリメント';
 
 /**
  * @param {Object} input

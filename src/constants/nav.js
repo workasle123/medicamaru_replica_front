@@ -23,10 +23,6 @@ export const MAIN_NAV = [
   /* Between browsing and reading: a campaign is a reason to buy, so it sits
      with the two browse routes rather than with the help links. */
   { href: '/campaign', label: 'キャンペーン' },
-  /* The WordPress コラム, proxied under /column (see next.config.mjs). Placed
-     after the two browse routes and before the help links: it is content to
-     read, not a way to shop and not support. */
-  { href: '/column', label: 'コラム' },
   { href: '/faq', label: 'よくあるご質問' },
   { href: '/contact', label: 'お問い合わせ' },
 ];
@@ -67,8 +63,6 @@ export const FOOTER_NAV = [
       { href: '/faq', label: 'よくあるご質問' },
       { href: '/symptom', label: '症状から探す' },
       { href: '/campaign', label: 'キャンペーン・クーポン' },
-      /* Matches the header entry — the コラム proxied under /column. */
-      { href: '/column', label: 'コラム' },
       /* 全商品 (/products) removed 2026-09-25. The page never listed anything:
          its listing call needs a category id it was never given, so it was an
          empty result behind a link promising the whole catalogue. Browsing is

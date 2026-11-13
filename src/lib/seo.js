@@ -97,8 +97,8 @@ export function buildMetadata({
   keywords,
   /* Set when `title` came from the admin panel's meta_title field. Those are
      authored as complete titles and usually already carry a brand — the ED
-     category's is 「…海外医薬品通販｜メディカ丸」 — so letting the layout's
-     template append the site name again produces 「…｜メディカ丸｜メディカ丸」.
+     category's is 「…海外医薬品通販｜お薬らく」 — so letting the layout's
+     template append the site name again produces 「…｜お薬らく｜お薬らく」.
      An absolute title bypasses the template and is used exactly as written,
      which is the whole point of a meta_title field. */
   titleIsComplete = false,
@@ -188,7 +188,6 @@ export const CMS_PAGE_SLUG = {
   '/about-personal-import': 'about-personal-imports',
   '/pharmaceutical-law': 'pharmaceuticals-medical-devices-act',
   '/editorial-policy': 'editorial-policy',
-  '/column': 'health-column',
 };
 
 /**
@@ -240,7 +239,7 @@ function isStale(text) {
  *
  * `titleIsComplete` because meta_title is authored as a whole title, brand and
  * all — letting the layout's template append the site name would produce
- * 「…｜メディカ丸｜メディカ丸」.
+ * 「…｜お薬らく｜お薬らく」.
  *
  * @param {string} route     The storefront path, keyed into CMS_PAGE_SLUG.
  * @param {object} fallback  What buildMetadata receives when the admin has

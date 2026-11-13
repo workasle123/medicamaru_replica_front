@@ -516,7 +516,7 @@ const OLD_HOST = /\b(?:www\.)?medicine\.shop\b/g;
 
 function rebrand(html) {
   if (typeof html !== 'string' || !html) return '';
-  return html.replace(OLD_BRAND, 'メディカ丸').replace(OLD_HOST, 'medicamaru.com');
+  return html.replace(OLD_BRAND, 'お薬らく').replace(OLD_HOST, 'medicamaru.com');
 }
 
 /**
