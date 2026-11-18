@@ -8,6 +8,7 @@ import ProductRail from '@/components/home/ProductRail/ProductRail';
 import SectionHeader from '@/components/ui/SectionHeader/SectionHeader';
 import LeadIntro from '@/components/home/LeadIntro/LeadIntro';
 import LineBanner from '@/components/home/LineBanner/LineBanner';
+import TrustBar from '@/components/home/TrustBar/TrustBar';
 import CategoryBanner from '@/components/banner/CategoryBanner/CategoryBanner';
 import PromoTiles from '@/components/banner/PromoTiles/PromoTiles';
 import FaqList from '@/components/product/FaqList/FaqList';
@@ -46,9 +47,11 @@ export default async function HomePage() {
       <JsonLd data={homeSchema({ faqs })} />
 
       <div className="container">
-        {/* The H1, the LINE banner and a button into the catalogue open the
-            page; the campaign carousel and the slider banners are gone. */}
-        <LeadIntro banner={<LineBanner banner={banners.homepageLine?.[0]} />} />
+        {/* The H1, two ways into the catalogue and the LINE banner open the
+            page, with a one-line strip of reassurances under them. */}
+        <LeadIntro aside={<LineBanner banner={banners.homepageLine?.[0]} />} />
+
+        <TrustBar />
 
         <section className="section">
           <SectionHeader

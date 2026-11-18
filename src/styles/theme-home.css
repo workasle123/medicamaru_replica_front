@@ -1,0 +1,565 @@
+/* ==========================================================================
+   Homepage composition layer  (CSS only — no markup, route or data changes)
+
+   SCOPE
+   Every rule below is nested inside
+       body:has(:is([class*="LeadIntro-module"]:is([class*="__lead "],[class$="__lead"]),[class*="LeadIntro_lead__"]))
+   LeadIntro is rendered by the homepage and nowhere else, so nothing here can
+   reach /category, /product, /cart, /account … even for shared components such
+   as ProductCard, SectionHeader or the header.
+
+   PALETTE
+   Uses only the existing tokens (logo blue, ink, neutral scale, one orange
+   accent), so it moves with theme-refresh.css if the palette is retuned.
+
+   TO REVERT: delete the @import of this file in globals.css.
+   ========================================================================== */
+
+body:has(:is([class*="LeadIntro-module"]:is([class*="__lead "],[class$="__lead"]),[class*="LeadIntro_lead__"])) {
+  --hp-radius: 12px;
+  --hp-radius-lg: 16px;
+  --hp-line: var(--c-neutral-200);
+  --hp-shadow: 0 1px 2px rgba(15, 26, 43, 0.05), 0 4px 14px rgba(15, 26, 43, 0.05);
+  --hp-shadow-hover: 0 2px 4px rgba(15, 26, 43, 0.06), 0 12px 28px rgba(10, 53, 119, 0.14);
+
+  background-color: var(--c-neutral-50);
+
+  /* ------------------------------------------------------------------------
+     Header — quieter chrome: hairline, ink text, animated underline
+     ---------------------------------------------------------------------- */
+  & :is([class*="Header-module"]:is([class*="__navLink "],[class$="__navLink"]),[class*="Header_navLink__"]) {
+    position: relative;
+    color: var(--c-neutral-800);
+    font-weight: var(--fw-medium);
+    letter-spacing: 0.02em;
+  }
+  & :is([class*="Header-module"]:is([class*="__navLink "],[class$="__navLink"]),[class*="Header_navLink__"])::after {
+    content: '';
+    position: absolute;
+    inset-inline: var(--sp-3);
+    bottom: 6px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--c-primary-500);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--dur-base) var(--ease-out);
+  }
+  & :is([class*="Header-module"]:is([class*="__navLink "],[class$="__navLink"]),[class*="Header_navLink__"]):hover,
+  & :is([class*="Header-module"]:is([class*="__navLink "],[class$="__navLink"]),[class*="Header_navLink__"]):focus-visible {
+    color: var(--c-ink);
+    text-decoration: none;
+  }
+  & :is([class*="Header-module"]:is([class*="__navLink "],[class$="__navLink"]),[class*="Header_navLink__"]):hover::after,
+  & :is([class*="Header-module"]:is([class*="__navLink "],[class$="__navLink"]),[class*="Header_navLink__"]):focus-visible::after {
+    transform: scaleX(1);
+  }
+
+  /* ------------------------------------------------------------------------
+     Hero — an editorial masthead, not "text left / product right".
+     LeadIntro's .intro wrapper is dissolved (display: contents) so the
+     headline, banner and button become grid items of .lead and can be placed
+     independently:
+
+        desktop   [ headline        ][ LINE banner ]
+                  [ button          ][ LINE banner ]
+
+        mobile    headline → banner → button
+     ---------------------------------------------------------------------- */
+
+
+
+
+  /* A short rule above the headline: the editorial cue that replaces the old
+     left border bar. Purely decorative, so it is generated. */
+
+
+
+
+
+
+
+  /* The LINE banner: framed like a printed insert, not floated on the page. */
+  & :is([class*="LineBanner-module"]:is([class*="__banner "],[class$="__banner"]),[class*="LineBanner_banner__"]) {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    border-radius: var(--hp-radius);
+    border: 1px solid var(--hp-line);
+    box-shadow: var(--hp-shadow);
+    aspect-ratio: auto;
+    height: auto;
+    transition:
+      box-shadow var(--dur-base) var(--ease-out),
+      transform var(--dur-base) var(--ease-out);
+  }
+  & a:is([class*="LineBanner-module"]:is([class*="__banner "],[class$="__banner"]),[class*="LineBanner_banner__"]):hover {
+    transform: translateY(-2px);
+    box-shadow: var(--hp-shadow-hover);
+  }
+  & :is([class*="LineBanner-module"]:is([class*="__image "],[class$="__image"]),[class*="LineBanner_image__"]) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  @media (min-width: 1024px) {
+
+
+
+    & :is([class*="LineBanner-module"]:is([class*="__banner "],[class$="__banner"]),[class*="LineBanner_banner__"]) {
+      grid-column: 7 / -1;
+      grid-row: 1 / span 2;
+      align-self: center;
+    }
+  }
+
+  /* ------------------------------------------------------------------------
+     Promo tiles & category banners — clean frames, one subtle scrim
+     ---------------------------------------------------------------------- */
+  & :is([class*="BannerShowcase-module"],[class^="BannerShowcase_"],[class*=" BannerShowcase_"]) img,
+  & :is([class*="CategoryBanner-module"]:is([class*="__banner "],[class$="__banner"]),[class*="CategoryBanner_banner__"]),
+  & :is([class*="PromoTiles-module"]:is([class*="__tile "],[class$="__tile"]),[class*="PromoTiles_tile__"]) {
+    border-radius: var(--hp-radius);
+  }
+  & :is([class*="CategoryBanner-module"]:is([class*="__banner "],[class$="__banner"]),[class*="CategoryBanner_banner__"]) {
+    overflow: hidden;
+    margin: var(--sp-4) 0 0;
+    border: 1px solid var(--hp-line);
+    box-shadow: var(--hp-shadow);
+  }
+  & :is([class*="PromoTiles-module"]:is([class*="__tile "],[class$="__tile"]),[class*="PromoTiles_tile__"]) {
+    border: 1px solid var(--hp-line);
+    box-shadow: var(--hp-shadow);
+  }
+  & :is([class*="PromoTiles-module"]:is([class*="__tile "],[class$="__tile"]),[class*="PromoTiles_tile__"]):hover {
+    box-shadow: var(--hp-shadow-hover);
+  }
+  & :is([class*="PromoTiles-module"]:is([class*="__overlay "],[class$="__overlay"]),[class*="PromoTiles_overlay__"]) {
+    padding: var(--sp-4) var(--sp-5);
+    background: linear-gradient(
+      to top,
+      rgba(10, 53, 119, 0.88) 0%,
+      rgba(10, 53, 119, 0.35) 55%,
+      rgba(10, 53, 119, 0) 100%
+    );
+  }
+  & :is([class*="PromoTiles-module"]:is([class*="__title "],[class$="__title"]),[class*="PromoTiles_title__"]) {
+    color: #fff;
+    letter-spacing: 0.04em;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  }
+  & :is([class*="PromoTiles-module"]:is([class*="__subtitle "],[class$="__subtitle"]),[class*="PromoTiles_subtitle__"]) {
+    color: rgba(255, 255, 255, 0.92);
+  }
+
+  /* ------------------------------------------------------------------------
+     Section headers — ink title, short accent rule, outlined "see all" pill
+     ---------------------------------------------------------------------- */
+  & :is([class*="SectionHeader-module"]:is([class*="__header "],[class$="__header"]),[class*="SectionHeader_header__"]) {
+    align-items: flex-end;
+    margin-bottom: var(--sp-4);
+    padding-bottom: var(--sp-3);
+    border-bottom: 1px solid var(--hp-line);
+  }
+  & :is([class*="SectionHeader-module"]:is([class*="__title "],[class$="__title"]),[class*="SectionHeader_title__"]) {
+    margin: 0;
+    color: var(--c-ink);
+    font-size: clamp(1.25rem, 1.05rem + 0.8vw, 1.625rem);
+    letter-spacing: 0.02em;
+  }
+  & :is([class*="SectionHeader-module"]:is([class*="__title "],[class$="__title"]),[class*="SectionHeader_title__"])::after {
+    display: none;
+  }
+  & :is([class*="SectionHeader-module"]:is([class*="__titleGroup "],[class$="__titleGroup"]),[class*="SectionHeader_titleGroup__"]) {
+    position: relative;
+    padding-inline-start: var(--sp-4);
+  }
+  & :is([class*="SectionHeader-module"]:is([class*="__titleGroup "],[class$="__titleGroup"]),[class*="SectionHeader_titleGroup__"])::before {
+    content: '';
+    position: absolute;
+    inset-block: 0.25em 0.25em;
+    inset-inline-start: 0;
+    width: 4px;
+    border-radius: 4px;
+    background: linear-gradient(180deg, var(--c-primary-500), var(--c-highlight-400));
+  }
+  & :is([class*="SectionHeader-module"]:is([class*="__subtitle "],[class$="__subtitle"]),[class*="SectionHeader_subtitle__"]) {
+    margin-top: var(--sp-1);
+    font-size: var(--fs-sm);
+    color: var(--c-neutral-500);
+  }
+  & :is([class*="SectionHeader-module"]:is([class*="__link "],[class$="__link"]),[class*="SectionHeader_link__"]) {
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+    padding-inline: var(--sp-4);
+    border: 1px solid var(--c-primary-300);
+    border-radius: var(--radius-pill);
+    background: #fff;
+    color: var(--c-primary-600);
+    font-weight: var(--fw-bold);
+    transition:
+      background-color var(--dur-fast) var(--ease-out),
+      color var(--dur-fast) var(--ease-out),
+      border-color var(--dur-fast) var(--ease-out);
+  }
+  & :is([class*="SectionHeader-module"]:is([class*="__link "],[class$="__link"]),[class*="SectionHeader_link__"]):hover {
+    background: var(--c-primary-500);
+    border-color: var(--c-primary-500);
+    color: #fff;
+    text-decoration: none;
+  }
+
+  /* ------------------------------------------------------------------------
+     Category index — left-aligned editorial tiles instead of centred stacks
+     ---------------------------------------------------------------------- */
+  & :is([class*="CategoryGrid-module"]:is([class*="__grid "],[class$="__grid"]),[class*="CategoryGrid_grid__"]) {
+    gap: var(--sp-3);
+  }
+  /* Eight categories divide into 4 x 2; six columns left a half-empty row. */
+  @media (min-width: 1024px) {
+    & :is([class*="CategoryGrid-module"]:is([class*="__grid "],[class$="__grid"]),[class*="CategoryGrid_grid__"]) {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: var(--sp-4);
+    }
+  }
+  & :is([class*="CategoryGrid-module"]:is([class*="__card "],[class$="__card"]),[class*="CategoryGrid_card__"]) {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas:
+      'icon name'
+      'icon count'
+      'kids kids';
+    column-gap: var(--sp-3);
+    row-gap: 2px;
+    align-items: center;
+    justify-items: start;
+    padding: var(--sp-4);
+    text-align: left;
+    background: #fff;
+    border: 1px solid var(--hp-line);
+    border-radius: var(--hp-radius);
+    box-shadow: none;
+    transition:
+      border-color var(--dur-fast) var(--ease-out),
+      box-shadow var(--dur-base) var(--ease-out),
+      transform var(--dur-base) var(--ease-out);
+  }
+  & :is([class*="CategoryGrid-module"]:is([class*="__card "],[class$="__card"]),[class*="CategoryGrid_card__"]):hover,
+  & :is([class*="CategoryGrid-module"]:is([class*="__card "],[class$="__card"]),[class*="CategoryGrid_card__"]):focus-within {
+    border-color: var(--c-primary-300);
+    box-shadow: var(--hp-shadow-hover);
+    transform: translateY(-2px);
+  }
+  & :is([class*="CategoryGrid-module"]:is([class*="__iconFrame "],[class$="__iconFrame"]),[class*="CategoryGrid_iconFrame__"]) {
+    grid-area: icon;
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    background: var(--c-primary-50);
+    border: 1px solid var(--c-primary-100);
+  }
+  & :is([class*="CategoryGrid-module"]:is([class*="__iconFallback "],[class$="__iconFallback"]),[class*="CategoryGrid_iconFallback__"]) {
+    font-size: 1.375rem;
+    color: var(--c-primary-600);
+  }
+  & :is([class*="CategoryGrid-module"]:is([class*="__name "],[class$="__name"]),[class*="CategoryGrid_name__"]) {
+    grid-area: name;
+    align-self: end;
+    color: var(--c-ink);
+    font-size: var(--fs-md);
+    letter-spacing: 0.01em;
+  }
+  & :is([class*="CategoryGrid-module"]:is([class*="__count "],[class$="__count"]),[class*="CategoryGrid_count__"]) {
+    grid-area: count;
+    align-self: start;
+    color: var(--c-neutral-500);
+    font-size: var(--fs-xs);
+  }
+  & :is([class*="CategoryGrid-module"]:is([class*="__children "],[class$="__children"]),[class*="CategoryGrid_children__"]) {
+    grid-area: kids;
+    justify-self: stretch;
+    margin-top: var(--sp-3);
+    padding-top: var(--sp-3);
+    border-top: 1px dashed var(--hp-line);
+    justify-content: flex-start;
+    text-align: left;
+  }
+  & :is([class*="CategoryGrid-module"]:is([class*="__childLink "],[class$="__childLink"]),[class*="CategoryGrid_childLink__"]) {
+    color: var(--c-neutral-600);
+  }
+
+  /* ------------------------------------------------------------------------
+     Product cards — one consistent object: framed image well, brand eyebrow,
+     two-line name, prominent price, quiet meta row. Heights equalise because
+     the body is a column and the price group takes the free space.
+     ---------------------------------------------------------------------- */
+  & :is([class*="ProductCard-module"]:is([class*="__card "],[class$="__card"]),[class*="ProductCard_card__"]) {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: #fff;
+    border: 1px solid var(--hp-line);
+    border-radius: var(--hp-radius);
+    box-shadow: none;
+    overflow: hidden;
+    transition:
+      border-color var(--dur-fast) var(--ease-out),
+      box-shadow var(--dur-base) var(--ease-out),
+      transform var(--dur-base) var(--ease-out);
+  }
+  & :is([class*="ProductCard-module"]:is([class*="__card "],[class$="__card"]),[class*="ProductCard_card__"]):hover,
+  & :is([class*="ProductCard-module"]:is([class*="__card "],[class$="__card"]),[class*="ProductCard_card__"]):focus-within {
+    border-color: var(--c-primary-300);
+    box-shadow: var(--hp-shadow-hover);
+    transform: translateY(-3px);
+  }
+  & :is([class*="ProductCard-module"]:is([class*="__media "],[class$="__media"]),[class*="ProductCard_media__"]) {
+    background: var(--c-neutral-50);
+    border-bottom: 1px solid var(--c-neutral-100);
+    padding: var(--sp-3);
+  }
+  & :is([class*="ProductCard-module"]:is([class*="__image "],[class$="__image"]),[class*="ProductCard_image__"]) {
+    mix-blend-mode: multiply;
+    transition: transform var(--dur-slow, 320ms) var(--ease-out);
+  }
+  & :is([class*="ProductCard-module"]:is([class*="__card "],[class$="__card"]),[class*="ProductCard_card__"]):hover :is([class*="ProductCard-module"]:is([class*="__image "],[class$="__image"]),[class*="ProductCard_image__"]) {
+    transform: scale(1.04);
+  }
+  & :is([class*="ProductCard-module"]:is([class*="__body "],[class$="__body"]),[class*="ProductCard_body__"]) {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: var(--sp-1);
+    padding: var(--sp-3) var(--sp-3) var(--sp-4);
+  }
+  & :is([class*="ProductCard-module"]:is([class*="__brand "],[class$="__brand"]),[class*="ProductCard_brand__"]) {
+    color: var(--c-neutral-500);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-medium);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  & :is([class*="ProductCard-module"]:is([class*="__name "],[class$="__name"]),[class*="ProductCard_name__"]) {
+    color: var(--c-ink);
+    line-height: 1.45;
+  }
+  & :is([class*="ProductCard-module"]:is([class*="__priceGroup "],[class$="__priceGroup"]),[class*="ProductCard_priceGroup__"]) {
+    margin-top: auto;
+    padding-top: var(--sp-2);
+  }
+  & :is([class*="ProductCard-module"]:is([class*="__unitPrice "],[class$="__unitPrice"]),[class*="ProductCard_unitPrice__"]) {
+    color: var(--c-ink);
+    letter-spacing: 0;
+  }
+  & :is([class*="ProductCard-module"]:is([class*="__perUnit "],[class$="__perUnit"]),[class*="ProductCard_perUnit__"]) {
+    color: var(--c-neutral-500);
+  }
+  & :is([class*="ProductCard-module"]:is([class*="__meta "],[class$="__meta"]),[class*="ProductCard_meta__"]) {
+    padding-top: var(--sp-2);
+    border-top: 1px solid var(--c-neutral-100);
+  }
+
+  /* Discount: a calm tag in the accent family instead of a flat red block. */
+  & :is([class*="ProductCard-module"],[class^="ProductCard_"],[class*=" ProductCard_"]) :is([class*="Badge-module"]:is([class*="__sale "],[class$="__sale"]),[class*="Badge_sale__"]) {
+    background: #fff2e0;
+    color: #9a4a00;
+    border: 1px solid #ffd49b;
+    border-radius: 4px;
+    font-weight: var(--fw-bold);
+    letter-spacing: 0.02em;
+  }
+  /* Availability: a status dot and quiet text, no filled chip. */
+  & :is([class*="ProductCard-module"],[class^="ProductCard_"],[class*=" ProductCard_"]) :is([class*="Badge-module"]:is([class*="__inStock "],[class$="__inStock"]),[class*="Badge_inStock__"]) {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0;
+    background: transparent;
+    color: var(--c-neutral-700);
+    font-weight: var(--fw-medium);
+  }
+  & :is([class*="ProductCard-module"],[class^="ProductCard_"],[class*=" ProductCard_"]) :is([class*="Badge-module"]:is([class*="__inStock "],[class$="__inStock"]),[class*="Badge_inStock__"])::before {
+    content: '';
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #1b9a6b;
+    box-shadow: 0 0 0 3px rgba(27, 154, 107, 0.16);
+  }
+
+  /* Rail arrows: quiet discs that match the cards. */
+  & :is([class*="ScrollRail-module"]:is([class*="__arrow "],[class$="__arrow"]),[class*="ScrollRail_arrow__"]) {
+    border: 1px solid var(--hp-line);
+    background: #fff;
+    color: var(--c-ink);
+    box-shadow: var(--hp-shadow);
+  }
+  & :is([class*="ScrollRail-module"]:is([class*="__arrow "],[class$="__arrow"]),[class*="ScrollRail_arrow__"]):hover {
+    border-color: var(--c-primary-400);
+    color: var(--c-primary-600);
+  }
+
+  /* Subcategory chips under each rail heading. */
+  & :is([class*="SubcategoryTags-module"],[class^="SubcategoryTags_"],[class*=" SubcategoryTags_"]) a {
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--hp-line);
+    background: #fff;
+    color: var(--c-neutral-700);
+    transition:
+      border-color var(--dur-fast) var(--ease-out),
+      color var(--dur-fast) var(--ease-out),
+      background-color var(--dur-fast) var(--ease-out);
+  }
+  & :is([class*="SubcategoryTags-module"],[class^="SubcategoryTags_"],[class*=" SubcategoryTags_"]) a:hover {
+    border-color: var(--c-primary-400);
+    background: var(--c-primary-50);
+    color: var(--c-primary-700);
+    text-decoration: none;
+  }
+
+  /* ------------------------------------------------------------------------
+     FAQ and order guide — readable reference blocks
+     ---------------------------------------------------------------------- */
+  & :is([class*="FaqList-module"]:is([class*="__item "],[class$="__item"]),[class*="FaqList_item__"]) {
+    background: #fff;
+    border: 1px solid var(--hp-line);
+    border-radius: var(--hp-radius);
+    box-shadow: none;
+  }
+  & :is([class*="FaqList-module"]:is([class*="__item "],[class$="__item"]),[class*="FaqList_item__"]):hover {
+    border-color: var(--c-primary-200);
+  }
+  & :is([class*="FaqList-module"]:is([class*="__questionText "],[class$="__questionText"]),[class*="FaqList_questionText__"]) {
+    color: var(--c-ink);
+    font-weight: var(--fw-bold);
+  }
+
+  & :is([class*="OrderGuideAside-module"]:is([class*="__card "],[class$="__card"]),[class*="OrderGuideAside_card__"]) {
+    background: #fff;
+    border: 1px solid var(--hp-line);
+    border-top: 3px solid var(--c-primary-500);
+    border-radius: var(--hp-radius);
+    box-shadow: var(--hp-shadow);
+  }
+  & :is([class*="OrderGuideAside-module"]:is([class*="__title "],[class$="__title"]),[class*="OrderGuideAside_title__"]) {
+    color: var(--c-ink);
+    letter-spacing: 0.03em;
+  }
+  & :is([class*="OrderGuideAside-module"]:is([class*="__num "],[class$="__num"]),[class*="OrderGuideAside_num__"]) {
+    background: var(--c-ink);
+    color: #fff;
+  }
+  & :is([class*="OrderGuideAside-module"]:is([class*="__stepTitle "],[class$="__stepTitle"]),[class*="OrderGuideAside_stepTitle__"]) {
+    color: var(--c-ink);
+  }
+  & :is([class*="OrderGuideAside-module"]:is([class*="__cta "],[class$="__cta"]),[class*="OrderGuideAside_cta__"]) {
+    border-radius: var(--hp-radius);
+    letter-spacing: 0.04em;
+  }
+
+  /* ------------------------------------------------------------------------
+     Footer — same structure, steadier rhythm and link legibility
+     ---------------------------------------------------------------------- */
+  & :is([class*="Footer-module"],[class^="Footer_"],[class*=" Footer_"]) a {
+    transition: color var(--dur-fast) var(--ease-out);
+  }
+  & :is([class*="Footer-module"],[class^="Footer_"],[class*=" Footer_"]) a:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  /* ==========================================================================
+     LAYOUT v2 — marketplace composition (phone first)
+
+     Overrides the hero, category index and rail sections above. Same scope,
+     same tokens; only structure changes:
+       · hero: LINE banner first on a phone, headline and a quiet button under
+         it; a tinted panel with a two-column split from 1024px
+       · category index: a swipeable icon row on phones, 4 columns on tablets,
+         the horizontal tiles above stay from 1024px
+       · product rails: white bands, 2.2 cards in view on a phone so the next
+         one peeks, compact cards
+     ========================================================================== */
+
+
+  /* ---- Category index: icon tiles at every width -------------------------- */
+  @media (min-width: 0px) {
+    & :is([class*="CategoryGrid-module"]:is([class*="__grid "],[class$="__grid"]),[class*="CategoryGrid_grid__"]) {
+      display: grid;
+      grid-auto-flow: column;
+      grid-template-columns: none;
+      grid-auto-columns: 86px;
+      gap: var(--sp-2);
+      overflow-x: auto;
+      scroll-snap-type: x proximity;
+      padding-bottom: var(--sp-2);
+      scrollbar-width: none;
+    }
+    & :is([class*="CategoryGrid-module"]:is([class*="__grid "],[class$="__grid"]),[class*="CategoryGrid_grid__"])::-webkit-scrollbar { display: none; }
+    & :is([class*="CategoryGrid-module"]:is([class*="__grid "],[class$="__grid"]),[class*="CategoryGrid_grid__"]) > * { scroll-snap-align: start; }
+    & :is([class*="CategoryGrid-module"]:is([class*="__card "],[class$="__card"]),[class*="CategoryGrid_card__"]) {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-items: center;
+      gap: var(--sp-2);
+      padding: var(--sp-3) var(--sp-1);
+      text-align: center;
+      border-radius: 14px;
+    }
+    & :is([class*="CategoryGrid-module"]:is([class*="__iconFrame "],[class$="__iconFrame"]),[class*="CategoryGrid_iconFrame__"]) { width: 52px; height: 52px; border-radius: 14px; }
+    & :is([class*="CategoryGrid-module"]:is([class*="__name "],[class$="__name"]),[class*="CategoryGrid_name__"]) {
+      font-size: 0.75rem;
+      line-height: 1.35;
+      text-align: center;
+      align-self: center;
+    }
+    & :is([class*="CategoryGrid-module"]:is([class*="__count "],[class$="__count"]),[class*="CategoryGrid_count__"]),
+    & :is([class*="CategoryGrid-module"]:is([class*="__children "],[class$="__children"]),[class*="CategoryGrid_children__"]) { display: none; }
+  }
+  @media (min-width: 640px) {
+    & :is([class*="CategoryGrid-module"]:is([class*="__grid "],[class$="__grid"]),[class*="CategoryGrid_grid__"]) {
+      grid-auto-flow: row;
+      grid-template-columns: repeat(auto-fit, minmax(112px, 1fr));
+      grid-auto-columns: auto;
+      overflow: visible;
+      gap: var(--sp-3);
+    }
+    & :is([class*="CategoryGrid-module"]:is([class*="__iconFrame "],[class$="__iconFrame"]),[class*="CategoryGrid_iconFrame__"]) { width: 60px; height: 60px; }
+    & :is([class*="CategoryGrid-module"]:is([class*="__name "],[class$="__name"]),[class*="CategoryGrid_name__"]) { font-size: var(--fs-sm); }
+  }
+
+  /* ---- Product rails as white bands --------------------------------------- */
+  & .section:has(:is([class*="ScrollRail-module"]:is([class*="__wrap "],[class$="__wrap"]),[class*="ScrollRail_wrap__"])) {
+    padding: var(--sp-3);
+    background: #fff;
+    border: 1px solid var(--hp-line);
+    border-radius: var(--hp-radius-lg);
+    box-shadow: var(--hp-shadow);
+  }
+  @media (min-width: 768px) {
+    & .section:has(:is([class*="ScrollRail-module"]:is([class*="__wrap "],[class$="__wrap"]),[class*="ScrollRail_wrap__"])) { padding: var(--sp-5) var(--sp-6); }
+  }
+  @media (max-width: 639px) {
+    & :is([class*="ScrollRail-module"]:is([class*="__track "],[class$="__track"]),[class*="ScrollRail_track__"]):not(:is([class*="ScrollRail-module"]:is([class*="__fluid "],[class$="__fluid"]),[class*="ScrollRail_fluid__"])) {
+      grid-auto-columns: 44%;
+      gap: var(--sp-2);
+    }
+    & :is([class*="ProductCard-module"]:is([class*="__media "],[class$="__media"]),[class*="ProductCard_media__"]) { padding: var(--sp-2); }
+    & :is([class*="ProductCard-module"]:is([class*="__body "],[class$="__body"]),[class*="ProductCard_body__"]) { padding: var(--sp-2) var(--sp-2) var(--sp-3); }
+    & :is([class*="ProductCard-module"]:is([class*="__name "],[class$="__name"]),[class*="ProductCard_name__"]) { font-size: var(--fs-sm); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    & * {
+      transition-duration: 0.01ms !important;
+    }
+    & :is([class*="ProductCard-module"]:is([class*="__card "],[class$="__card"]),[class*="ProductCard_card__"]):hover,
+    & :is([class*="CategoryGrid-module"]:is([class*="__card "],[class$="__card"]),[class*="CategoryGrid_card__"]):hover,
+    & a:is([class*="LineBanner-module"]:is([class*="__banner "],[class$="__banner"]),[class*="LineBanner_banner__"]):hover {
+      transform: none;
+    }
+  }
+}

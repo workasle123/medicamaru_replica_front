@@ -19,6 +19,7 @@ import CartAddedNotice from '@/components/cart/CartAddedNotice/CartAddedNotice';
 import ProductRail from '@/components/home/ProductRail/ProductRail';
 import Rating from '@/components/ui/Rating/Rating';
 import Badge from '@/components/ui/Badge/Badge';
+import MobileBuyBar from '@/components/product/MobileBuyBar/MobileBuyBar';
 
 import {
   getAllProductSlugs,
@@ -364,135 +365,153 @@ export default async function ProductDetailPage({ params }) {
           )}
         </div>
 
-        <div className={styles.head}>
-          {product.brand && <p className={styles.brand}>{product.brand}</p>}
-          <h1 className={styles.title}>{product.name}</h1>
+        {/* Buy column: the title, price and the pack panel together, level with
+            the photo — what a shopper came to do is in one place, above the
+            fold, instead of the pack panel hanging in a rail beside the
+            description. */}
+        <div className={styles.buyColumn}>
+          <div className={styles.head}>
+            {product.brand && <p className={styles.brand}>{product.brand}</p>}
+            <h1 className={styles.title}>{product.name}</h1>
 
-          <div className={styles.headlinePrice}>
-            {wasUnitPrice > best.unitPrice && (
-              <span className={`${styles.wasPrice} numeric`}>
-                {formatYenPrefix(wasUnitPrice)}
+            <div className={styles.headlinePrice}>
+              {wasUnitPrice > best.unitPrice && (
+                <span className={`${styles.wasPrice} numeric`}>
+                  {formatYenPrefix(wasUnitPrice)}
+                </span>
+              )}
+              <span className={`${styles.unitPrice} numeric`}>
+                {formatYenPrefix(best.unitPrice)}
+                <span className={styles.perUnit}>{formatPerUnit(best.unitLabel)}</span>
               </span>
-            )}
-            <span className={`${styles.unitPrice} numeric`}>
-              {formatYenPrefix(best.unitPrice)}
-              <span className={styles.perUnit}>{formatPerUnit(best.unitLabel)}</span>
-            </span>
-            {/* The pack this price comes from, so the headline figure is
-                attributable; every other tier is in the panel.
+              {/* The pack this price comes from, so the headline figure is
+                  attributable; every other tier is in the panel.
 
-                `best`, not `cheapest`. The per-unit figure beside it is the
-                best unit price in the range — usually the LARGEST pack —
-                while this line used to name the cheapest pack, which is the
-                smallest. So the two halves described different variants:
-                「1錠あたり24円」 next to 「730円／1シート 10錠」, and 730/10
-                is 73, not 24. The sentence contradicted itself, and the
-                cheaper-looking pack was the one that did not earn the
-                headline rate. */}
-            <span className={`${styles.fromPrice} numeric`}>
-              {formatYenSuffix(best.price)}／{best.packLabel}
-            </span>
+                  `best`, not `cheapest`. The per-unit figure beside it is the
+                  best unit price in the range — usually the LARGEST pack —
+                  while this line used to name the cheapest pack, which is the
+                  smallest. So the two halves described different variants:
+                  「1錠あたり24円」 next to 「730円／1シート 10錠」, and 730/10
+                  is 73, not 24. The sentence contradicted itself, and the
+                  cheaper-looking pack was the one that did not earn the
+                  headline rate. */}
+              <span className={`${styles.fromPrice} numeric`}>
+                {formatYenSuffix(best.price)}／{best.packLabel}
+              </span>
+              {best.discountPct > 0 && (
+                <span className={`${styles.discountPill} numeric`}>{best.discountPct}%OFF</span>
+              )}
+            </div>
+
+            <div className={styles.ratingRow}>
+              {/* Stars only once there is a review behind them: five empty
+                  stars and 「0.0」 read as a bad score, not as no score. */}
+              {rating.count > 0 ? (
+                <>
+                  <Rating average={rating.average} count={rating.count} showValue />
+                  <a href="#reviews" className={styles.reviewLink}>
+                    レビューを見る
+                  </a>
+                </>
+              ) : (
+                <a href="#reviews" className={styles.reviewLink}>
+                  レビューを書く
+                </a>
+              )}
+              {inStock ? <Badge variant="inStock">在庫あり</Badge> : <Badge variant="outOfStock">在庫なし</Badge>}
+            </div>
+
+            {/* In-page shortcuts, so the long page is one tap from any section. */}
+            <nav className={styles.jump} aria-label="ページ内リンク">
+              <a href="#specs" className={styles.jumpLink}>基本情報</a>
+              {product.faqs.length > 0 && <a href="#faq" className={styles.jumpLink}>よくある質問</a>}
+              <a href="#reviews" className={styles.jumpLink}>レビュー</a>
+            </nav>
           </div>
 
-          <div className={styles.ratingRow}>
-            <Rating average={rating.average} count={rating.count} showValue />
-            {rating.count > 0 && (
-              <a href="#reviews" className={styles.reviewLink}>
-                レビューを見る
-              </a>
-            )}
-            {inStock ? <Badge variant="inStock">在庫あり</Badge> : <Badge variant="outOfStock">在庫なし</Badge>}
-          </div>
-        </div>
-
-        {/* The right rail: the pack panel, then 売れ筋ランキング under it.
-
-            ONE box, because a grid cannot flow two items down a column that a
-            third item is spanning. With the panel spanning the title, specs
-            and body rows — which is what keeps the blank space out — the only
-            cell left for the ranking was below the description, which put it
-            thousands of pixels down the page on every product. Inside a rail
-            they simply stack, and the ranking starts where the packs end.
-
-            This is also why the ranking is no longer last in the DOM. Below
-            1280px it does not render at all, so nothing changes there; above
-            it, a screen reader now meets it after the buy box rather than
-            after the description. The aria-label makes it a landmark that can
-            be skipped in one key press, which is the trade for having it
-            beside the text instead of beneath it. */}
-        <div className={styles.railRight}>
-          <div className={styles.purchase}>
+            <div className={styles.purchase} id="purchase">
             <PriceTiers product={product} />
           </div>
-
-          <aside className={styles.rankingColumn} aria-label="売れ筋ランキング">
-            <RankingBox products={ranked} />
-          </aside>
         </div>
 
-        <div className={styles.details}>
-          <ProductHighlights
-            composition={product.composition}
-            shippingEstimate={product.shippingEstimate}
-          />
+        {/* Side column: 目次, then 売れ筋ランキング. It sits before the text in
+            the DOM so keyboard and screen-reader users reach the contents list
+            first; the grid places it beside (or above) the text. */}
+        <div className={styles.sideColumn}>
+          <div className={styles.sideSticky}>
+            {/* The 目次 is a sibling column, not a block above the text, so it stays
+                in view while the body is read. It is FIRST in the DOM so keyboard
+                and screen-reader users reach it before the content it indexes;
+                on narrow screens it simply stacks above. */}
+            <aside className={styles.tocColumn}>
+              <ProductToc sections={tocSections} />
+            </aside>
 
-          <div className={styles.specs} id="specs">
-            <h2 className="visually-hidden">商品の基本情報</h2>
-            <SpecTable specs={product.specs} />
+
+            <aside className={styles.rankingColumn} aria-label="売れ筋ランキング">
+              <RankingBox products={ranked} />
+            </aside>
+          </div>
+        </div>
+
+        <div className={styles.mainColumn}>
+          <div className={styles.details}>
+            <ProductHighlights
+              composition={product.composition}
+              shippingEstimate={product.shippingEstimate}
+            />
+
+            <div className={styles.specs} id="specs">
+              <h2 className="visually-hidden">商品の基本情報</h2>
+              <SpecTable specs={product.specs} />
+            </div>
+
+            {/* E-E-A-T signals: freshness and medical supervision */}
+            <p className={styles.byline}>
+              <span>
+                最終更新日：
+                <time dateTime={toIsoDate(product.updatedAt)}>{formatDate(product.updatedAt)}</time>
+              </span>
+              {product.supervisedBy && <span>監修：{product.supervisedBy}</span>}
+            </p>
           </div>
 
-          {/* E-E-A-T signals: freshness and medical supervision */}
-          <p className={styles.byline}>
-            <span>
-              最終更新日：
-              <time dateTime={toIsoDate(product.updatedAt)}>{formatDate(product.updatedAt)}</time>
-            </span>
-            {product.supervisedBy && <span>監修：{product.supervisedBy}</span>}
-          </p>
-        </div>
 
-        {/* The 目次 is a sibling column, not a block above the text, so it stays
-            in view while the body is read. It is FIRST in the DOM so keyboard
-            and screen-reader users reach it before the content it indexes;
-            on narrow screens it simply stacks above. */}
-        <aside className={styles.tocColumn}>
-          <ProductToc sections={tocSections} />
-        </aside>
+          <div className={styles.bodyMain}>
+            <ProductContent blocks={contentBlocks} />
 
-        <div className={styles.bodyMain}>
-          <ProductContent blocks={contentBlocks} />
+            <FaqList faqs={product.faqs} title={`${product.name}に関するよくあるご質問`} />
 
-          <FaqList faqs={product.faqs} title={`${product.name}に関するよくあるご質問`} />
+            {/* The form resolves its own eligibility after hydration. It MUST
+                NOT be decided here: this page is prerendered static HTML for
+                every product, and reading the session cookie during its render
+                would opt all of them into dynamic rendering. */}
+            <ReviewSummary
+              rating={rating}
+              reviews={reviews.items}
+              /* product.slug, not the requested one — the two differ for a
+                 legacy numeric URL, and the path that needs revalidating after
+                 a post is the canonical one. */
+              form={<ReviewForm productId={product.id} slug={product.slug} />}
+            />
 
-          {/* The form resolves its own eligibility after hydration. It MUST
-              NOT be decided here: this page is prerendered static HTML for
-              every product, and reading the session cookie during its render
-              would opt all of them into dynamic rendering. */}
-          <ReviewSummary
-            rating={rating}
-            reviews={reviews.items}
-            /* product.slug, not the requested one — the two differ for a
-               legacy numeric URL, and the path that needs revalidating after
-               a post is the canonical one. */
-            form={<ReviewForm productId={product.id} slug={product.slug} />}
-          />
+          {product.references?.length > 0 && (
+            <section className={styles.references} id="references">
+              <h2 className={styles.referencesTitle}>参考文献</h2>
+              <ul className={styles.referencesList}>
+                {product.references.map((ref) => (
+                  <li key={ref}>
+                    <a href={ref} rel="nofollow noopener noreferrer" target="_blank">
+                      {ref}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
 
-        {product.references?.length > 0 && (
-          <section className={styles.references} id="references">
-            <h2 className={styles.referencesTitle}>参考文献</h2>
-            <ul className={styles.referencesList}>
-              {product.references.map((ref) => (
-                <li key={ref}>
-                  <a href={ref} rel="nofollow noopener noreferrer" target="_blank">
-                    {ref}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </section>
-        )}
-
-          {product.disclaimer && <p className={styles.disclaimer}>{product.disclaimer}</p>}
+            {product.disclaimer && <p className={styles.disclaimer}>{product.disclaimer}</p>}
+          </div>
         </div>
       </div>
 
@@ -501,6 +520,12 @@ export default async function ProductDetailPage({ params }) {
           <ProductRail title="関連商品" products={related} />
         </div>
       )}
+
+      <MobileBuyBar
+        price={formatYenPrefix(best.unitPrice)}
+        perUnit={formatPerUnit(best.unitLabel)}
+        inStock={inStock}
+      />
     </div>
   );
 }
