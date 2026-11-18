@@ -44,7 +44,10 @@
        新規登録 is among them — お気に入り, ログイン/新規登録, カート, AIに相談 —
        which measured 312px against the 304px the wider middle column left it, so
        they overlapped. The search field still clears 440px here. */
-    grid-template-columns: 1fr minmax(0, 620px) 1fr;
+    /* Search takes everything between the logo and the actions. The outer
+       columns size to their content, so the actions can never be squeezed
+       into the search (the overlap the old 620px cap guarded against). */
+    grid-template-columns: auto minmax(0, 1fr) auto;
   }
 }
 
@@ -95,7 +98,8 @@
      smaller than the old katakana wordmark did at the same box height. This
      buys some of that back. It cannot buy all of it — see the note above
      .logoFull on what would. */
-  height: 44px;
+  height: 70px;
+  padding-top: 8px;
 }
 
 @media (min-width: 1024px) {
@@ -136,6 +140,8 @@
     width: 100%;
     padding-bottom: 0;
     justify-self: center;
+    /* Wide, but not a 1,100px bar on a large monitor. */
+    max-width: 960px;
   }
 }
 
