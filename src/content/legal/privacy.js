@@ -11,7 +11,7 @@ const content = {
   "intro": [
     {
       "type": "p",
-      "text": "Sense Pharmaceuticals（以下「当社」といいます）は、お薬らく（medicamaru.com、以下「本サイト」といいます）の運営にあたり、利用者の皆さまの個人情報を適切に取り扱うことを重要な責務と考えています。本ポリシーでは、当社が取得する情報の内容と、その取扱いについて説明します。"
+      "text": "Sense Pharmaceuticals（以下「当社」といいます）は、お薬らく（okusuriraku.shop、以下「本サイト」といいます）の運営にあたり、利用者の皆さまの個人情報を適切に取り扱うことを重要な責務と考えています。本ポリシーでは、当社が取得する情報の内容と、その取扱いについて説明します。"
     }
   ],
   "sections": [
@@ -208,7 +208,7 @@ const content = {
           "type": "list",
           "items": [
             "運営会社：Sense Pharmaceuticals",
-            "メールアドレス：info@medicamaru.com"
+            "メールアドレス：info@okusuriraku.shop"
           ]
         },
         {

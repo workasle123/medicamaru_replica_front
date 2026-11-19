@@ -13,7 +13,7 @@
  */
 
 /**
- * Real endpoints, verified live against https://adminpanel.medicamaru.com.
+ * Real endpoints, verified live against https://adminpanel.okusuriraku.shop.
  *
  * These are the backend's actual routes (routes/webApi.php, mounted at the
  * `/api` prefix) — NOT the `/api/storefront/v1/*` contract proposed in

@@ -21,9 +21,9 @@ import { SITE } from '@/constants/site';
  * verification worked and the page they were shown said otherwise.
  *
  * The forwarded headers carry the host the customer actually typed, so they
- * come first. NEXT_PUBLIC_SITE_URL is the fallback for a proxy that sends
- * neither, and `nextUrl.origin` is kept last for local development, where
- * there is no proxy and it is correct.
+ * come first. SITE.url — NEXT_PUBLIC_SITE_URL, or the live domain
+ * https://okusuriraku.shop when that is unset — is the fallback for a proxy
+ * that sends neither. `nextUrl.origin` is kept last as a final resort.
  *
  * @param {Request & {nextUrl: URL}} request
  * @returns {string}
@@ -42,8 +42,9 @@ export function publicOrigin(request) {
     return `${proto}://${forwardedHost}`;
   }
 
-  /* Set on the live deployment; the placeholder default is no use here. */
-  if (SITE.url && !SITE.url.includes('medicamaru.example')) return SITE.url;
+  /* NEXT_PUBLIC_SITE_URL when set, otherwise the live domain — both are real
+     addresses a browser can go to. */
+  if (SITE.url) return SITE.url;
 
   return request.nextUrl.origin;
 }

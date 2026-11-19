@@ -11,7 +11,7 @@ const content = {
   "intro": [
     {
       "type": "p",
-      "text": "お薬らく（medicamaru.com）に掲載するすべてのコンテンツは、正確性・公正性・利用者の安全性を最優先に制作しています。本ページでは、当サイトがコンテンツ制作にあたり守っている基本方針をご説明します。"
+      "text": "お薬らく（okusuriraku.shop）に掲載するすべてのコンテンツは、正確性・公正性・利用者の安全性を最優先に制作しています。本ページでは、当サイトがコンテンツ制作にあたり守っている基本方針をご説明します。"
     }
   ],
   "sections": [
@@ -126,7 +126,7 @@ const content = {
         {
           "type": "list",
           "items": [
-            "メールアドレス：info@medicamaru.com"
+            "メールアドレス：info@okusuriraku.shop"
           ]
         },
         {

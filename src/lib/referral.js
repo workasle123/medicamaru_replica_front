@@ -6,7 +6,7 @@ import { SITE } from '@/constants/site';
  * Built here rather than taken from the API. /customer/my-referrals returns a
  * `referral_link`, but it is composed with Laravel's `url()`, so it resolves
  * against whatever host answered the request — the admin panel. A customer
- * would be handed https://adminpanel.medicamaru.com/register?ref=XXXX, which
+ * would be handed https://adminpanel.okusuriraku.shop/register?ref=XXXX, which
  * is not a page that exists there.
  *
  * `ref` is the query key because that is the one the backend already published
