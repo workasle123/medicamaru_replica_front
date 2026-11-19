@@ -23,7 +23,7 @@ export function abs(path = '/') {
 
 /* The trailing slash is deliberate and matches the SEO team's documents: the
    organization and the website are identified by the site ROOT, and
-   `https://medicamaru.com/#organization` is the form their graphs reference. */
+   `https://okusuriraku.shop/#organization` is the form their graphs reference. */
 export const ORG_ID = `${abs('/')}#organization`;
 export const WEBSITE_ID = `${abs('/')}#website`;
 
@@ -34,7 +34,7 @@ export const WEBSITE_ID = `${abs('/')}#website`;
  */
 
 /** Public contact address, published in the Organization node. */
-export const ORG_EMAIL = 'info@medicamaru.com';
+export const ORG_EMAIL = 'info@okusuriraku.shop';
 
 /** Absolute, and a real file: public/brand/logo.png. */
 export const ORG_LOGO = abs('/brand/logo.png');

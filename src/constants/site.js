@@ -12,8 +12,8 @@ export const SITE = {
     'お薬らくは、海外医薬品・ジェネリック医薬品・サプリメントの個人輸入をサポートする通販サイトです。症状から探せる検索と、わかりやすい商品情報で、はじめての方も安心してご利用いただけます。',
   locale: 'ja_JP',
   lang: 'ja',
-  // Domain is not final — see docs/DECISIONS.md Q6. Override with NEXT_PUBLIC_SITE_URL.
-  url: process.env.NEXT_PUBLIC_SITE_URL || 'https://medicamaru.example',
+  // Defaults to the live domain. Override with NEXT_PUBLIC_SITE_URL (e.g. http://localhost:3000 in development).
+  url: process.env.NEXT_PUBLIC_SITE_URL || 'https://okusuriraku.shop',
   currency: 'JPY',
   country: 'JP',
 };
@@ -57,7 +57,7 @@ export const OPERATOR = {
   representative: 'Dr. Brajesh Bharadwaj',
   address: '44, Regal Building, New Delhi-110001',
   phone: '+91 7357 374 396',
-  email: 'info@medicamaru.com',
+  email: 'info@okusuriraku.shop',
   supportHours: '10:00〜18:00',
 };
 

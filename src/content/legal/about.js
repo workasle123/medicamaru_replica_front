@@ -16,7 +16,7 @@ const content = {
       "blocks": [
         {
           "type": "p",
-          "text": "お薬らく（medicamaru.com）は、海外で製造・販売されている医薬品、医薬部外品、サプリメント、化粧品などについて、個人輸入という仕組みを通じてご希望の方に取り次ぐ情報提供・注文サポートサイトです。"
+          "text": "お薬らく（okusuriraku.shop）は、海外で製造・販売されている医薬品、医薬部外品、サプリメント、化粧品などについて、個人輸入という仕組みを通じてご希望の方に取り次ぐ情報提供・注文サポートサイトです。"
         },
         {
           "type": "p",
@@ -133,13 +133,13 @@ const content = {
           },
           {
             "label": "お問い合わせメールアドレス",
-            "value": "info@medicamaru.com",
-            "href": "mailto:info@medicamaru.com"
+            "value": "info@okusuriraku.shop",
+            "href": "mailto:info@okusuriraku.shop"
           },
           {
             "label": "ウェブサイト",
-            "value": "https://medicamaru.com",
-            "href": "https://medicamaru.com"
+            "value": "https://okusuriraku.shop",
+            "href": "https://okusuriraku.shop"
           }
         ]
       }

@@ -4,7 +4,7 @@
  * Talks to the live backend at API_BASE_URL. Implements the same interface as
  * the mock adapter, so `DATA_SOURCE=api|mock` is the only switch needed.
  *
- * Verified live against https://adminpanel.medicamaru.com on 2026-08-13.
+ * Verified live against https://adminpanel.okusuriraku.shop on 2026-08-13.
  * Response shapes are mapped in ./normalise.js — nothing above the service
  * layer sees the backend's snake_case rows.
  *

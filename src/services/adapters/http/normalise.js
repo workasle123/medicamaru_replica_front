@@ -6,7 +6,7 @@
  * Everything above the service layer speaks the types in `lib/types.js`, so
  * this module is the single seam where those two vocabularies meet.
  *
- * Verified against https://adminpanel.medicamaru.com on 2026-08-13.
+ * Verified against https://adminpanel.okusuriraku.shop on 2026-08-13.
  */
 
 import { SITE } from '@/constants/site';
@@ -15,7 +15,7 @@ import { productSlug } from '@/lib/product-url';
 
 /** Uploads are served from /storage, verified: /storage/products/*.webp → 200 */
 const STORAGE_BASE = (
-  process.env.MEDIA_BASE_URL || 'https://adminpanel.medicamaru.com/storage'
+  process.env.MEDIA_BASE_URL || 'https://adminpanel.okusuriraku.shop/storage'
 ).replace(/\/$/, '');
 
 /** `products/foo.webp` → `https://…/storage/products/foo.webp` */
@@ -446,7 +446,7 @@ function stripTags(html) {
  * A link that ALREADY points at this site is honoured as written. It was not,
  * and that was a bug: the whitelist below was drawn up for medicine.shop's
  * routes, and because our own host went through the same filter, a banner the
- * admin pointed at https://medicamaru.com/campaign or /my-account/referral
+ * admin pointed at https://okusuriraku.shop/campaign or /my-account/referral
  * came back null and rendered as artwork with no link at all. Paths on our
  * own host are ours to serve — if one is wrong it should 404 and be fixed in
  * the admin, not be silently swallowed here.
@@ -516,7 +516,7 @@ const OLD_HOST = /\b(?:www\.)?medicine\.shop\b/g;
 
 function rebrand(html) {
   if (typeof html !== 'string' || !html) return '';
-  return html.replace(OLD_BRAND, 'お薬らく').replace(OLD_HOST, 'medicamaru.com');
+  return html.replace(OLD_BRAND, 'お薬らく').replace(OLD_HOST, 'okusuriraku.shop');
 }
 
 /**
@@ -879,7 +879,7 @@ export function normaliseReview(raw) {
  *
  * `referral_link` from the backend is dropped on purpose. It is built with
  * Laravel's `url()`, so it resolves against the ADMIN host and hands the
- * customer https://adminpanel.medicamaru.com/register?ref=... — a page that
+ * customer https://adminpanel.okusuriraku.shop/register?ref=... — a page that
  * does not exist there. The storefront composes its own from the code.
  *
  * `referred_users` are the people this customer brought in; `referree_users`

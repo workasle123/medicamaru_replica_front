@@ -12,7 +12,7 @@
 import { products } from './fixtures';
 import { toSummary } from './index';
 
-const DEMO_EMAIL = 'demo@medicamaru.example';
+const DEMO_EMAIL = 'demo@okusuriraku.shop';
 const DEMO_PASSWORD = 'medicamaru123';
 
 /** In-memory store. Resets on every server restart — by design. */

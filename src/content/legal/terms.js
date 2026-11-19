@@ -11,7 +11,7 @@ const content = {
   "intro": [
     {
       "type": "p",
-      "text": "本規約は、Sense Pharmaceuticals（以下「当社」といいます）が運営するウェブサイト「お薬らく」（medicamaru.com、以下「本サイト」といいます）のご利用条件を定めるものです。本サイトをご利用いただく際は、本規約に同意いただいたものとみなします。"
+      "text": "本規約は、Sense Pharmaceuticals（以下「当社」といいます）が運営するウェブサイト「お薬らく」（okusuriraku.shop、以下「本サイト」といいます）のご利用条件を定めるものです。本サイトをご利用いただく際は、本規約に同意いただいたものとみなします。"
     }
   ],
   "sections": [
@@ -33,7 +33,7 @@ const content = {
         },
         {
           "type": "p",
-          "text": "本サービスは Sense Pharmaceuticals が運営しています。お問い合わせ先はお問い合わせフォームまたは info@medicamaru.com です。"
+          "text": "本サービスは Sense Pharmaceuticals が運営しています。お問い合わせ先はお問い合わせフォームまたは info@okusuriraku.shop です。"
         },
         {
           "type": "h3",
@@ -382,7 +382,7 @@ const content = {
         {
           "type": "list",
           "items": [
-            "メールアドレス：info@medicamaru.com",
+            "メールアドレス：info@okusuriraku.shop",
             "受付時間：[受付時間]（土日祝日・年末年始を除く）"
           ]
         },
