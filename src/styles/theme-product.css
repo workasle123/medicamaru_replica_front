@@ -1,0 +1,154 @@
+/* ==========================================================================
+   Product page composition layer  (CSS only — no markup, route or data changes)
+
+   SCOPE
+   Every rule is nested inside  body:has(:is([class*="ProductPage-module"]:is([class*="__page "],[class$="__page"]),[class*="ProductPage_page__"])).  ProductPage's
+   .page element exists on /product/[slug] and nowhere else, so nothing here
+   reaches the homepage, category listings, cart or account pages.
+
+   LAYOUT
+     desktop  [ large gallery ][ title · price · facts ][ buy box ]   (≥1280)
+              [ large gallery ][ title · price · facts / buy box ]   (1024–1279)
+     phone    title + price → buy box → facts → tags → contents → description
+              (the buy box moves above the tags and specs: the path from
+              "what is it" to "add to cart" no longer crosses 600px of metadata)
+
+   TO REVERT: delete the @import of this file in globals.css.
+   ========================================================================== */
+
+body:has(:is([class*="ProductPage-module"]:is([class*="__page "],[class$="__page"]),[class*="ProductPage_page__"])) {
+  --pp-radius: 16px;
+  --pp-line: var(--c-neutral-200);
+  --pp-shadow: 0 1px 2px rgba(15, 26, 43, 0.05), 0 4px 14px rgba(15, 26, 43, 0.05);
+
+  background-color: var(--c-neutral-50);
+
+  & :is([class*="ProductPage-module"]:is([class*="__page "],[class$="__page"]),[class*="ProductPage_page__"]) {
+    gap: var(--sp-4);
+  }
+
+  /* ---- Cards ---------------------------------------------------------------- */
+  & :is([class*="ProductPage-module"]:is([class*="__head "],[class$="__head"]),[class*="ProductPage_head__"]),
+  & :is([class*="ProductPage-module"]:is([class*="__details "],[class$="__details"]),[class*="ProductPage_details__"]) {
+    padding: var(--sp-4);
+    background: #fff;
+    border: 1px solid var(--pp-line);
+    border-radius: var(--pp-radius);
+    box-shadow: var(--pp-shadow);
+  }
+
+  & :is([class*="ProductPage-module"]:is([class*="__brand "],[class$="__brand"]),[class*="ProductPage_brand__"]) {
+    margin-bottom: var(--sp-1);
+    color: var(--c-primary-600);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-bold);
+    letter-spacing: 0.12em;
+  }
+  & :is([class*="ProductPage-module"]:is([class*="__title "],[class$="__title"]),[class*="ProductPage_title__"]) {
+    color: var(--c-ink);
+    font-size: clamp(1.375rem, 1.1rem + 1vw, 1.875rem);
+    line-height: 1.35;
+    letter-spacing: 0.01em;
+  }
+  & :is([class*="ProductPage-module"]:is([class*="__unitPrice "],[class$="__unitPrice"]),[class*="ProductPage_unitPrice__"]) {
+    color: var(--c-primary-700);
+  }
+
+  /* ---- Gallery -------------------------------------------------------------- */
+  & :is([class*="ProductGallery-module"]:is([class*="__strip "],[class$="__strip"]),[class*="ProductGallery_strip__"]) {
+    background: #fff;
+    border-color: var(--pp-line);
+    border-radius: var(--pp-radius);
+    box-shadow: var(--pp-shadow);
+  }
+  & :is([class*="ProductGallery-module"]:is([class*="__thumb "],[class$="__thumb"]),[class*="ProductGallery_thumb__"]) {
+    border-radius: 10px;
+    background: #fff;
+  }
+
+  /* ---- Buy box -------------------------------------------------------------- */
+  & :is([class*="PriceTiers-module"]:is([class*="__panel "],[class$="__panel"]),[class*="PriceTiers_panel__"]) {
+    padding: var(--sp-4);
+    background: #fff;
+    border: 1px solid var(--c-primary-200);
+    border-top: 4px solid var(--c-primary-500);
+    border-radius: var(--pp-radius);
+    box-shadow: 0 2px 4px rgba(15, 26, 43, 0.05), 0 10px 26px rgba(10, 53, 119, 0.10);
+  }
+  & :is([class*="PriceTiers-module"]:is([class*="__heading "],[class$="__heading"]),[class*="PriceTiers_heading__"]) {
+    color: var(--c-ink);
+    font-size: var(--fs-md);
+  }
+  & :is([class*="PriceTiers-module"]:is([class*="__tier "],[class$="__tier"]),[class*="PriceTiers_tier__"]) {
+    border-radius: 12px;
+    transition: border-color var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
+  }
+  & :is([class*="PriceTiers-module"]:is([class*="__tier "],[class$="__tier"]),[class*="PriceTiers_tier__"]):hover {
+    border-color: var(--c-primary-400);
+    box-shadow: var(--pp-shadow);
+  }
+
+  /* ---- Description ----------------------------------------------------------- */
+  & :is([class*="ProductPage-module"]:is([class*="__bodyMain "],[class$="__bodyMain"]),[class*="ProductPage_bodyMain__"]) h2 {
+    color: var(--c-ink);
+    font-size: clamp(1.125rem, 1rem + 0.5vw, 1.375rem);
+    line-height: 1.4;
+  }
+
+  /* ---- Related products as a band, like the homepage rails ------------------ */
+  & :is([class*="ProductPage-module"]:is([class*="__related "],[class$="__related"]),[class*="ProductPage_related__"]) {
+    padding: var(--sp-3);
+    background: #fff;
+    border: 1px solid var(--pp-line);
+    border-radius: var(--pp-radius);
+    box-shadow: var(--pp-shadow);
+  }
+
+  /* ---- Tablet and desktop ----------------------------------------------------- */
+  @media (min-width: 768px) {
+    & :is([class*="ProductPage-module"]:is([class*="__head "],[class$="__head"]),[class*="ProductPage_head__"]),
+    & :is([class*="ProductPage-module"]:is([class*="__details "],[class$="__details"]),[class*="ProductPage_details__"]) { padding: var(--sp-5) var(--sp-6); }
+    & :is([class*="ProductPage-module"]:is([class*="__related "],[class$="__related"]),[class*="ProductPage_related__"]) { padding: var(--sp-5) var(--sp-6); }
+  }
+  /* ---- Pack cards side by side when the buy column is wide -------------- */
+  /* The buy column spans two grid columns from 1280px (~800px). One pack per
+     row there stretched each カートに入れる button across the whole width;
+     as cards in a grid they stay a sensible size and more packs fit above
+     the fold. auto-fill falls back to one column wherever 2 x 260px will not
+     fit, so the narrower layouts are untouched. */
+  & :is([class*="PriceTiers-module"]:is([class*="__tiers "],[class$="__tiers"]),[class*="PriceTiers_tiers__"]) {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: var(--sp-3);
+  }
+  & :is([class*="PriceTiers-module"]:is([class*="__tier "],[class$="__tier"]),[class*="PriceTiers_tier__"]) {
+    margin: 0;
+  }
+
+  /* ---- Phone ---------------------------------------------------------------- */
+  @media (max-width: 767px) {
+    /* Gallery: photo full width, thumbnails in a swipe row underneath. The
+       side-by-side column left a 56px strip of empty frames next to a short
+       photo; now the photo gets the width and the thumbnails take one row. */
+    & :is([class*="ProductGallery-module"]:is([class*="__gallery "],[class$="__gallery"]),[class*="ProductGallery_gallery__"]) { flex-direction: column; align-items: stretch; }
+    & :is([class*="ProductGallery-module"]:is([class*="__slide "],[class$="__slide"]),[class*="ProductGallery_slide__"]) { height: min(70vw, 340px); }
+    & :is([class*="ProductGallery-module"]:is([class*="__thumbs "],[class$="__thumbs"]),[class*="ProductGallery_thumbs__"]) {
+      flex: none;
+      align-self: auto;
+      flex-direction: row;
+      overflow-x: auto;
+      overflow-y: visible;
+      padding-bottom: 2px;
+    }
+    & :is([class*="ProductGallery-module"]:is([class*="__thumb "],[class$="__thumb"]),[class*="ProductGallery_thumb__"]) { flex: none; width: 60px; height: 60px; }
+
+    & :is([class*="ScrollRail-module"]:is([class*="__track "],[class$="__track"]),[class*="ScrollRail_track__"]):not(:is([class*="ScrollRail-module"]:is([class*="__fluid "],[class$="__fluid"]),[class*="ScrollRail_fluid__"])) {
+      grid-auto-columns: 44%;
+      gap: var(--sp-2);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    & * { transition-duration: 0.01ms !important; }
+  }
+}

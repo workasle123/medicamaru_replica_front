@@ -108,95 +108,84 @@
   color: var(--color-text-subtle);
 }
 
-/* Two columns: the rail, then everything else. The pack panel does NOT get a
-   column of its own until 1280px — at this width a third rail would leave the
-   description under 350px — so it stays directly under the title, which is as
-   high as a single content column allows. The rail runs gallery, then 目次. */
-@media (min-width: 1024px) {
+/* --- Page grid ------------------------------------------------------------
+
+   Children of .page, in DOM order:
+     galleryColumn · buyColumn (head + purchase) · sideColumn (目次, ranking)
+     · mainColumn (details + description)
+
+   phone    one column, flattened with `display: contents` and ordered below
+   768+     two columns   [ photo | title + price + packs ]
+                          [ 目次 across the page ]
+                          [ specs + description across the page ]
+   1280+    three columns [ photo | title + price + packs     ]
+                          [ specs + description    | 目次 + ranking (sticky) ]
+
+   The pack panel used to hang in a rail beside the description, so a shopper
+   read the title in one column and found the buy buttons in another. Now the
+   photo, the headline price and the packs are one row, above the fold, and
+   the long text below has the full width to itself. */
+.buyColumn,
+.mainColumn,
+.sideColumn {
+  min-width: 0;
+}
+
+.buyColumn {
+  display: grid;
+  gap: var(--sp-4);
+  align-content: start;
+}
+
+.mainColumn {
+  display: grid;
+  gap: var(--sp-6);
+  align-content: start;
+}
+
+@media (min-width: 768px) {
   .page {
-    grid-template-columns: minmax(0, var(--product-aside)) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr);
     grid-template-areas:
-      'gallery head'
-      'gallery purchase'
-      'gallery details'
-      'toc     body';
-    column-gap: var(--sp-8);
+      'gallery buy'
+      'side    side'
+      'main    main';
+    column-gap: var(--sp-6);
     align-items: start;
   }
 
-  .galleryColumn {
-    grid-area: gallery;
-  }
-
-  .head {
-    grid-area: head;
-  }
-
-  .purchase {
-    grid-area: purchase;
-  }
-
-  .details {
-    grid-area: details;
-  }
-
-  .tocColumn {
-    grid-area: toc;
-  }
-
-  .bodyMain {
-    grid-area: body;
-  }
+  .galleryColumn { grid-area: gallery; }
+  .buyColumn { grid-area: buy; }
+  .sideColumn { grid-area: side; }
+  .mainColumn { grid-area: main; }
 }
 
-/* Three columns from 1280px: the gallery/目次 rail, the product information
-   and body, and a rail of its own for the pack panel — so 数量別価格 starts
-   level with the title rather than below the price, where at 1280x900 it used
-   to run from y=362 to y=954, i.e. past the fold.
-
-   THE RAIL SPANS ALL THREE ROWS, down into the description. That is what
-   merging the two grids bought: the pack panel's height is paid for by the
-   text beside it instead of by a row held open next to it.
-
-   One column, one grid item, two things stacked inside it — the packs, then
-   the ranking. They cannot be two grid items: a grid cannot flow two items
-   down a column that a third item spans, so the ranking's only cell was a
-   fourth row BELOW the description, which put it 4,575px down the page on a
-   7-pack product and 5,591px down on a 4-pack one. Beside the text is where
-   a recommendation earns its place.
-
-   The rail is 360px against the 300px rail opposite, so the two bracket the
-   text rather than mirroring each other — this is the one carrying product
-   cards and a column of buy buttons. */
 @media (min-width: 1280px) {
   .page {
-    grid-template-columns: minmax(0, var(--product-aside)) minmax(0, 1fr) 360px;
+    grid-template-columns: minmax(0, 540px) minmax(0, 1fr) 320px;
     grid-template-areas:
-      'gallery head    rail'
-      'gallery details rail'
-      'toc     body    rail';
+      'gallery buy  buy'
+      'main    main side';
+    column-gap: var(--sp-8);
   }
 
-  .railRight {
-    grid-area: rail;
-    /* Stretched, unlike everything else in this grid: the ranking inside it
-       is sticky, and a sticky element travels inside its PARENT's box. Left
-       at `start` the rail would be only as tall as the packs plus the
-       ranking, and the ranking would have nowhere to travel. */
+  /* Stretched, so the sticky box inside has the length of the description to
+     travel through. */
+  .sideColumn {
     align-self: stretch;
-    min-width: 0;
+  }
+
+  .sideSticky {
+    position: sticky;
+    top: calc(var(--header-clear) + var(--sp-6));
+    display: grid;
+    gap: var(--sp-5);
+    max-height: calc(100dvh - var(--header-clear) - var(--sp-10));
+    overflow-y: auto;
+    overscroll-behavior: contain;
   }
 }
 
-/* Below 1280 there is no third column, so the rail stops being a box at all
-   and hands its children back to the grid — the pack panel lands exactly
-   where it used to sit in the single column, and the ranking is `display:
-   none` at these widths anyway. That is why no ordering is needed here. */
-@media (max-width: 1279px) {
-  .railRight {
-    display: contents;
-  }
-}
 
 .head,
 .details {
@@ -340,18 +329,6 @@
   min-width: 0;
 }
 
-@media (min-width: 1024px) {
-  .tocColumn {
-    position: sticky;
-    /* The header no longer sticks, so this only needs breathing room. */
-    top: calc(var(--header-clear) + var(--sp-6));
-    /* Never taller than the viewport: a body with twelve headings would
-       otherwise run past the bottom with no way to reach the lower entries. */
-    max-height: calc(100dvh - var(--header-clear) - var(--sp-10));
-    overflow-y: auto;
-    overscroll-behavior: contain;
-  }
-}
 
 .bodyMain {
   min-width: 0;
@@ -404,19 +381,6 @@
   .rankingColumn {
     display: block;
     min-width: 0;
-    /* Clears the pack panel above it in the rail — without this the two
-       cards touch, and they are two separate things. */
-    margin-top: var(--sp-6);
-    position: sticky;
-    /* Same offset as the 目次 opposite it, so the two columns settle level
-       rather than one riding slightly higher than the other. */
-    top: calc(var(--header-clear) + var(--sp-6));
-    /* The list is ten products tall and the viewport may not be. Capping it
-       keeps the lower entries reachable instead of running off the bottom
-       where nothing can scroll to them. */
-    max-height: calc(100dvh - var(--header-clear) - var(--sp-10));
-    overflow-y: auto;
-    overscroll-behavior: contain;
   }
 }
 
@@ -440,35 +404,88 @@
    hoisted alongside the photo — the 目次 and the description included, which
    would put the body text above the product name. The order below is the DOM
    order with the tags lifted out of the gallery. */
+@media (max-width: 767px) {
+  .buyColumn,
+  .mainColumn,
+  .sideColumn,
+  .sideSticky {
+    display: contents;
+  }
+
+  .head { order: 1; }
+  .purchase { order: 2; }
+  .details { order: 3; }
+  .tagSection { order: 4; }
+  .tocColumn { order: 5; }
+  .bodyMain { order: 6; }
+}
+
 @media (max-width: 639px) {
   .galleryColumn {
     display: contents;
   }
 
-  .head {
-    order: 1;
-  }
-
   .tagSection {
-    order: 2;
     /* The grid gap spaces it now; the original top margin was for sitting
        directly under the photo. */
     margin-top: 0;
   }
+}
 
-  .purchase {
-    order: 3;
-  }
+/* --- Headline discount, in-page shortcuts ------------------------------- */
 
-  .details {
-    order: 4;
-  }
+.discountPill {
+  align-self: center;
+  padding: 2px 10px;
+  border-radius: var(--radius-pill);
+  background-color: var(--c-sale-600);
+  color: var(--color-text-inverse);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  line-height: 1.6;
+}
 
-  .tocColumn {
-    order: 5;
-  }
+/* A horizontally scrolling pill row: four short labels fit a phone, and the
+   row scrolls rather than wraps if a translation ever grows them. */
+.jump {
+  display: flex;
+  gap: var(--sp-2);
+  margin-top: var(--sp-3);
+  padding-bottom: 2px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
 
-  .bodyMain {
-    order: 6;
+.jump::-webkit-scrollbar {
+  display: none;
+}
+
+.jumpLink {
+  flex: none;
+  padding: 6px 14px;
+  border: 1px solid var(--c-primary-200);
+  border-radius: var(--radius-pill);
+  background-color: var(--c-primary-50);
+  color: var(--c-primary-700);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  white-space: nowrap;
+}
+
+.jumpLink:hover {
+  text-decoration: none;
+  background-color: var(--c-primary-100);
+}
+
+/* The sticky header would otherwise cover the heading an anchor lands on, and
+   the fixed buy bar must not cover the last section on a phone. */
+.purchase,
+.specs {
+  scroll-margin-top: calc(var(--header-clear) + var(--sp-3));
+}
+
+@media (max-width: 1023px) {
+  .page {
+    padding-bottom: calc(var(--sp-10) + var(--bottom-bar-h, 72px));
   }
 }
