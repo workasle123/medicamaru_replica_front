@@ -2,7 +2,6 @@ import { getAllProductSlugs } from '@/services/products.service';
 import { getAllCategorySlugs, listSymptoms, listSymptomGroups } from '@/services/categories.service';
 import { listNotices } from '@/services/notices.service';
 import { absoluteUrl } from '@/lib/seo';
-import { GUIDE_PATH } from '@/content/guide/medicine-guide';
 
 /**
  * sitemap.xml
@@ -41,9 +40,6 @@ export default async function sitemap() {
     { path: '/faq', priority: 0.6, changeFrequency: 'monthly' },
     { path: '/notices', priority: 0.4, changeFrequency: 'weekly' },
     { path: '/about-personal-import', priority: 0.6, changeFrequency: 'monthly' },
-    /* The お薬ガイド. Percent-encoded at its source — absoluteUrl only
-       concatenates, and raw UTF-8 in an XML sitemap is asking for trouble. */
-    { path: GUIDE_PATH, priority: 0.6, changeFrequency: 'monthly' },
     { path: '/pharmaceutical-law', priority: 0.5, changeFrequency: 'yearly' },
     { path: '/about', priority: 0.5, changeFrequency: 'yearly' },
     { path: '/contact', priority: 0.5, changeFrequency: 'yearly' },

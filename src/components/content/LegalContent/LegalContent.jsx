@@ -6,16 +6,13 @@ import styles from './LegalContent.module.css';
 /**
  * LegalContent — renders an imported long-form document.
  *
- * Named for the policy pages it was built for, and now also renders the
- * お薬ガイド, which has the same shape: headings, prose, lists and ordered
- * steps, read top to bottom. The guide added `figure`, images on a step, and
- * a trailing link on a paragraph; a policy page simply never uses them.
- * A second renderer would have been the same switch statement with three
- * more cases and every existing case duplicated.
+ * Named for the policy pages it renders: headings, prose, lists and ordered
+ * steps, read top to bottom. A second renderer would have been the same
+ * switch statement with three more cases and every existing case duplicated.
  *
  * Takes the same object PageToc takes, so the page, its headings and its
  * contents list cannot drift apart: all three come from one file in
- * `src/content/legal/` or `src/content/guide/`.
+ * `src/content/legal/`.
  *
  * The headings are styled HERE rather than through ContentPage's `.body h2`,
  * because that selector also dresses the FAQ and notice pages — a banded

@@ -6,8 +6,6 @@
  * let the category index page carry the long tail.
  */
 
-import { GUIDE_PATH } from '@/content/guide/medicine-guide';
-
 /**
  * Primary desktop navigation.
  *
@@ -48,13 +46,6 @@ export const FOOTER_NAV = [
     heading: 'ご利用ガイド',
     icon: 'guide',
     links: [
-      /* The long-form guide: what medicines are, how to read a product page,
-         and the order flow end to end. First in the column because it is the
-         one entry that answers a first-time visitor's questions in order —
-         the pages below it answer one question each.
-         Japanese slug, percent-encoded at its source so the footer and the
-         canonical tag cannot point at different URLs. */
-      { href: GUIDE_PATH, label: 'お薬ガイド' },
       { href: '/about-personal-import', label: '個人輸入について' },
       /* Next to 個人輸入について on purpose: the two are read together, and a
          personal-import shop that explains 薬機法 is answering the question a
