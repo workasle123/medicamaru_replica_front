@@ -99,10 +99,10 @@
 }
 
 /* --- Figures ------------------------------------------------------------
-   Screenshots of the shop, in the お薬ガイド. The border and rounded corner
-   matter more than they look: these are pictures of a white UI on a white
-   page, and without an edge they read as part of the document rather than as
-   a picture of a screen. */
+   Screenshots of the shop. The border and rounded corner matter more than
+   they look: these are pictures of a white UI on a white page, and without
+   an edge they read as part of the document rather than as a picture of a
+   screen. */
 .doc .figure {
   margin: 0 0 var(--sp-5);
 }
