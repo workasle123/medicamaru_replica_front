@@ -41,7 +41,8 @@ export const SHIPPING = {
  * The operator, for documents that have to name a seller — currently the
  * printable order statement.
  *
- * Most of these facts are also stated on /about under 事業者情報, which remains
+ * Most of these facts are also stated on /about, in the 特定商取引法に基づく表示
+ * table's 販売事業者 group, which remains
  * the editorial source for that page (src/content/legal/about.js says it is
  * edited only there). This is the structured copy, for templates that need the
  * fields individually rather than as rendered prose. Change one and check the

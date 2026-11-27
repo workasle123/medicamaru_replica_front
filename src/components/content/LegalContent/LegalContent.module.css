@@ -190,3 +190,60 @@
   overflow-wrap: anywhere;
   color: var(--color-text);
 }
+
+/* --- table ---------------------------------------------------------------
+   The 特定商取引法 table. Cell borders, padding and the label tint come from
+   ContentPage's `.body th, .body td`, which every table in an article shares,
+   so this adds only what a grouped two-column disclosure needs. Two classes
+   deep, so these outrank `.body th` (a class and an element). */
+.tableWrap {
+  margin: var(--sp-4) 0 0;
+}
+
+.table {
+  table-layout: fixed;
+  border-collapse: collapse;
+  line-height: var(--lh-relaxed);
+}
+
+/* 7.5rem on a phone; from 640px a third of the table, which keeps the
+   longest label (「カスタマーサポート受付時間」) to two lines in the
+   three-column layout and to one where the article is at full measure. */
+.tableLabelCol {
+  width: 7.5rem;
+}
+
+.table .tableGroup {
+  background-color: var(--c-primary-100);
+  color: var(--color-text);
+}
+
+.table .tableLabel {
+  white-space: normal; /* `.body th` is nowrap, for data grids */
+  color: var(--color-text-muted);
+}
+
+/* overflow-wrap for the address and the URL, both long single tokens. */
+.table .tableValue {
+  overflow-wrap: anywhere;
+}
+
+.tableLine {
+  margin: 0;
+}
+
+.tableLine + .tableLine {
+  margin-top: var(--sp-2);
+}
+
+@media (min-width: 640px) {
+  .tableLabelCol {
+    width: 32%;
+  }
+
+  .table .tableGroup,
+  .table .tableLabel,
+  .table .tableValue {
+    padding-inline: var(--sp-4);
+  }
+}

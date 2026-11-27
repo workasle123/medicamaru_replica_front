@@ -100,7 +100,8 @@ function renderBlock(block, i) {
     case 'figure':
       return <Figure key={key} {...block} />;
 
-    /* A labelled-value disclosure — the 特定商取引法 operator table.
+    /* A labelled-value list. It carried the 特定商取引法 operator details
+       until those moved into the `table` block below (2026-11-27).
        A <dl> rather than a <table>: these are pairs, not a grid, and two
        columns with no header row is a layout table wearing data markup. The
        pairs stack on a phone, where a 2-column table would either scroll
@@ -120,6 +121,59 @@ function renderBlock(block, i) {
             </div>
           ))}
         </dl>
+      );
+
+    /* A labelled table in groups — the 特定商取引法に基づく表示, laid out
+       the way kaigai-okusuri-tsuhan.com/shipping lays out the same
+       disclosure: a band per group, then label / value rows.
+
+       A real <table> this time, where `definitions` above chose a <dl>. Thirty
+       rows in six groups is a document a payment-gateway reviewer scans as a
+       grid, and the row and group headers are what let a screen reader say
+       which group a row belongs to. It stays a table on a phone too — the
+       label column just narrows — because restyling table elements as blocks
+       makes Safari drop the table from the accessibility tree.
+
+       A value is a string, or an array of lines; a line is a string or
+       `{text, href}`. Links get a line of their own rather than markup inside
+       a sentence, for the reason the paragraph case gives below. */
+    case 'table':
+      return (
+        <div key={key} className={styles.tableWrap}>
+          <table className={styles.table}>
+            {block.caption && <caption className="visually-hidden">{block.caption}</caption>}
+            {/* Widths on <col>, for table-layout: fixed — without it the
+                label column grows to its longest label and takes half a
+                phone screen. */}
+            <colgroup>
+              <col className={styles.tableLabelCol} />
+              <col />
+            </colgroup>
+            {block.groups.map((group) => (
+              <tbody key={group.heading}>
+                <tr>
+                  <th colSpan={2} scope="rowgroup" className={styles.tableGroup}>
+                    {group.heading}
+                  </th>
+                </tr>
+                {group.rows.map((row) => (
+                  <tr key={row.label}>
+                    <th scope="row" className={styles.tableLabel}>
+                      {row.label}
+                    </th>
+                    <td className={styles.tableValue}>
+                      {(Array.isArray(row.value) ? row.value : [row.value]).map((line, j) => (
+                        <p key={j} className={styles.tableLine}>
+                          {typeof line === 'string' ? line : <CellLink {...line} />}
+                        </p>
+                      ))}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            ))}
+          </table>
+        </div>
       );
 
     default:
@@ -142,6 +196,24 @@ function renderBlock(block, i) {
         </p>
       );
   }
+}
+
+/**
+ * A link on its own line in a table cell. A page of this site goes through
+ * <Link> — without prefetch, which on a page of thirty rows would be a burst
+ * of requests nobody asked for — and a mail or outside address is a plain
+ * anchor.
+ */
+function CellLink({ text, href }) {
+  return href.startsWith('/') ? (
+    <Link href={href} prefetch={false} className={styles.inlineLink}>
+      {text}
+    </Link>
+  ) : (
+    <a href={href} className={styles.inlineLink}>
+      {text}
+    </a>
+  );
 }
 
 /**

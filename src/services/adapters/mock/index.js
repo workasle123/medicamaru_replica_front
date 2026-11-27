@@ -10,7 +10,7 @@
  */
 
 import { products, categories, symptoms, blogs, banners } from './fixtures';
-import { DEFAULT_PER_PAGE } from '@/constants/site';
+import { DEFAULT_PER_PAGE, SHIPPING } from '@/constants/site';
 import { richTextHtml } from '@/lib/sanitize';
 
 /**
@@ -75,6 +75,11 @@ function delay(ms = 40) {
 }
 
 export const mockAdapter = {
+  /** Mirrors the live free-shipping offer so mock mode prints the threshold. */
+  async getFreeShippingThreshold() {
+    return SHIPPING.freeThreshold;
+  },
+
   async getCategories() {
     await delay();
     return categories;
