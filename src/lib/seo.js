@@ -203,6 +203,10 @@ const RETIRED_BRANDS = [
   'メディスンショップ',
   'メディシンショップ',
   '医薬品ショップ',
+  /* The sister shop this storefront was built from. Its copy reached this
+     backend's SEO rows too — about-us read 「メディカ丸について - …」 on
+     2026-11-27. */
+  'メディカ丸',
 ];
 
 /** Whether a string still carries a retired brand name. */

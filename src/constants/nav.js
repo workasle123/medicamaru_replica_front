@@ -65,7 +65,7 @@ export const FOOTER_NAV = [
     heading: 'サイト情報',
     icon: 'info',
     links: [
-      { href: '/about', label: '特定商取引法表記' },
+      { href: '/about#tokushoho', label: '特定商取引法に基づく表示' },
       { href: '/editorial-policy', label: '編集方針' },
       { href: '/terms', label: '利用規約' },
       { href: '/privacy', label: 'プライバシーポリシー' },

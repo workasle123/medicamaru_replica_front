@@ -477,6 +477,40 @@ export const httpAdapter = {
   },
 
   /**
+   * The spend that earns free shipping, or null when no such offer is live.
+   *
+   * medicamaru.com reads this from /home/free-shipping, but this backend has
+   * no such route (404, checked 2026-11-27). The offer is in the same
+   * /home/alloffers/1 list the /campaign page reads, so it is taken from
+   * there: identical URL and cache options to getCampaigns, so Next serves
+   * both from one cached fetch. Read straight off the offer row rather than
+   * through normaliseCampaign, which builds a `benefit` for percentage and
+   * fixed only.
+   *
+   * Lowest threshold wins: two overlapping free-shipping offers is an admin
+   * mistake, not an error.
+   */
+  async getFreeShippingThreshold() {
+    const res = await apiFetch(endpoints.campaignOffers(), {
+      revalidate: TTL.home,
+      tags: ['banners'],
+    });
+
+    /* Number(), not parseInt(): the column is a decimal, so PHP may send 5000
+       as 5000.00, and a bad row could send null or "". */
+    const thresholds = asArray(unwrap(res))
+      .filter(
+        (row) =>
+          row?.discount_type === 'free_shipping' &&
+          (row.status == null || Number(row.status) === 1),
+      )
+      .map((row) => Number(row.offer_value_min))
+      .filter((yen) => Number.isFinite(yen) && yen > 0);
+
+    return thresholds.length ? Math.round(Math.min(...thresholds)) : null;
+  },
+
+  /**
    * Every campaign for the /campaign page, soonest to finish first.
    *
    * The backend applies the date window and the 「Show on Campaign Page」 flag,
